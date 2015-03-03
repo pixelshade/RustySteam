@@ -23,13 +23,13 @@ public class Movable : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (rigidbody == null) return;
-        if(rigidbody.velocity == Vector3.zero)
+        if (GetComponent<Rigidbody>() == null) return;
+        if(GetComponent<Rigidbody>().velocity == Vector3.zero)
             _isMoving = false;
 
         if (_hasToMove)
         {
-            rigidbody.velocity = vectorToMove*powerToMove;
+            GetComponent<Rigidbody>().velocity = vectorToMove*powerToMove;
             _hasToMove = false;
         }
     }

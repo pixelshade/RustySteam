@@ -24,7 +24,7 @@ public class LevelController : MonoBehaviour
             {
                 var c = Instantiate(cube, point, Quaternion.identity) as GameObject;
                 c.transform.localScale += new Vector3(Random.value, Random.value, Random.value)*10;
-                c.renderer.material.color = new Color(Random.value,Random.value,Random.value);
+                c.GetComponent<Renderer>().material.color = new Color(Random.value,Random.value,Random.value);
                 cubes.Add(c);
             }
             else
