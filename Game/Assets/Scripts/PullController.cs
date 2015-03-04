@@ -75,8 +75,7 @@ public class PullController : MonoBehaviour
     {
         if(Input.GetButton("Levitate") || Input.GetKey("e"))
         {
-            Debug.Log("pressed");
-            if (hit.transform.tag.Equals("movable") && hit.rigidbody != null)
+            if (hit.transform != null && hit.transform.tag.Equals("movable") && hit.rigidbody != null)
             {
                 hit.rigidbody.AddForce(0,Power,0);
             }
