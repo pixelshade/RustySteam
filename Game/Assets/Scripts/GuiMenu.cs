@@ -11,7 +11,7 @@ public class GuiMenu : MonoBehaviour {
 	
 	}
 
-    void OnGUI()
+    void OnGUI() 
     {
 
 

@@ -4,13 +4,14 @@ using System.Collections;
 public class Movable : MonoBehaviour
 {
 
-    private bool _isMoving = false;
+    
     private bool _hasToMove = false;
     private Vector3 vectorToMove;
     private float powerToMove;
+    public bool IsMovable = true;
 
 
-
+    
 	// Use this for initialization
 	void Start () {
 	
@@ -24,8 +25,6 @@ public class Movable : MonoBehaviour
     void FixedUpdate()
     {
         if (GetComponent<Rigidbody>() == null) return;
-        if(GetComponent<Rigidbody>().velocity == Vector3.zero)
-            _isMoving = false;
 
         if (_hasToMove)
         {

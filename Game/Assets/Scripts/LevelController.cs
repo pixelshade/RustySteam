@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour
 {
-    private const int NUM_CUBES = 500;
+    private const int NUM_CUBES = 5;
     private List<GameObject> cubes = new List<GameObject>(); 
 
 	// Use this for initialization
@@ -16,21 +16,30 @@ public class LevelController : MonoBehaviour
         for (var i = 0; i < NUM_CUBES; i++)
         {
             
-            var point = Random.insideUnitSphere * 50;
+            var point = Random.insideUnitSphere * 500;
             point.y = Math.Abs(point.y);
-            
-            
+
+            GameObject c;
             if (Consts.IsSinglePlayer)
             {
-                var c = Instantiate(cube, point, Quaternion.identity) as GameObject;
-                c.transform.localScale += new Vector3(Random.value, Random.value, Random.value)*10;
-                c.GetComponent<Renderer>().material.color = new Color(Random.value,Random.value,Random.value);
-                cubes.Add(c);
+                c = Instantiate(cube, point, Quaternion.identity) as GameObject;
+                
             }
             else
             {
-                 cubes.Add(Network.Instantiate(cube, point, Quaternion.identity, 0) as GameObject);
-            }    
+                c = Network.Instantiate(cube, point, Quaternion.identity, 0) as GameObject;
+            }
+            c.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
+            c.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
+
+            // We will create some stable blocks 
+            if (Random.value > 0.5)
+            {
+                c.GetComponent<Renderer>().material.color = new Color(0.8f,0.8f,0.8f);
+                c.transform.localScale += c.transform.localScale * 10;
+                Destroy(c.GetComponent<Movable>());
+            }
+            cubes.Add(c);
         }
 
 	}
