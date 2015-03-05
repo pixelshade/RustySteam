@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour
@@ -17,4 +18,13 @@ public class Player : MonoBehaviour
 	void Update () {
 	
 	}
+
+    void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("sila" + collision.relativeVelocity.magnitude);
+//        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
+        if(collision.relativeVelocity.magnitude > 50)
+        HP -= 10;
+
+    }
 }

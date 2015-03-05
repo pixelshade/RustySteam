@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour
 {
-    private const int NUM_CUBES = 5;
+    private const int NUM_CUBES = 50;
     private List<GameObject> cubes = new List<GameObject>(); 
 
 	// Use this for initialization
@@ -36,7 +36,9 @@ public class LevelController : MonoBehaviour
             if (Random.value > 0.5)
             {
                 c.GetComponent<Renderer>().material.color = new Color(0.8f,0.8f,0.8f);
+                c.GetComponent<Rigidbody>().isKinematic = true;
                 c.transform.localScale += c.transform.localScale * 10;
+                c.transform.position = new Vector3(c.transform.position.x, 0, c.transform.position.z);
                 Destroy(c.GetComponent<Movable>());
             }
             cubes.Add(c);
