@@ -23,6 +23,7 @@ public class PullController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            transform.GetComponent<FPSRigidController>().grounded = false;
             if (_cdLeft > 0)
             {
               
@@ -49,12 +50,13 @@ public class PullController : MonoBehaviour
     }
 
 
-    private void ProcessRightClick(Ray ray, RaycastHit hit)
+    private void ProcessRightClick(Ray ray, RaycastHit hit, Vector3 fwd)
     {
         
 
         if (Input.GetMouseButtonDown(1))
         {
+            transform.GetComponent<FPSRigidController>().grounded = false;
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
@@ -66,8 +68,8 @@ public class PullController : MonoBehaviour
                 else
                 {
                     var self = transform.GetComponent<Movable>();
-                    var direction = hit.transform.position - transform.position;
-                    self.MoveTowards(direction.normalized, Power);
+                    //var direction = hit.transform.position - transform.position;
+                    self.MoveTowards(fwd.normalized, Power);
                 }
             
             }
@@ -103,14 +105,16 @@ public class PullController : MonoBehaviour
 
         Power += Input.GetAxis("Mouse ScrollWheel")*10;
 
+        Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        fwd.y = cam.y;
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
         Crosshair.color = Physics.Raycast(ray, out hit, Range) ? Color.red : Color.black;
 
-        ProcessLeftClick(ray, hit,fwd);
-        ProcessRightClick(ray, hit);
+        ProcessLeftClick(ray, hit, fwd);
+        ProcessRightClick(ray, hit, fwd);
         ProcessActions(ray, hit);
 
 

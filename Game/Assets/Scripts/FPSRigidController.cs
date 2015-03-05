@@ -8,7 +8,7 @@ public class FPSRigidController : MonoBehaviour
     public float maxVelocityChange = 10.0f;
     public bool canJump = true;
     public float jumpHeight = 2.0f;
-    private bool grounded = false;
+    public bool grounded = false;
     private Rigidbody _rigidbody;
 
 
@@ -18,12 +18,20 @@ public class FPSRigidController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody>();
         
-        _rigidbody.freezeRotation = true;
-        _rigidbody.useGravity = false;
+        //_rigidbody.freezeRotation = true;
+        //_rigidbody.useGravity = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void FixedUpdate()
     {
+        if (Input.GetButton("Cancel"))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Application.LoadLevel("MainMenu");
+        }
         if (grounded)
         {
             // Calculate how fast we should be moving
