@@ -9,14 +9,20 @@ public class PullController : MonoBehaviour
     public float Power = 10;
     public int Range = 100;
     public float CD = 0.5f;
-    public Image Crosshair;
-
 
     private float _cdLeft = 0.0f;
+    private GuiGame _guiGame;
+
+
+    void Awake()
+    {
+        
+    }
 
 	// Use this for initialization
-	void Start () {
-	    
+	void Start ()
+	{
+	    _guiGame = GetComponent<GuiGame>();
 	}
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
@@ -107,7 +113,9 @@ public class PullController : MonoBehaviour
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
-        Crosshair.color = Physics.Raycast(ray, out hit, Range) ? Color.red : Color.black;
+        //chage crosshair if we have something hit 
+        _guiGame.CrosshairSelected(Physics.Raycast(ray, out hit, Range));
+        
 
         ProcessLeftClick(ray, hit,fwd);
         ProcessRightClick(ray, hit);
