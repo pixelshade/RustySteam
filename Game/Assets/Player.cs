@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 
     public int HP = 100;
 
+    public bool Stunned = false;
     public bool HasFlag = false;
     public GameObject FlagGameObject;
     // Use this for initialization

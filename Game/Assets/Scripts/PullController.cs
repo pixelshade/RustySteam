@@ -9,8 +9,10 @@ public class PullController : MonoBehaviour
     public float Power = 10;
     public int Range = 100;
     public float CD = 0.5f;
+    public float Stun = 1.0f;
 
     private float _cdLeft = 0.0f;
+    private float _stunLeft = 0.0f;
     private GuiGame _guiGame;
 
 
@@ -27,9 +29,8 @@ public class PullController : MonoBehaviour
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("Fire1"))
         {
-            transform.GetComponent<FPSRigidController>().grounded = false;
             if (_cdLeft > 0)
             {
                 return;
@@ -45,7 +46,8 @@ public class PullController : MonoBehaviour
                 }
                 else
                 {
-
+                    transform.GetComponent<Player>().Stunned = true;
+                    _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
                     self.MoveTowards(fwd.normalized, -Power);
                 }
@@ -58,16 +60,13 @@ public class PullController : MonoBehaviour
 
     private void ProcessRightClick(Ray ray, RaycastHit hit, Vector3 fwd)
     {
-        
-
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetButtonDown("Fire2"))
         {
             if (_cdLeft > 0)
             {
                 return;
             }
             _cdLeft = CD;
-            transform.GetComponent<FPSRigidController>().grounded = false;
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
@@ -78,6 +77,8 @@ public class PullController : MonoBehaviour
                 }
                 else
                 {
+                    transform.GetComponent<Player>().Stunned = true;
+                    _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
                     //var direction = hit.transform.position - transform.position;
                     self.MoveTowards(fwd.normalized, Power);
@@ -103,6 +104,17 @@ public class PullController : MonoBehaviour
     private void Update()
     {
 
+        //Stun
+        if (_stunLeft > 0)
+        {
+            _stunLeft -= Time.deltaTime;
+        }
+        else if (_stunLeft < 0)
+        {
+            _stunLeft = 0;
+            transform.GetComponent<Player>().Stunned = false;
+        }
+
         // Cooldown 
         if (_cdLeft > 0)
         {
@@ -116,9 +128,12 @@ public class PullController : MonoBehaviour
 
         Power += Input.GetAxis("Mouse ScrollWheel")*10;
 
+        // Direction of shot depends on rotation of player and his camera
         Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        fwd.x -= fwd.x * Math.Abs(cam.y);
         fwd.y = cam.y;
+        fwd.z -= fwd.z * Math.Abs(cam.y);
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 

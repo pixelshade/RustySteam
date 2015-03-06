@@ -8,8 +8,9 @@ public class FPSRigidController : MonoBehaviour
     public float maxVelocityChange = 10.0f;
     public bool canJump = true;
     public float jumpHeight = 2.0f;
-    public bool grounded = false;
+    private bool grounded = false;
     private Rigidbody _rigidbody;
+    private Player _player;
 
 
 
@@ -17,6 +18,7 @@ public class FPSRigidController : MonoBehaviour
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _player = GetComponent<Player>();
         
         //_rigidbody.freezeRotation = true;
         //_rigidbody.useGravity = false;
@@ -32,7 +34,7 @@ public class FPSRigidController : MonoBehaviour
             Cursor.visible = true;
             Application.LoadLevel("MainMenu");
         }
-        if (grounded)
+        if (grounded && !_player.Stunned)
         {
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
@@ -41,16 +43,37 @@ public class FPSRigidController : MonoBehaviour
 
             // Apply a force that attempts to reach our target velocity
             Vector3 velocity = _rigidbody.velocity;
-            Vector3 velocityChange = (targetVelocity - velocity);
-            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-            velocityChange.y = 0;
-            _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
-
+            if (targetVelocity != Vector3.zero)
+            {
+                Vector3 velocityChange = (targetVelocity - velocity);
+                velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+                velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+                velocityChange.y = 0;
+                _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+            }
             // Jump
             if (canJump && Input.GetButton("Jump"))
             {
                 _rigidbody.velocity = new Vector3(velocity.x, CalculateJumpVerticalSpeed(), velocity.z);
+            }
+        }
+        else if (!_player.Stunned)
+        {
+            // Calculate how fast we should be moving
+            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            targetVelocity = transform.TransformDirection(targetVelocity);
+            targetVelocity *= speed;
+            targetVelocity *= 0.4f;
+
+            // Apply a force that attempts to reach our target velocity
+            Vector3 velocity = _rigidbody.velocity;
+            if (targetVelocity != Vector3.zero)
+            {
+                Vector3 velocityChange = (targetVelocity - velocity);
+                velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+                velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+                velocityChange.y = 0;
+                _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
             }
         }
 
