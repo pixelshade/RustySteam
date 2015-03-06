@@ -10,6 +10,11 @@ public class GuiGame : MonoBehaviour
 
     private bool _crosshairSelected;
 
+    
+    private float _respawnTime;
+
+    private GUIStyle _hugeGuiStyle;
+
 	// Use this for initialization
     void Awake()
     {
@@ -17,8 +22,10 @@ public class GuiGame : MonoBehaviour
         _pull = GetComponent<PullController>();
     }
 
-	void Start () {
-	
+	void Start ()
+	{
+	    _hugeGuiStyle = new GUIStyle();
+	    _hugeGuiStyle.fontSize = 72;
 	}
 	
 	// Update is called once per frame
@@ -28,18 +35,43 @@ public class GuiGame : MonoBehaviour
 
     void OnGUI()
     {
-        if(_crosshairSelected)
+        
+        
+        GUI.TextArea(new Rect(0, 0, 100, 50),"HP:" + _player.HP+ " \n Power:"+ _pull.Power + "\n Range: "+ _pull.Range);
+
+//        if (_pull.CdLeft()>0)
+//        {
+            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height-50, 100, 50),  " CD ready in "+ _pull.CdLeft() +"s");
+//        }
+//        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
+
+        CrossHairGUI();
+
+        RespawnGUI();
+    }
+
+    private void CrossHairGUI()
+    {
+        if (_crosshairSelected)
             GUI.DrawTexture(new Rect(Screen.width / 2 - 16, Screen.height / 2 - 16, 32, 32), CrosshairTexture, ScaleMode.ScaleToFit, true);
         else
             GUI.DrawTexture(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 12, 24, 24), CrosshairTexture, ScaleMode.ScaleToFit, true);
 
-        GUI.TextArea(new Rect(0, 0, 100, 50),"HP:" + _player.HP+ " \n Power:"+ _pull.Power + "\n Range: "+ _pull.Range);
+    }
 
-        if (_pull.CdLeft()>0)
+
+    private void RespawnGUI()
+    {
+        if (_respawnTime > 0)
         {
-            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height-50, 100, 50),  " CD ready in "+ _pull.CdLeft() +"s");
+            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 12, 24, 24), "Rewspawn in :"+ _respawnTime);
         }
-//        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
+        else if (_respawnTime > -1)
+        {
+            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 12, 24, 24), "GO!", _hugeGuiStyle);
+        }
+        _respawnTime -= Time.deltaTime;
+        
     }
 
     public void CrosshairSelected(bool selected)
@@ -47,5 +79,10 @@ public class GuiGame : MonoBehaviour
         _crosshairSelected = selected;
     }
 
-   
+
+    public void RespawnIn(float seconds)
+    {
+        _respawnTime = seconds;
+        Debug.Log("resp " + _respawnTime);
+    }
 }

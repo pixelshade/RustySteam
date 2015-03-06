@@ -32,9 +32,9 @@ public class PullController : MonoBehaviour
             transform.GetComponent<FPSRigidController>().grounded = false;
             if (_cdLeft > 0)
             {
-              
                 return;
             }
+            _cdLeft = CD;
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
@@ -62,6 +62,11 @@ public class PullController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
+            if (_cdLeft > 0)
+            {
+                return;
+            }
+            _cdLeft = CD;
             transform.GetComponent<FPSRigidController>().grounded = false;
             if (Physics.Raycast(ray, out hit, Range))
             {
