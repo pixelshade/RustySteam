@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class FPSRigidController : MonoBehaviour
 {
     public float speed = 10.0f;
@@ -32,7 +33,7 @@ public class FPSRigidController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Application.LoadLevel("MainMenu");
+            Application.LoadLevel(Consts.MainMenuScene);
         }
         if (grounded && !_player.Stunned)
         {
