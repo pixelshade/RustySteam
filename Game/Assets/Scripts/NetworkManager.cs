@@ -24,16 +24,13 @@ public class NetworkManager : MonoBehaviour {
 
     void Awake ()
 	{
-		/*DontDestroyOnLoad(this);
-		GetComponent<NetworkView>().group = 0;
-		Network.SetLevelPrefix(_lastLevelPrefix);
-		Application.LoadLevel(Consts.MainMenuScene);*/
+		DontDestroyOnLoad(this);
+        //Application.LoadLevel("MainMenu");
 	}
 
 	public void LoadLevel(string level){
 		//Network.RemoveRPCsInGroup(0);
 		//Network.RemoveRPCsInGroup(1);
-        Debug.Log("LoadLevel");
 		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix + 1);
 	}
 
@@ -92,6 +89,6 @@ public class NetworkManager : MonoBehaviour {
 
 	public static NetworkManager Get(){
 		GameObject go = GameObject.Find("NetworkManager");
-	    return go.GetComponent<NetworkManager>();
+	    return go == null ? null : go.GetComponent<NetworkManager>();
 	}
 }

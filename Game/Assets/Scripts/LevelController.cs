@@ -5,13 +5,24 @@ using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
 
-public class LevelController : MonoBehaviour
+public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 {
     private const int NUM_CUBES = 50;
-    private List<GameObject> cubes = new List<GameObject>(); 
+    private List<GameObject> cubes = new List<GameObject>();
+    private NetworkManager _networkManager;
 
 	// Use this for initialization
 	void Start () {
+        _networkManager = NetworkManager.Get();
+        if (_networkManager != null)
+        {
+            _networkManager.LoadFinish.Add(this);
+        }
+        else
+        {
+            Debug.LogWarning("NetworkManager is null! - Debugging enviroment");
+        }
+
         var cube = Resources.Load("Cube", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NUM_CUBES; i++)
         {
@@ -51,4 +62,12 @@ public class LevelController : MonoBehaviour
 	void Update () {
 	
 	}
+
+    public void LoadFinished()
+    {
+    }
+
+    public void AllLoadFinished()
+    {
+    }
 }

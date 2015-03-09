@@ -27,6 +27,7 @@ public class GuiMenu : MonoBehaviour {
 
 	void Start () {
         _networkManager = NetworkManager.Get();
+        Debug.Log(_networkManager);
         _nick = "Player" + Random.Range(0, 20);
         if (PlayerPrefs.HasKey("NickName"))
         {
@@ -37,7 +38,7 @@ public class GuiMenu : MonoBehaviour {
 
     void Awake()
     {
-        GetComponent<NetworkView>().group = 0;
+        //GetComponent<NetworkView>().group = 0;
     }
 
 
