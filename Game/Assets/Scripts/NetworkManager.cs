@@ -24,15 +24,16 @@ public class NetworkManager : MonoBehaviour {
 
     void Awake ()
 	{
-		DontDestroyOnLoad(this);
-		GetComponent<NetworkView>().group = 1;
+		/*DontDestroyOnLoad(this);
+		GetComponent<NetworkView>().group = 0;
 		Network.SetLevelPrefix(_lastLevelPrefix);
-		Application.LoadLevel(Consts.MainMenuScene);
+		Application.LoadLevel(Consts.MainMenuScene);*/
 	}
 
 	public void LoadLevel(string level){
-		Network.RemoveRPCsInGroup(0);
-		Network.RemoveRPCsInGroup(1);
+		//Network.RemoveRPCsInGroup(0);
+		//Network.RemoveRPCsInGroup(1);
+        Debug.Log("LoadLevel");
 		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix + 1);
 	}
 
