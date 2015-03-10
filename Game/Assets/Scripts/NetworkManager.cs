@@ -29,10 +29,11 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	public void LoadLevel(string level){
-		//Network.RemoveRPCsInGroup(0);
-		//Network.RemoveRPCsInGroup(1);
+		Network.RemoveRPCsInGroup(0);
 		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix + 1);
 	}
+
+
 
 	[RPC] 
 	IEnumerator LoadLevelRPC (string level, int levelPrefix){

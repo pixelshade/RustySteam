@@ -9,11 +9,15 @@ public class GuiMenu : MonoBehaviour {
         MainMenu, Lobby, Join, Host
     }
 
+    public Texture Logo;
+
     private HostData[] _hostList;
     private MenuState _state;
     private string _nick;
     private int _campParty;
-    
+    private readonly Rect _centRect = new Rect(Screen.width/2 - 100, 100, 200, 400);
+
+
     private bool _disconnect;
     private NetworkManager _networkManager;
 
@@ -38,14 +42,14 @@ public class GuiMenu : MonoBehaviour {
 
     void Awake()
     {
-        //GetComponent<NetworkView>().group = 0;
+//        GetComponent<NetworkView>().group = 0;
     }
 
 
     private void OnGUI()
     {
-        GUI.Label(new Rect(Screen.width/2 - 50, 20, 100, 50), "Rusty Steam "+ _state);
-        
+        GUI.DrawTexture(new Rect(Screen.width / 2 - 100, 0, 200, 100), Logo,ScaleMode.ScaleToFit);
+        GUILayout.BeginArea(_centRect);
         if (_state == MenuState.MainMenu)
         {
             MainMenu();
@@ -62,7 +66,7 @@ public class GuiMenu : MonoBehaviour {
         {
             GameLobby();
         }
-        
+        GUILayout.EndArea();
     }
 
     // Update is called once per frame
@@ -73,34 +77,33 @@ public class GuiMenu : MonoBehaviour {
 
     void MainMenu()
     {
-        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Name:");
+        _nick = GUILayout.TextField(_nick,20);
+        PlayerPrefs.SetString("NickName", _nick);
+        GUILayout.EndHorizontal();
+        
 
-        // Make the first button. If it is pressed, Application.Loadlevel (1) will be executed
-        if (GUI.Button(new Rect(Screen.width / 2 - 50, 140, 100, 20), "Create game"))
+
+        if (GUILayout.Button("Create game"))
         {
             SetState(MenuState.Host);
-            _campParty = 0;
-            
-
         }
 
-        // Make the second button.
-        if (GUI.Button(new Rect(Screen.width / 2 - 50, 180, 100, 20), "Join game"))
+
+        if (GUILayout.Button("Join game"))
         {
             SetState(MenuState.Join);
-//            Application.LoadLevel("GameScene");
         }
 
-        if (GUI.Button(new Rect(Screen.width / 2 - 50, 220, 100, 20), "Exit"))
+        if (GUILayout.Button("Exit"))
         {
             Application.Quit();
         }
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Nickname:");
-        _nick = GUILayout.TextField(_nick, 25);
-        PlayerPrefs.SetString("NickName", _nick);
-        GUILayout.EndHorizontal();
+
+       
+
     }
 
     void JoinGame()
@@ -132,78 +135,79 @@ public class GuiMenu : MonoBehaviour {
     void HostGame()
     {
  
-		        GUILayout.Label("Host Game");
-		        
-		        GUILayout.BeginHorizontal();
-		        if(GUILayout.Button("Back")){
-		            SetState(MenuState.MainMenu);
-		        }
-		        if(GUILayout.Button("Start Server")){
+//		        GUILayout.Label("Host Game");
+//		        
+//		        GUILayout.BeginHorizontal();
+//		        if(GUILayout.Button("Back")){
+//		            SetState(MenuState.MainMenu);
+//		        }
+//		        if(GUILayout.Button("Start Server")){
 		            //Network.InitializeSecurity();
 		            _disconnect = false;
 		            Network.InitializeServer(Consts.maxPlayers, Consts.Port, !Network.HavePublicAddress());
 		            MasterServer.RegisterHost(Consts.GameName, _nick + "'s Game");
-		        }
-		        GUILayout.EndHorizontal();
+//		        }
+//		        GUILayout.EndHorizontal();
 		   
     }
 
-    void GameLobby()
+    private void GameLobby()
     {
-        
-            GUILayout.Label("Lobby");
-            int count = 0;
-            for (int i = 0; i < (Consts.maxPlayers); i++)
+
+        GUILayout.Label("Lobby");
+        int count = 0;
+        for (int i = 0; i < (Consts.maxPlayers); i++)
+        {
+            if (_networkManager.PlayerList[i] != null) count++;
+        }
+        GUILayout.Label("Players (" + count + "/" + (Consts.maxPlayers) + "):");
+        for (int i = 0; i < Consts.maxPlayers; i++)
+        {
+            if (i%2 == 0) GUILayout.BeginHorizontal();
+            if (_networkManager.PlayerList[i] == null)
             {
-                if (_networkManager.PlayerList[i] != null) count++;
-            }
-            GUILayout.Label("Players (" + count + "/" + (Consts.maxPlayers) + "):");
-            for (int i = 0; i < Consts.maxPlayers; i++)
-            {
-                if (i % 2 == 0) GUILayout.BeginHorizontal();
-                if (_networkManager.PlayerList[i] == null)
-                {
-                    GUILayout.Label("<Empty>");
-                }
-                else
-                {
-                    if (Consts.IsHost)
-                    {
-                        if (GUILayout.Button(_networkManager.PlayerList[i].Username))
-                        {
-                            GetComponent<NetworkView>().RPC("KickPlayer", RPCMode.AllBuffered, _networkManager.PlayerList[i].Player);
-                        }
-                    }
-                    else
-                    {
-                        GUILayout.Label(_networkManager.PlayerList[i].Username);
-                    }
-                }
-                if (i % 2 == 1) GUILayout.EndHorizontal();
-            }
-            
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Leave Lobby"))
-            {
-                StartCoroutine(LeaveLobby());
-            }
-            if (Consts.IsHost)
-            {
-                if (GUILayout.Button("Start Game"))
-                {
-                    MasterServer.UnregisterHost();
-                    _networkManager.LoadLevel(Consts.GameScene);
-                }
+                GUILayout.Label("<Empty>");
             }
             else
             {
-                GUILayout.Label("Wait for Host to Start the Game");
+                if (Consts.IsHost)
+                {
+                    if (GUILayout.Button(_networkManager.PlayerList[i].Username))
+                    {
+                        GetComponent<NetworkView>()
+                            .RPC("KickPlayer", RPCMode.AllBuffered, _networkManager.PlayerList[i].Player);
+                    }
+                }
+                else
+                {
+                    GUILayout.Label(_networkManager.PlayerList[i].Username);
+                }
             }
-            GUILayout.EndHorizontal();
-        
+            if (i%2 == 1) GUILayout.EndHorizontal();
+        }
+
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Leave Lobby"))
+        {
+            StartCoroutine(LeaveLobby());
+        }
+        if (Consts.IsHost)
+        {
+            if (GUILayout.Button("Start Game"))
+            {
+                MasterServer.UnregisterHost();
+                _networkManager.LoadLevel(Consts.GameScene);
+            }
+        }
+        else
+        {
+            GUILayout.Label("Wait for Host to Start the Game");
+        }
+        GUILayout.EndHorizontal();
+
     }
 
-	void OnMasterServerEvent(MasterServerEvent msEvent)
+    void OnMasterServerEvent(MasterServerEvent msEvent)
 	{
 		if (msEvent == MasterServerEvent.HostListReceived)
 			_hostList = MasterServer.PollHostList();

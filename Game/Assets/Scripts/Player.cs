@@ -14,7 +14,11 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        if (GetComponent<NetworkView>().isMine)
+        {
+            Camera[] c = GetComponentsInChildren<Camera>();
+            c[0].enabled = true;
+        }
     }
 
     // Update is called once per frame
