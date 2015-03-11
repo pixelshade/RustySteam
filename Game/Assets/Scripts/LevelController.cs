@@ -10,7 +10,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     private const int NUM_CUBES = 10;
     private List<GameObject> cubes = new List<GameObject>();
     private NetworkManager _networkManager;
-
+    private Rigidbody _rb;
 	// Use this for initialization
 	void Start () {
 	    if (Consts.IsHost)
@@ -30,13 +30,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 //        pos.y = 5;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
-	
+        _rb = p.GetComponent<Rigidbody>();
 //        Debug.Log("[NETWORK]playerName has joined the game.");
 //        playerCount += 1;
     }
 
 	void OnGUI(){
-		GUI.Label(new Rect(120,0,200,100),"velocity "+rb.velocity+"\n pos: "+rb.position);
+		GUI.Label(new Rect(120,0,200,100),"velocity "+_rb.velocity+"\n pos: "+_rb.position);
 	}
 
 
