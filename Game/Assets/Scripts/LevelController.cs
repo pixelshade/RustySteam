@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 {
-    private const int NUM_CUBES = 1;
+    private const int NUM_CUBES = 10;
     private List<GameObject> cubes = new List<GameObject>();
     private NetworkManager _networkManager;
 
@@ -26,14 +26,18 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
 //        var pos = Random.insideUnitSphere*100;
-         Vector3 pos = Consts.IsHost ? new Vector3(0, 2, 0) : new Vector3(5, 2, 5);
-//        pos.y = 2;
+         Vector3 pos = Consts.IsHost ? new Vector3(0, 5, 0) : new Vector3(50, 5, 50);
+//        pos.y = 5;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
-        
-        Debug.Log("[NETWORK]playerName has joined the game.");
+	
+//        Debug.Log("[NETWORK]playerName has joined the game.");
 //        playerCount += 1;
     }
+
+	void OnGUI(){
+		GUI.Label(new Rect(120,0,200,100),"velocity "+rb.velocity+"\n pos: "+rb.position);
+	}
 
 
     public void InitWorld()

@@ -41,7 +41,7 @@ public class Player : MonoBehaviour
                 
             }
 
-            Respawn(5);
+            Respawn(1);
         }
     }
 
@@ -81,7 +81,10 @@ public class Player : MonoBehaviour
 
     public IEnumerator Respawn(float time = 0)
     {
+		Debug.Log ("pls");
         var gameGui = GetComponent<GuiGame>();
+
+		Debug.Log (gameGui);
         gameGui.RespawnIn(time);
         var position = Random.insideUnitSphere * 500;
         position.y = 1;
