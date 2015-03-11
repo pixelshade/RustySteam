@@ -52,36 +52,34 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             Debug.LogWarning("NetworkManager is null! - Debugging enviroment");
         }
 
-        var cube = Resources.Load("Prefabs/Cube", typeof(GameObject)) as GameObject;
+        var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
+        var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NUM_CUBES; i++)
         {
 
             var point = Random.insideUnitSphere * 500;
             point.y = Math.Abs(point.y);
 
-            GameObject c;
-//            if (Consts.IsSinglePlayer)
-//            {
-//                c = Instantiate(cube, point, Quaternion.identity) as GameObject;
-//            }
-//            else
-//            {
-             
-                c = Network.Instantiate(cube, point, Quaternion.identity, 0) as GameObject;
-//            }
-            c.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
-            c.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
+            var point2 = Random.insideUnitSphere * 500;
+            point.y = Math.Abs(point2.y);
 
-            // We will create some stable blocks 
-            if (Random.value > 0.5)
+            GameObject s,w;
+            if (Consts.IsSinglePlayer)
             {
-                c.GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f);
-                c.GetComponent<Rigidbody>().isKinematic = true;
-                c.transform.localScale += c.transform.localScale * 10;
-                c.transform.position = new Vector3(c.transform.position.x, 0, c.transform.position.z);
-                Destroy(c.GetComponent<Movable>());
+                s = Instantiate(scrap, point, Quaternion.identity) as GameObject;
+                w = Instantiate(wall, point, Quaternion.identity) as GameObject;
             }
-            cubes.Add(c);
+            else
+            {
+                s = Network.Instantiate(scrap, point, Quaternion.identity, 0) as GameObject;
+                w = Network.Instantiate(wall, point, Quaternion.identity, 0) as GameObject;
+            }
+            s.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
+            w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
+//            c.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
+
+           
+            
         }
     }
 
