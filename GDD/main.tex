@@ -15,37 +15,49 @@
 \tableofcontents
  
 \chapter{Story}
-Zatiaľ nie je k dispozicií
+Zatiaľ nie je k dispozicií, hra je zatiaľ primárne zameraná na arena-like multiplayer. Neskôr môžu pribudnúť dejové úseky.
  
 \chapter{Feature Listing}
 \begin{itemize}
   \item 3D First Person Shooter
-  \item Hooks
+  \item Grappling Hooks
   \item Enviroment Control
   \item Multiplayer
   \item Weapon Customization
+  \item Different Characters
+  \item Tutorial
 \end{itemize}
+
+\chapter{Requirements}
+\begin{itemize}
+  \item Internet Connection - Hra je primárne určená na hranie s ostatnými hráčmi. Pri tvorbe hernej session využíva Unity masterserver pre vytváranie a nájdenie hier.
+  \item Windows/Linux/OSX
+\end{itemize}
+
 
 \chapter{Gameplay}
 \section{Game Mechanics}
- Hlavnou mechanikou hry je priťahovanie a odťahovanie. Hráči pomocou zbraní môžu odhadzovať pohyblivé časti prostredia vrátane iných hráčov. Pri použití voči statickým prvkom prostredia je automaticky použitá opačná sila na hráča - teda napríklad hráč, ktorý chcel odhodiť nepohyblivú stenu sa od nej odhodí. Hráči sa môžu klasicky pohybovať po prostredí a majú určitú formu ukazatela životov. Tie možno nepriatelom ubrať pomocou viacerých možných spôsobov buď polohovaním nepriateľa do určitých zón, trafením pohyblivým predmetom alebo pomocou headshotu - vid nižšie.  
+ Hlavnou mechanikou hry je priťahovanie a odtláčanie. Hráči budú schopný pomocou zbraní pohybovať rôzne časti prostredia, toto zahŕňa napríklad aj ostatných hráčov. Pri použití voči statickým prvkom prostredia je automaticky použitá opačná sila na hráča - teda napríklad hráč, ktorý chcel odhodiť nepohyblivú stenu sa odhodí od nej. Hráči sa môžu klasicky pohybovať po prostredí a majú určitú formu ukazatela životov. Hráčom znižuje množstvo životov sila, ktorá na nich pôsobí pri kolízií s objektami - či už statickými (stena, zem) alebo pohyblivými (rôzne objekty). Taktiiež je možno nepriateľom ubrať životy pomocou ďalších možných spôsobov napríklad polohovaním nepriateľa do určitých zón alebo pomocou ripshotu - viď nižšie.  Hra má pomerne vysoké tempo, preto je vhodná hlavne pre skúsených hráčov FPS hier. Použitie odpudivej sily je vrámci dostrelu okamžité, narozdiel od priťažlivej, ktorá sa pohybuje určitou rýchlosťou do určitej vzdialenosti dostrelu.
 
 \section{Game Mode}
-Hodnotenie hráčov záleži od zvoleného herného módu, aj keď zabíjanie hráčov je dôležité v oboch módoch, jeho dôležitosť sa mení.
+Hodnotenie hráčov záleži od zvoleného herného módu, aj keď zabíjanie hráčov je dôležité v oboch módoch, jeho dopad sa líši. Hráči sa budú rozlišovať farbou modelu podľa tímu do ktorého patria.
 \subsection{Team Deathmatch}
 Hráči musia nazbierať stanovený počet fragov skôr ako nepriateľský tím. Tie získajú zabitím nepriateľov pomocou prostredia, vyhodenia z mapy alebo spoluprácou so svojími spoluhráčmi na nejakom combe.
 
 \subsection{Capture The Flag}
 Skóre tímov sa počíta v množstve vlajok, ktoré odniesli z nepriateľskej základne do svojej. Vlajka z človeka spadne ak bude trafení nejakým objektom (toto trafenie nemusí byť smrteľné) alebo zabití.
+
+\subsection{King of the Kong}
+Hra má podobný priebeh ako Team Deathmatch len v určitých intervaloch sa spawne neutrálna jednotka, Kong, ktorá periodický pridáva body tímu, ktorý ho ovláda. Ovládnutie Konga je zložitý proces pri ktorom budú hráči musieť spolupracovať tak aby sa dostali na určitú pozíciu, na ktorej je Kong ovládany. Úlohou druhého tímu je prebrať Konga na svoju stranu zneškodnením hráča, ktorý Konga ovláda a dosadení svojho vlastného spoluhráča, ktorý ho bude ovládať.
  
 \section{Controls}
-Hráči sa budú vo svete pohybovať pomocou pohybových kláves, štandardne WSAD a strielať so zbraní pomocou tláčítok myši. Taktiež budú mať k dispozícií nejaké utility itemy, ktoré budú môcť štandardne aktivovať pomocou Q a E.
+Hra sa primárne ovláda pomocou klávesnice a myši. Všetky akcie hráča sú meniteľné na základe preferencií hráča. 
 
 \section{Combos}
-Mechaniky hry umožnia hráčom v multiplayeri robiť kombá, ako vystreliť hráča ako projektil alebo takzvaný headshot, ak 2 rôzný ľudia pritiahnú toho istého človeka.
+Mechaniky hry umožnia hráčom v multiplayeri pomocou fyziky robiť kombá, ako napríklad vystreliť hráča ako projektil alebo takzvaný ripshot, roztrhnutie hráča keď ho naraz pritiahujú dvaja rôzny hráči. Podhadzovanie objektov druhému hráčovi ako dočasné plošiny od ktorých môže odskočiť. 
 
 \section{Drops to Powerups}
-Vo svete sa budú spawnovať powerupy, ktoré dočasne vylepšia atribúty hráča alebo jeho zbraní. Rýchlejšie projektily, pohyb a tak podobne.
+Vo svete sa budú spawnovať powerupy, ktoré dočasne vylepšia atribúty hráča alebo jeho zbraní. Rýchlejšie projektily, pohyb, zdravie, neviditeľnosť, imunita a tak podobne.
 
 \section{Weapon Customization}
 Z menu budú mať hráči možnosť poupravovať si zbrane podľa vlastného štýlu hrania a chute. Budú mať maximálny počet bodov, ktoré budú mocť rozdeliť medzi rôzne parametre zbrane ako dostrel, rýchlosť projektilu, šírka projektilu a ďalšie.
@@ -53,12 +65,30 @@ Z menu budú mať hráči možnosť poupravovať si zbrane podľa vlastného št
 \chapter{Visual}
 \section{Art Style}
 Hlavnou grafickou témou hry bude steampunk, a všetky prvky hry budú ladené podľa tejto témy.
+
+\section{Character Selection}
  
 \section{User Interface}
 \subsection{Menus}
-Hráči budú mať možnosť vytvoriť server, pripojiť sa na server, nastaviť systemové parametre (rozlišenie, hlasitosť, senzitivita) ako aj customizovať si niektoré parametre zbraní podľa vlastnej chute.
+\begin{itemize}
+  \item Vytvorenie hernej session
+  \item Vyhľadanie aktívnych herných session
+  \item Herné lobby
+  \item Nastavenie rozlíšenia
+  \item Nastavenie ovládania
+  \item Výber postavy
+  \item Výber a customizácia zbraní
+  \item Volba mena
+\end{itemize}
  
 \subsection{Gameplay}
-Počas hry budú vidiet indikátory zobrazujúce pripravenosť zbraní, skóre oboch tímov a 3D radar na ktorom sa im bude zobrazovať poloha spojencov a nepriateľov.
- 
+Počas hry budú mať hráči prístup k rôznym indikátorom: vidiet indikátory zobrazujúce pripravenosť zbraní, skóre oboch tímov a 3D radar na ktorom sa im bude zobrazovať poloha spojencov a nepriateľov.
+\begin{itemize}
+  \item Ukazovateľ životov
+  \item Pripravenosť zbraní
+  \item 3D Minimapa
+  \item Chat
+  \item Mená hráčov
+\end{itemize} 
+
 \end{document}
