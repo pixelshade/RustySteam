@@ -17,12 +17,12 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 	    {
 	        InitWorld();
 	    }
-	    SpawnPlayer();
+        SpawnPlayer(PlayerPrefs.GetString("NickName"));
 
 	}
 
 
-    public void SpawnPlayer()
+    public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
 //        var pos = Random.insideUnitSphere*100;
@@ -30,6 +30,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 //        pos.y = 5;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
+        p.GetComponent<Player>().Name = name;
         _rb = p.GetComponent<Rigidbody>();
 //        Debug.Log("[NETWORK]playerName has joined the game.");
 //        playerCount += 1;

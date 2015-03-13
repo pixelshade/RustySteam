@@ -11,14 +11,33 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
     public GameObject FlagGameObject;
+
+    public string Name
+    {
+        get { return _name; } 
+        set
+        {
+            if (_playerNameText != null)
+            {
+                _name = value;
+                _playerNameText.text = value;
+            }
+        }
+    }
+    private string _name;
+    private TextMesh _playerNameText;
     // Use this for initialization
     void Start()
     {
         if (GetComponent<NetworkView>().isMine)
         {
             Camera[] c = GetComponentsInChildren<Camera>();
+            AudioListener[] al = GetComponentsInChildren<AudioListener>();
             c[0].enabled = true;
+            al[0].enabled = true;
         }
+        _playerNameText = GameObject.Find("PlayerName").GetComponent<TextMesh>();
+        _playerNameText.text = _name;
     }
 
     // Update is called once per frame
