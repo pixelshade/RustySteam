@@ -5,6 +5,9 @@
 \usepackage{lmodern}
 \usepackage{txfonts} %Times New Roman
 \usepackage[T1]{fontenc}
+\usepackage{hyperref}
+
+
  
 \title{Rusty Steam}
 \author{Martin Strapko \\ Peter Šulík}
@@ -15,15 +18,18 @@
 \tableofcontents
  
 \chapter{Story}
-Prostredie, v ktorom sa hra odohráva je neznáma krajina 21. storočia, kde sa vybralo ľudstvo inou cestou ako cestou elektriny ale ostalo verné energii pary, z ktorú využívaju takmer všetky pristroje. Je to  prostredie v ktorom, je každý druhý občan tejto krajiny kutil, ktorý experimentuje a vytvára si rôzne šikovné prístroje. To sa však nepáči vláde, ktorá chce mať pod kontrolou tvorbu týchto pristrojov. Keďže vznikajú agresivné potičky, ktoré sú na dennom poriadku. V jednej z nich sa ocitá aj hráč. Velmi často sa diskutuje, že či by 
+Prostredie, v ktorom sa hra odohráva je neznáma krajina 21. storočia, kde sa vybralo ľudstvo inou historickou cestou ako cestou elektriny a ostalo verné energii pary. Tú využívaju takmer všetky pristroje. Je to  prostredie v ktorom, je každý druhý občan tejto krajiny kutil, ktorý experimentuje a vytvára si rôzne šikovné prístroje. To sa však nepáči vláde, ktorá chce mať pod kontrolou tvorbu týchto prístrojov a aj predaj. Vznikajú agresivné potičky, ktoré sú na dennom poriadku, v ktorých si rôzne kutilské klany tovarní dokazujú, kto vyrába lepšie prístroje. V jednej z nich sa ocitá aj hráč. 
+
 \section{Structure}
-Hra je určená pre hru viacerých hráčov, ktorý bojujú v určitej \"aréne\" alebo na ohraničenom území. Hráči neobjavujú nové časti deju - skôr sú len vhodený do prostredia, ktorého história a pribéhy postáv v ňom bojujúcich . Pre jednotlivé Game Mody a pre jednotlivé postavy bude vytvorený príbeh.
+Hra je určená pre hru viacerých hráčov, ktorý bojujú v určitej \"aréne\" alebo na ohraničenom území. Hráči neobjavujú nové časti deju - skôr sú len vhodený do prostredia, ktorého história a pribéhy postáv v ňom bojujúcich sú povedané v popiskoch/cutscénach pri výbere postáv, či levelov. Pre jednotlivé Game Mody a pre jednotlivé postavy bude vytvorený príbeh vyscetlujúci ich pozadie.
+
 \section{Capture The Flow}
-Tento konflikt vznikol kvôli vedeckej komunite, ktorá sa rozdelila v určitom období na dva smery. Jeden, za ktorým stál známy vedec Ed Tyson, hlásajúci jednosmerný prúd pary. Na druhej strane stála vedkyňa La Tess, ktorá tvrdila, že budúcnosť patrí striedavému prúdu pary. Tak ako to aj z našej histórie poznáme sa po dlhodobých hádkach oboch strán naskytlo riešenie - vojna. Kto
+Tento konflikt vznikol kvôli vedeckej komunite, ktorá sa v určitom období rozdelila na dva smery. Jeden, za ktorým stál známy vedec Ed Tyson, hlásajúci jednosmerný prúd pary. Na druhej strane stála vedkyňa La Tess, ktorá tvrdila, že budúcnosť patrí striedavému prúdu pary. Obaja vedci vyrobili určité množstvo jedného aj druhého typu pary, tie však ukradli nadšenci jednotlivých smerov. Tak ako to aj z našej histórie poznáme sa po dlhodobých diskusiách oboch strán naskytlo riešenie - vojna. Alebo aspoň tak si to vysvetlili obyvatelia, ktorí chcú dokázať pravdu svojho presvedčenia tým, že ukradnú tej druhej skupine nádoby obsahujúce ich typ pary a prinesú do svojej zákládni, kde ich zničia. Keď jeden z týchto tímov príde o všetky zásoby pary - prehrá argument. A tak keďze hráč je členom jedného z týchto smerov tak ovplyvní buducnosť, ktorý typ pary je lepší. Tradične logckými argumentami.
 
 \section{King of the Kong}
-Pri jednom z konfiktov sa splnili predpovede mnohých konšpirátorov. Vláda naozaj začala stavať stroj pomocou ktorého chcela ukludnit nepokoje a nastolit poriadok. Volala sa KONG.(Kolosalna ozaj nie gorila) Bol to obrovitansky robot, ktory pripominal žirafu. To čo však vláda netušila, bolo, že jej tajnú ju obyvatelia našli a chceli sa jej zmocniť. Rozhadali sa však dve strany mesta - každá zo strán ho chce mať na svojej strane kde by slúžila ako vyhliadková veža. Kompromis v strede zrejme nebol dobrý nikomu a tak sa hráč stáva súčasťou boja, kde dve superiace strany bojoujú o nadvladu nad KONGom.
-
+Pri jednom z konfiktov sa splnili predpovede mnohých konšpirátorov. Vláda naozaj začala stavať stroj, pomocou ktorého chcela ukludniť nepokoje a nastoliť poriadok. Volala sa KONG.(Kolosálna ozaj nie gorila/kontrolovany obor na gaunerov) Bol to obrovitánsky robot, ktorý pripomínal žirafu. To čo však vláda netušila, bolo, že jej tajnú zbráň obyvatelia našli a chceli sa jej zmocniť. Rozhadáli sa však dve strany mesta - každá zo strán ho chcela mať na svojej strane kde by slúžila ako vyhliadková veža. Kompromis v strede zrejme nebol dobrý nikomu a tak sa hráč stáva súčasťou boja, kde dve súperiace strany bojoujú o nadvladu nad KONGom. 
+// Lol. poznámka pomimo: existuje kapela \href{https://youtu.be/dDRHx4cPgbE?t=50s}{Steam Powered Giraffe} . 
+ 
 
 \chapter{Feature Listing}
 \begin{itemize}
@@ -53,11 +59,12 @@ Hodnotenie hráčov záleži od zvoleného herného módu, aj keď zabíjanie hr
 Hráči musia nazbierať stanovený počet fragov skôr ako nepriateľský tím. Tie získajú zabitím nepriateľov pomocou prostredia, vyhodenia z mapy alebo spoluprácou so svojími spoluhráčmi na nejakom combe.
 
 \subsection{Capture The Flow}
-Skóre tímov sa počíta v množstve vlajok, ktoré odniesli z nepriateľskej základne do svojej. Vlajka z človeka spadne ak bude trafení nejakým objektom (toto trafenie nemusí byť smrteľné) alebo zabití.
+Klasický mód Capture The Flag.
+Skóre tímov sa počíta v množstve vlajok/špeciálnych objektov, ktoré odniesli z nepriateľskej základne do svojej. Vlajka z človeka spadne ak bude trafení nejakým objektom (toto trafenie nemusí byť smrteľné) alebo zabití.
 
 \subsection{King of the Kong}
-Hra má podobný priebeh ako Team Deathmatch len v určitých intervaloch sa spawne neutrálna jednotka, Kong, ktorá periodický pridáva body tímu, ktorý ho ovláda. Ovládnutie Konga je zložitý proces pri ktorom budú hráči musieť spolupracovať tak aby sa dostali na určitú pozíciu, na ktorej je Kong ovládany. Úlohou druhého tímu je prebrať Konga na svoju stranu zneškodnením hráča, ktorý Konga ovláda a dosadení svojho vlastného spoluhráča, ktorý ho bude ovládať.
- 
+Hra má podobný priebeh ako Team Deathmatch len v určitých intervaloch sa spawne neutrálna jednotka, Kong, ktorá periodický pridáva body tímu, ktorý ho ovláda. Ovládnutie Konga je zložitý proces pri ktorom budú hráči musieť spolupracovať tak aby sa dostali na určitú pozíciu, na ktorej je Kong ovládany. Úlohou druhého tímu je prebrať Konga na svoju stranu zneškodnením hráča, ktorý Konga ovláda a dosadení svojho vlastného spoluhráča, ktorý ho bude ovládať. 
+
 \section{Controls}
 Hra sa primárne ovláda pomocou klávesnice a myši. Všetky akcie hráča sú meniteľné na základe preferencií hráča. 
 
@@ -72,10 +79,10 @@ Z menu budú mať hráči možnosť poupravovať si zbrane podľa vlastného št
  
 \chapter{Visual}
 \section{Art Style}
-Hlavnou grafickou témou hry bude steampunk, a všetky prvky hry budú ladené podľa tejto témy. Farebna paleta by mala byt pastelová, taktiež by modely mali byť relativne jednoduché a zložene z málo polygónov a detaily objektov by mali byť v textúrach.
+Hlavnou grafickou témou hry bude steampunk, a všetky prvky hry budú ladené podľa tejto témy. Farebna paleta by mala byt pastelová, taktiež by modely mali byť relativne jednoduché a zložene z málo polygónov a detaily objektov by mali byť v textúrach. Primarny smer designu postáv i objektov by mal byť ladený do cartoon/chibi štýlu, kde sa upúšta od realizmu a váha je skôr na disproporcii(velké hlavy, ruky, nohy), ktorá nahráva cute štýlu, takmer ako pre deti. Avšak určite pri RIPshotoch a iných typoch smrti by bol vyborné odskušať kontrast s naturalizmom - nešetriť krvou a chrbticami bez hláv. 
 
 \section{Character Selection}
- Hráči si môžu vybrať výzor svojej postavy pred začaťím hry z predvyrobených postáv. Primárne by výzor postavy nemal ovplyvňovať gameplay.
+ Hráči si môžu vybrať výzor svojej postavy pred začaťím hry z predvyrobených postáv. Primárne by výzor postavy nemal ovplyvňovať gameplay. 
 
 \section{User Interface}
 \subsection{Menus}
