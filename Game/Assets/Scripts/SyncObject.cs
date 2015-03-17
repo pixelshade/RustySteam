@@ -8,10 +8,10 @@ public class SyncObject : MonoBehaviour
     private Vector3 _syncStartPosition = Vector3.zero;
     private Vector3 _syncEndPosition = Vector3.zero;
     private Quaternion _q = Quaternion.identity;
-
+    private Rigidbody _rb;
     void Start()
     {
-
+        _rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -27,13 +27,13 @@ public class SyncObject : MonoBehaviour
 
         if (stream.isWriting)
         {
-            syncPosition = GetComponent<Rigidbody>().position;
+            syncPosition = _rb.position;
             stream.Serialize(ref syncPosition);
 
-            syncVelocity = GetComponent<Rigidbody>().velocity;
+            syncVelocity = _rb.velocity;
             stream.Serialize(ref syncVelocity);
 
-            _q = GetComponent<Rigidbody>().rotation;
+            _q = _rb.rotation;
             stream.Serialize(ref _q);
             Serialize(stream, info);
         }
@@ -48,7 +48,7 @@ public class SyncObject : MonoBehaviour
             _lastSynchronizationTime = Time.time;
 
             _syncEndPosition = syncPosition + syncVelocity * _syncDelay;
-            _syncStartPosition = GetComponent<Rigidbody>().position;
+            _syncStartPosition = _rb.position;
             Deserialize(stream, info);
         }
     }
@@ -62,8 +62,8 @@ public class SyncObject : MonoBehaviour
         else
         {
             _syncTime += Time.deltaTime;
-            GetComponent<Rigidbody>().position = Vector3.Lerp(_syncStartPosition, _syncEndPosition, _syncTime / _syncDelay);
-            GetComponent<Rigidbody>().rotation = _q;
+            _rb.position = Vector3.Lerp(_syncStartPosition, _syncEndPosition, _syncTime / _syncDelay);
+            _rb.rotation = _q;
         }
     }
 
