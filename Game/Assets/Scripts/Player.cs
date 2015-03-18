@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("sila" + collision.relativeVelocity.magnitude);
+//        Debug.Log("sila" + collision.relativeVelocity.magnitude);
         //        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
         if (collision.relativeVelocity.magnitude > 50)
             HP -= 10;
@@ -76,7 +76,10 @@ public class Player : MonoBehaviour
         {
             Debug.Log("vlajka!");
             HasFlag = true;
-            Destroy(collision.gameObject);
+            if (Consts.IsSinglePlayer)
+                Destroy(collision.gameObject);
+            else
+                Network.Destroy(collision.gameObject);
         }
 
     }

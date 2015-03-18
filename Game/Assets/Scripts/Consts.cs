@@ -7,6 +7,11 @@ public class Consts
     public static int maxPlayers = 8;
     public static int Port = 25000;
 
+    public enum GameModes
+    {
+        CaptureTheFlag, DeathMatch, KingOfTheKong
+    }
+
     public static bool IsSinglePlayer
     {
         get { return !Network.isServer && !Network.isClient; }

@@ -11,6 +11,11 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     private List<GameObject> cubes = new List<GameObject>();
     private NetworkManager _networkManager;
     private Rigidbody _rb;
+
+
+
+    private Consts.GameModes _gameMode;
+    
 	// Use this for initialization
 	void Start () {
 	    if (Consts.IsHost)
@@ -32,6 +37,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
         p.GetComponent<Player>().Name = name;
         _rb = p.GetComponent<Rigidbody>();
+        Debug.Log("wecolvome:"+name);
 //        Debug.Log("[NETWORK]playerName has joined the game.");
 //        playerCount += 1;
     }
@@ -62,21 +68,22 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             point.y = Math.Abs(point.y);
 
             var point2 = Random.insideUnitSphere * 500;
-            point.y = Math.Abs(point2.y);
+            point.y = Math.Abs(point2.y)/2;
 
             GameObject s,w;
             if (Consts.IsSinglePlayer)
             {
                 s = Instantiate(scrap, point, Quaternion.identity) as GameObject;
-                w = Instantiate(wall, point, Quaternion.identity) as GameObject;
+                w = Instantiate(wall, point2, Quaternion.identity) as GameObject;
             }
             else
             {
                 s = Network.Instantiate(scrap, point, Quaternion.identity, 0) as GameObject;
-                w = Network.Instantiate(wall, point, Quaternion.identity, 0) as GameObject;
+                w = Network.Instantiate(wall, point2, Quaternion.identity, 0) as GameObject;
             }
-            s.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
-            w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
+//            s.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
+          
+            w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 50;
 //            c.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
 
            

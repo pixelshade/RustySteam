@@ -5,6 +5,7 @@ public class SyncObject : MonoBehaviour
     private float _lastSynchronizationTime;
     private float _syncDelay;
     private float _syncTime;
+
     private Vector3 _syncStartPosition = Vector3.zero;
     private Vector3 _syncEndPosition = Vector3.zero;
     private Quaternion _q = Quaternion.identity;
@@ -46,11 +47,13 @@ public class SyncObject : MonoBehaviour
             _syncTime = 0f;
             _syncDelay = Time.time - _lastSynchronizationTime;
             _lastSynchronizationTime = Time.time;
-
+           
             _syncEndPosition = syncPosition + syncVelocity * _syncDelay;
-            _syncStartPosition = _rb.position;
+            _syncStartPosition = GetComponent<Rigidbody>().position;
+            
             Deserialize(stream, info);
         }
+        
     }
 
     void FixedUpdate()
