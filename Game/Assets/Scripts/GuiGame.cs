@@ -64,11 +64,11 @@ public class GuiGame : MonoBehaviour
     {
         if (_respawnTime > 0)
         {
-            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 12, 24, 24), "Rewspawn in :"+ _respawnTime);
+            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 100, 200, 24), _respawnTime.ToString("D"), _hugeGuiStyle);
         }
         else if (_respawnTime > -1)
         {
-            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 12, 24, 24), "GO!", _hugeGuiStyle);
+            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 100, 200, 24), "GO!", _hugeGuiStyle);
         }
         _respawnTime -= Time.deltaTime;
         

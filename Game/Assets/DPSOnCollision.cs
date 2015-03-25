@@ -7,7 +7,8 @@ public class DPSOnCollision : MonoBehaviour
     public int Damage = 10;
     public float Seconds = 1000;
 
-	private Dictionary<Player, float>  collidingPlayers = new Dictionary<Player, float> ();
+    private List<Player> collidingPlayers = new List<Player>();
+    private List<float> times = new List<float>();
   
    
 	// Use this for initialization
@@ -16,32 +17,26 @@ public class DPSOnCollision : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
-//		var temp = new Dictionary<Player, float> ();
-
-		foreach (var t in collidingPlayers) {
-//			Debug.Log("next:"+t.Value);
-//			Debug.Log ("time:"+Time.time);
-			if (Time.time > t.Value) {
-
-				t.Key.HP -= Damage;
-				collidingPlayers[t.Key] = Time.time + Seconds;
-				var c = Time.time + Seconds;
-//				temp.Add(t.Key,c);
-//				Debug.Log(c);
-			}
-		}
-//		collidingPlayers = temp;
-
-//		Debug.Log (collidingPlayers);
+	void Update ()
+	{
+	    for (int i = 0; i < collidingPlayers.Count; i++)
+	    {
+	        if (Time.time > times[i])
+	        {
+                collidingPlayers[i].HP -= Damage;
+                times[i] = Time.time + Seconds;
+	        }
+	    }
 	}
 
     void OnCollisionEnter(Collision collision)
     {
         var player = collision.transform.GetComponent<Player>();
-        if (player != null)
+        if (player != null && !collidingPlayers.Contains(player))
         {
-			collidingPlayers.Add(player, Time.time);
+			collidingPlayers.Add(player);
+            Debug.Log(player.name);
+            times.Add(Time.time);
 
         }
 
@@ -51,7 +46,10 @@ public class DPSOnCollision : MonoBehaviour
 		var player = collision.transform.GetComponent<Player>();
 		if (player != null)
 		{
-			collidingPlayers.Remove(player);			
+            var pos = collidingPlayers.IndexOf(player);
+		    if (pos < 0) return;
+		    collidingPlayers.RemoveAt(pos);
+		    times.RemoveAt(pos);
 		}
 
 	}

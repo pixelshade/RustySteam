@@ -35,7 +35,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 //        pos.y = 5;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
-        p.GetComponent<Player>().Name = name;
+        p.GetComponent<Player>().NickName = name;
         _rb = p.GetComponent<Rigidbody>();
         Debug.Log("wecolvome:"+name);
 //        Debug.Log("[NETWORK]playerName has joined the game.");

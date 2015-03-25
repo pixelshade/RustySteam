@@ -5,26 +5,29 @@ using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
-
+    public int StartHP = 100;
     public int HP = 100;
 
+
+    public bool Dead = false;
     public bool Stunned = false;
     public bool HasFlag = false;
     public GameObject FlagGameObject;
+    
 
-    public string Name
+    public string NickName
     {
-        get { return _name; } 
+        get { return _nickName; } 
         set
         {
             if (_playerNameText != null)
             {
-                _name = value;
+                _nickName = value;
                 _playerNameText.text = value;
             }
         }
     }
-    private string _name;
+    private string _nickName;
     private TextMesh _playerNameText;
     // Use this for initialization
     void Start()
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
             al[0].enabled = true;
         }
         _playerNameText = GameObject.Find("PlayerName").GetComponent<TextMesh>();
-        _playerNameText.text = _name;
+        _playerNameText.text = _nickName;
     }
 
     // Update is called once per frame
@@ -59,8 +62,12 @@ public class Player : MonoBehaviour
 //                rb.AddExplosionForce(2,transform.position,3);
                 
             }
-
-            Respawn(1);
+            
+            if (!Dead)
+            {
+                Respawn(5);
+                Dead = true;
+            }
         }
     }
 
@@ -101,23 +108,27 @@ public class Player : MonoBehaviour
         return f;
     }
 
-    public IEnumerator Respawn(float time = 0)
+    public void Respawn(float time = 0)
     {
-		Debug.Log ("pls");
         var gameGui = GetComponent<GuiGame>();
-
-		Debug.Log (gameGui);
+        Invoke("Respawn", time);
         gameGui.RespawnIn(time);
+//        yield return new  WaitForSeconds(time);
+    }
+
+    public void Respawn()
+    {
         var position = Random.insideUnitSphere * 500;
-        position.y = 1;
-        yield return new  WaitForSeconds(time);
-        Respawn(position);
-        
+        HP = StartHP;
+        Dead = false;
+        transform.position = position;
+        position.y = 2;
     }
 
     public IEnumerator Respawn(Vector3 position ,float time = 0)
     {
         yield return new WaitForSeconds(time);
+        Debug.Log("pls");
         transform.position = position;
     }
 
