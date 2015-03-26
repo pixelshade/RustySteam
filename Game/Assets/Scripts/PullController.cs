@@ -39,17 +39,19 @@ public class PullController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
+                int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj!=null)
                 {
+                    
                     var direction = hit.transform.position - transform.position;
-                    hitObj.MoveTowards(direction.normalized, Power);
+                    hitObj.MoveTowards(playerIndex,direction.normalized, Power);
                 }
                 else
                 {
                     transform.GetComponent<Player>().Stunned = true;
                     _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
-                    self.MoveTowards(fwd.normalized, -Power);
+                    self.MoveTowards(playerIndex, fwd.normalized, -Power);
                 }
             
             }
@@ -70,10 +72,11 @@ public class PullController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
+                int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj != null)
                 {
                     var direction = hit.transform.position - transform.position;
-                    hitObj.MoveTowards(direction.normalized, -Power);
+                    hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                 }
                 else
                 {
@@ -81,7 +84,7 @@ public class PullController : MonoBehaviour
                     _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
                     //var direction = hit.transform.position - transform.position;
-                    self.MoveTowards(fwd.normalized, Power);
+                    self.MoveTowards(playerIndex, fwd.normalized, Power);
                 }
             
             }

@@ -9,7 +9,7 @@ public class Consts
 
     public enum GameModes
     {
-        CaptureTheFlag, DeathMatch, KingOfTheKong
+        CaptureTheFlag, DeathMatch, KingOfTheHill
     }
 
     public static bool IsSinglePlayer

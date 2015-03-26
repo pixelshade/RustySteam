@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     public bool HasFlag = false;
     public int Team = 0;
     public GameObject FlagGameObject;
-    
+
+
+    private int _killer, _deathType;
 
     public string NickName
     {
@@ -64,8 +66,14 @@ public class Player : MonoBehaviour
                 
             }
             
+            // called once while dead
+            
             if (!Dead)
             {
+                var levelController = GameObject.Find("Main");
+                var playerIndex = NetworkManager.Get().GetPosition(true);
+                if (Consts.IsHost)
+                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, playerIndex, _deathType);
                 Respawn(5);
                 Dead = true;
             }
@@ -77,7 +85,15 @@ public class Player : MonoBehaviour
 //        Debug.Log("sila" + collision.relativeVelocity.magnitude);
         //        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
         if (collision.relativeVelocity.magnitude > 50)
+        {
             HP -= 10;
+            if(HP ==0)
+                if (collision.gameObject.GetComponent<Movable>() != null)
+                {
+                    _killer = collision.gameObject.GetComponent<Movable>().MovedByPlayer;
+                    _deathType = (int)DeathType.Hit;
+                }
+        }
 
         var flag = collision.transform.GetComponent<FlagController>();
         if (flag != null)

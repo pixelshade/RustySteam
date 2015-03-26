@@ -39,7 +39,7 @@ public class GuiGame : MonoBehaviour
 
     void OnGUI()
     {
-        
+//                GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
         
         GUI.TextArea(new Rect(0, 0, 100, 50),"HP:" + _player.HP+ " \n Power:"+ _pull.Power + "\n Range: "+ _pull.Range);
 

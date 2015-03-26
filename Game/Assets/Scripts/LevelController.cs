@@ -1,30 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using System.Collections;
 using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 {
-    private const int NUM_CUBES = 10;
-    private List<GameObject> cubes = new List<GameObject>();
+    public const int NumCubes = 10;
+    
     private NetworkManager _networkManager;
     private Rigidbody _rb;
 
+    private Consts.GameModes _gameMode;
     private TeamInfo _teamA, _teamB;
 
     public List<GameObject> PlayersGameObjects = new List<GameObject>();
-//    private List<NetworkManager.PlayerInfo> _playerInfos;
 
-    private Consts.GameModes _gameMode;
+    private List<NetworkManager.PlayerInfo> _playerInfos;
+
+    private int _killer, _victim = -1;
+    private DeathType _deathType;
+    
+    private float _timeToShowKill;
     
 	// Use this for initialization
 	void Start () {
         _networkManager = NetworkManager.Get();
-	   
-        
+        _playerInfos = _networkManager.PlayerList;
+
+        _gameMode = Consts.GameModes.DeathMatch;
+
         _teamA = new TeamInfo("Edison");
         _teamB = new TeamInfo("Tesla");
 
@@ -64,19 +68,26 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
         var pos = Random.insideUnitSphere*300;
         pos.y = 2;
-//        pos.y = 5;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
         p.GetComponent<Player>().NickName = name;
-        _rb = p.GetComponent<Rigidbody>();
-        Debug.Log("wecolvome:"+name);
-//        Debug.Log("[NETWORK]playerName has joined the game.");
-//        playerCount += 1;
     }
 
     void OnGUI()
     {
-        GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
+        if (_timeToShowKill > Time.time)
+        {
+            if (_killer != -1)
+            {
+                GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
+                    _playerInfos[_killer].NickName + " -[" + _deathType + "]- " + _playerInfos[_victim].NickName);
+            }
+            else
+            {
+                GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
+                    "-[#cruelWorld]-" + _playerInfos[_victim].NickName);
+            }
+        }
     }
 
 
@@ -94,7 +105,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
         var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
-        for (var i = 0; i < NUM_CUBES; i++)
+        for (var i = 0; i < NumCubes; i++)
         {
 
             var point = Random.insideUnitSphere * 500;
@@ -114,13 +125,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                 s = Network.Instantiate(scrap, point, Quaternion.identity, 0) as GameObject;
                 w = Network.Instantiate(wall, point2, Quaternion.identity, 0) as GameObject;
             }
-//            s.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 10;
-          
             w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 50;
-//            c.GetComponent<Renderer>().material.color = new Color(Random.value, Random.value, Random.value);
-
-           
-            
         }
     }
 
@@ -133,9 +138,33 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     void PlayerJoinTeam(int playerIndex, int team)
     {
         Debug.Log("[RPC]DividePlayersToTeams");
-        var playerInfos = _networkManager.PlayerList;
-        if (playerInfos != null && playerInfos[playerIndex] != null)
-        playerInfos[playerIndex].Team = (team == 1) ? _teamA : _teamB;
+       
+        if (_playerInfos != null && _playerInfos[playerIndex] != null)
+        _playerInfos[playerIndex].Team = (team == 1) ? _teamA : _teamB;
+    }
+
+    [RPC]
+    void PlayerKillEnemyWith(int killer, int victim, int deathType)
+    {
+        if (_playerInfos != null && _playerInfos[killer] != null && _playerInfos[victim] != null)
+        {
+            _playerInfos[killer].Kills++;
+            _playerInfos[victim].Deaths++;
+            if (_gameMode == Consts.GameModes.DeathMatch && _playerInfos[killer].Team != _playerInfos[victim].Team)
+            {
+                _playerInfos[killer].Team.Score++;
+            }
+            ShowKill(killer, victim, deathType);
+        }
+    }
+
+    private void ShowKill(int killer, int victim, int deathType )
+    {
+        _deathType = (DeathType)deathType;
+        _killer = killer;
+        _victim = victim;
+        _timeToShowKill = Time.time + 5;
+
     }
 
 
@@ -155,11 +184,17 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 public class TeamInfo
 {
     public string TeamName;
-//    public List<NetworkManager.PlayerInfo> Players= new List<NetworkManager.PlayerInfo>();
     public int Score = 0;
 
-    public TeamInfo(string Name)
+    public TeamInfo(string name)
     {
-        TeamName = Name;
+        TeamName = name;
     }
 }
+
+enum DeathType
+{
+    Fall, Hit, DeathZone
+}
+
+

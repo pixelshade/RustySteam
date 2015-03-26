@@ -10,6 +10,8 @@ public class Movable : MonoBehaviour
     private float powerToMove;
     public bool IsMovable = true;
 
+    public int MovedByPlayer;
+
 
     
 	// Use this for initialization
@@ -31,10 +33,14 @@ public class Movable : MonoBehaviour
             GetComponent<Rigidbody>().velocity = vectorToMove*powerToMove;
             _hasToMove = false;
         }
+        // no longer moving
+        if (GetComponent<Rigidbody>().velocity.sqrMagnitude < 0.01f)
+             MovedByPlayer = -1;
     }
 
-    public void MoveTowards(Vector3 vector3, float power = 1)
+    public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
     {
+        MovedByPlayer = actuator;
         vectorToMove = vector3;
         powerToMove = power;
         _hasToMove = true;
