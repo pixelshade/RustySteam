@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public bool Dead = false;
     public bool Stunned = false;
     public bool HasFlag = false;
+    public int Team = 0;
     public GameObject FlagGameObject;
     
 
@@ -110,6 +111,8 @@ public class Player : MonoBehaviour
 
     public void Respawn(float time = 0)
     {
+        var fpsRigidCtrl = GetComponent<FPSRigidController>();
+        fpsRigidCtrl.enabled = false;
         var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
         gameGui.RespawnIn(time);
@@ -118,11 +121,18 @@ public class Player : MonoBehaviour
 
     public void Respawn()
     {
-        var position = Random.insideUnitSphere * 500;
+        var fpsRigidCtrl = GetComponent<FPSRigidController>();
+        fpsRigidCtrl.enabled = true;
+
+        var p =GameObject.Find("SpawnZone").transform.position;
+        var position = new Vector3(p.x, 2, p.z);
+        position +=  Random.insideUnitSphere*(Random.Range(-100,100));
+
         HP = StartHP;
         Dead = false;
+        
         transform.position = position;
-        position.y = 2;
+        
     }
 
     public IEnumerator Respawn(Vector3 position ,float time = 0)

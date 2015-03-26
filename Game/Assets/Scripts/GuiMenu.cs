@@ -172,7 +172,7 @@ public class GuiMenu : MonoBehaviour {
             {
                 if (Consts.IsHost)
                 {
-                    if (GUILayout.Button(_networkManager.PlayerList[i].Username))
+                    if (GUILayout.Button(_networkManager.PlayerList[i].NickName))
                     {
                         GetComponent<NetworkView>()
                             .RPC("KickPlayer", RPCMode.AllBuffered, _networkManager.PlayerList[i].Player);
@@ -180,7 +180,7 @@ public class GuiMenu : MonoBehaviour {
                 }
                 else
                 {
-                    GUILayout.Label(_networkManager.PlayerList[i].Username);
+                    GUILayout.Label(_networkManager.PlayerList[i].NickName);
                 }
             }
             if (i%2 == 1) GUILayout.EndHorizontal();
@@ -252,7 +252,7 @@ public class GuiMenu : MonoBehaviour {
 	[RPC] 
 	void AddPlayer(NetworkPlayer player, string username, int i) {
 		Debug.Log("got addplayer " + username);
-	    _networkManager.PlayerList[i] = new NetworkManager.PlayerInfo {Player = player, Username = username};
+	    _networkManager.PlayerList[i] = new NetworkManager.PlayerInfo {Player = player, NickName = username};
 	}
 
 	[RPC] 

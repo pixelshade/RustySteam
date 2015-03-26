@@ -2,13 +2,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class NetworkManager : MonoBehaviour {
 
 
 	public class PlayerInfo {
-		public string Username;
+		public string NickName;
 		public NetworkPlayer Player;
+	    public TeamInfo Team;
+	    public int Score;
+	    public int Kills;
+	    public int Deaths;
 	}
 
 	public interface ILoadFinish {
@@ -30,7 +35,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public void LoadLevel(string level){
 		Network.RemoveRPCsInGroup(0);
-		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix + 1);
+		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix);
 	}
 
 

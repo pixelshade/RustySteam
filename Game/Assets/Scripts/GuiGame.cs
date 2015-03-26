@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using System.Collections;
 
 public class GuiGame : MonoBehaviour
@@ -7,9 +8,10 @@ public class GuiGame : MonoBehaviour
 
     private Player _player;
     private PullController _pull;
+    
 
     private bool _crosshairSelected;
-
+    private List<NetworkManager.PlayerInfo> _playerInfos;
     
     private float _respawnTime;
 
@@ -26,6 +28,8 @@ public class GuiGame : MonoBehaviour
 	{
 	    _hugeGuiStyle = new GUIStyle();
 	    _hugeGuiStyle.fontSize = 72;
+	    _playerInfos = NetworkManager.Get().PlayerList;
+
 	}
 	
 	// Update is called once per frame
@@ -48,6 +52,8 @@ public class GuiGame : MonoBehaviour
         CrossHairGUI();
 
         RespawnGUI();
+
+        ScoreGUI();
     }
 
     private void CrossHairGUI()
@@ -62,16 +68,42 @@ public class GuiGame : MonoBehaviour
 
     private void RespawnGUI()
     {
-        if (_respawnTime > 0)
+        var res = _respawnTime - Time.time;
+        
+        if (res > 0)
         {
-            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 100, 200, 24), _respawnTime.ToString("D"), _hugeGuiStyle);
+            GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 100, 200, 24), ((int)res).ToString(), _hugeGuiStyle);
         }
-        else if (_respawnTime > -1)
+        else if (res > -1)
         {
             GUI.TextArea(new Rect(Screen.width / 2 - 12, Screen.height / 2 - 100, 200, 24), "GO!", _hugeGuiStyle);
         }
-        _respawnTime -= Time.deltaTime;
         
+
+    }
+
+
+    private void ScoreGUI()
+    {
+        string plrScore = "";
+        string strTeam1 = "", strTeam2 = "";
+        TeamInfo team1 = null;
+        foreach (var player in _playerInfos)
+        {
+
+            if (player == null || player.Team == null) continue;
+            if (team1 == null) team1 = player.Team;
+            if (player.Team == team1)
+            {
+                strTeam1 += player.Team.TeamName +" " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+            }
+            else
+            {
+                strTeam2 += player.Team.TeamName +" " +player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+            }
+        }
+        plrScore += strTeam1 + "==========\n" + strTeam2;
+        GUI.TextArea(new Rect(Screen.width - 200, 0, 200, 200), plrScore);
     }
 
     public void CrosshairSelected(bool selected)
@@ -82,7 +114,6 @@ public class GuiGame : MonoBehaviour
 
     public void RespawnIn(float seconds)
     {
-        _respawnTime = seconds;
-        Debug.Log("resp " + _respawnTime);
+        _respawnTime = seconds+Time.time;
     }
 }

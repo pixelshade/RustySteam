@@ -128,23 +128,27 @@ public class PullController : MonoBehaviour
 
         Power += Input.GetAxis("Mouse ScrollWheel")*10;
 
-        // Direction of shot depends on rotation of player and his camera
-        Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
-        fwd.x -= fwd.x * Math.Abs(cam.y);
-        fwd.y = cam.y;
-        fwd.z -= fwd.z * Math.Abs(cam.y);
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        if (Camera.main.enabled)
+        {
+            // Direction of shot depends on rotation of player and his camera
+            Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
+            Vector3 fwd = transform.TransformDirection(Vector3.forward);
+            fwd.x -= fwd.x*Math.Abs(cam.y);
+            fwd.y = cam.y;
+            fwd.z -= fwd.z*Math.Abs(cam.y);
 
-        //chage crosshair if we have something hit 
-        _guiGame.CrosshairSelected(Physics.Raycast(ray, out hit, Range));
-        
 
-        ProcessLeftClick(ray, hit, fwd);
-        ProcessRightClick(ray, hit, fwd);
-        ProcessActions(ray, hit);
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2, 0));
 
+            //chage crosshair if we have something hit 
+            _guiGame.CrosshairSelected(Physics.Raycast(ray, out hit, Range));
+
+
+            ProcessLeftClick(ray, hit, fwd);
+            ProcessRightClick(ray, hit, fwd);
+            ProcessActions(ray, hit);
+        }
 
 
 //	    print("There is something in front of the object!");
