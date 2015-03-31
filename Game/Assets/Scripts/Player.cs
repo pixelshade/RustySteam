@@ -141,10 +141,18 @@ public class Player : MonoBehaviour
     {
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         fpsRigidCtrl.enabled = true;
-
-        var p =GameObject.Find("SpawnZone").transform.position;
+        Vector3 p;
+        if (Team == 1)
+        {
+            p = GameObject.Find("SpawnZoneA").transform.position;
+        }
+        else
+        {
+            p = GameObject.Find("SpawnZoneB").transform.position;
+        }
         var position = new Vector3(p.x, 2, p.z);
-        position +=  Random.insideUnitSphere*(Random.Range(-100,100));
+//        position +=  Random.insideUnitSphere*(Random.Range(-100,100));
+//        position.y = 2;
 
         HP = StartHP;
         Dead = false;

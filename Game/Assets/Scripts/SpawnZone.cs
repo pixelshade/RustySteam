@@ -3,7 +3,6 @@ using System.Collections;
 
 public class SpawnZone : MonoBehaviour
 {
-    public int BelongsToTeam;
     public int RadiusOfSpawn;
 
 	// Use this for initialization
@@ -15,4 +14,9 @@ public class SpawnZone : MonoBehaviour
 	void Update () {
 	
 	}
+
+    public void SpawnFlag()
+    {
+        
+    }
 }

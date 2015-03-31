@@ -11,7 +11,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     private Rigidbody _rb;
 
     public Consts.GameModes GameMode;
-    private TeamInfo _teamA, _teamB;
+    public static TeamInfo _teamA, _teamB;
 
     public List<GameObject> PlayersGameObjects = new List<GameObject>();
 
@@ -27,7 +27,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         _networkManager = NetworkManager.Get();
         PlayerInfos = _networkManager.PlayerList;
 
-        GameMode = Consts.GameModes.DeathMatch;
+	    GameMode =  (Consts.GameModes) _networkManager.GameMode;
 
         _teamA = new TeamInfo("Edison");
         _teamB = new TeamInfo("Tesla");
@@ -169,27 +169,28 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
 	public void SpawnFlagForTeam(TeamInfo team){
 		GameObject flagSpawn;
+        GameObject flag, flagPrefab;
+        
 		if (team == _teamA) {
 			flagSpawn = GameObject.Find ("FlagSpawnZoneA") as GameObject;
+            flagPrefab = Resources.Load("Prefabs/FlagA", typeof(GameObject)) as GameObject;
 		} else {
 			flagSpawn = GameObject.Find ("FlagSpawnZoneB") as GameObject;
+            flagPrefab = Resources.Load("Prefabs/FlagB", typeof(GameObject)) as GameObject;
 		}
 
 		if (flagSpawn == null) {
 			Debug.LogError("there is no spawn point that belongs to specified team");
 			return;
 		}
-		GameObject flag;
-		var flagPrefab = Resources.Load("Prefabs/flag", typeof(GameObject)) as GameObject;
+		
 		if (Consts.IsSinglePlayer)
 		{
 			flag = Instantiate(flagPrefab, flagSpawn.transform.position, Quaternion.identity) as GameObject;
-
 		}
 		else
 		{
 			flag = Network.Instantiate(flagPrefab, flagSpawn.transform.position, Quaternion.identity, 0) as GameObject;
-
 		}
 
 	}

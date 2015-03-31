@@ -27,22 +27,27 @@ public class NetworkManager : MonoBehaviour {
 	public List<ILoadFinish> LoadFinish = new List<ILoadFinish>();
 	private int _loaded;
 
+    public int GameMode;
+    
+
+
     void Awake ()
 	{
 		DontDestroyOnLoad(this);
         //Application.LoadLevel("MainMenu");
 	}
 
-	public void LoadLevel(string level){
+	public void LoadLevel(string level, int gameMode){
 		Network.RemoveRPCsInGroup(0);
-		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix);
+		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix, GameMode);
 	}
 
 
 
 	[RPC] 
-	IEnumerator LoadLevelRPC (string level, int levelPrefix){
-		_loaded = 0;
+	IEnumerator LoadLevelRPC (string level, int levelPrefix, int gameMode){
+        GameMode = gameMode;
+        _loaded = 0;
 		_lastLevelPrefix = levelPrefix;
 		Network.SetSendingEnabled(0, false);    
 		Network.isMessageQueueRunning = false;
@@ -51,7 +56,8 @@ public class NetworkManager : MonoBehaviour {
 		yield return null;
 		yield return null;
 		Network.isMessageQueueRunning = true;
-		Network.SetSendingEnabled(0, true);	
+		Network.SetSendingEnabled(0, true);
+	    
 		if(Network.isServer){
 			TellLoaded();
 		} else {

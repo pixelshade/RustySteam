@@ -21,7 +21,9 @@ public class GuiMenu : MonoBehaviour {
     private bool _disconnect;
     private NetworkManager _networkManager;
 
-    
+    private readonly string[] _selModesStrings = Enum.GetNames(typeof(Consts.GameModes));
+
+    private int _selModeInt = 0;
 
     public void SetState(MenuState newState)
     {
@@ -29,7 +31,9 @@ public class GuiMenu : MonoBehaviour {
     }
 
 
-	void Start () {
+	void Start ()
+	{
+	   
         _networkManager = NetworkManager.Get();
         Debug.Log(_networkManager);
         _nick = "Player" + Random.Range(0, 20);
@@ -185,7 +189,17 @@ public class GuiMenu : MonoBehaviour {
             }
             if (i%2 == 1) GUILayout.EndHorizontal();
         }
-
+        GUILayout.BeginHorizontal();
+        if (Consts.IsHost)
+        {
+            _selModeInt = GUILayout.SelectionGrid(_selModeInt, _selModesStrings, 1);
+        }
+        else
+        {
+            GUILayout.Label("Host selects mode:"+(Consts.GameModes)_selModeInt);
+           
+        }
+        GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Leave Lobby"))
         {
@@ -196,8 +210,12 @@ public class GuiMenu : MonoBehaviour {
             if (GUILayout.Button("Start Game"))
             {
                 MasterServer.UnregisterHost();
-                _networkManager.LoadLevel(Consts.GameScene);
+
+                _networkManager.LoadLevel(Consts.GameScene, _selModeInt);
             }
+            
+            
+           
         }
         else
         {
