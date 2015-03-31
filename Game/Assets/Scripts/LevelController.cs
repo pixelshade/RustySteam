@@ -10,12 +10,12 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     private NetworkManager _networkManager;
     private Rigidbody _rb;
 
-    private Consts.GameModes _gameMode;
+    public Consts.GameModes GameMode;
     private TeamInfo _teamA, _teamB;
 
     public List<GameObject> PlayersGameObjects = new List<GameObject>();
 
-    private List<NetworkManager.PlayerInfo> _playerInfos;
+    public List<NetworkManager.PlayerInfo> PlayerInfos;
 
     private int _killer, _victim = -1;
     private DeathType _deathType;
@@ -25,9 +25,9 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 	// Use this for initialization
 	void Start () {
         _networkManager = NetworkManager.Get();
-        _playerInfos = _networkManager.PlayerList;
+        PlayerInfos = _networkManager.PlayerList;
 
-        _gameMode = Consts.GameModes.DeathMatch;
+        GameMode = Consts.GameModes.DeathMatch;
 
         _teamA = new TeamInfo("Edison");
         _teamB = new TeamInfo("Tesla");
@@ -77,15 +77,15 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     {
         if (_timeToShowKill > Time.time)
         {
-            if (_killer != -1)
+            if (_killer != -1 && _killer != _victim)
             {
                 GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
-                    _playerInfos[_killer].NickName + " -[" + _deathType + "]- " + _playerInfos[_victim].NickName);
+                    PlayerInfos[_killer].NickName + " -[" + _deathType + "]- " + PlayerInfos[_victim].NickName);
             }
             else
             {
                 GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
-                    "-[#cruelWorld]-" + _playerInfos[_victim].NickName);
+                    "-[#cruelWorld]-" + PlayerInfos[_victim].NickName);
             }
         }
     }
@@ -139,20 +139,20 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     {
         Debug.Log("[RPC]DividePlayersToTeams");
        
-        if (_playerInfos != null && _playerInfos[playerIndex] != null)
-        _playerInfos[playerIndex].Team = (team == 1) ? _teamA : _teamB;
+        if (PlayerInfos != null && PlayerInfos[playerIndex] != null)
+        PlayerInfos[playerIndex].Team = (team == 1) ? _teamA : _teamB;
     }
 
     [RPC]
     void PlayerKillEnemyWith(int killer, int victim, int deathType)
     {
-        if (_playerInfos != null && _playerInfos[killer] != null && _playerInfos[victim] != null)
+        if (PlayerInfos != null && PlayerInfos[killer] != null && PlayerInfos[victim] != null)
         {
-            _playerInfos[killer].Kills++;
-            _playerInfos[victim].Deaths++;
-            if (_gameMode == Consts.GameModes.DeathMatch && _playerInfos[killer].Team != _playerInfos[victim].Team)
+			if(killer != victim)  PlayerInfos[killer].Kills++;
+            PlayerInfos[victim].Deaths++;
+            if (GameMode == Consts.GameModes.DeathMatch && PlayerInfos[killer].Team != PlayerInfos[victim].Team)
             {
-                _playerInfos[killer].Team.Score++;
+                PlayerInfos[killer].Team.Score++;
             }
             ShowKill(killer, victim, deathType);
         }
@@ -166,6 +166,33 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         _timeToShowKill = Time.time + 5;
 
     }
+
+	public void SpawnFlagForTeam(TeamInfo team){
+		GameObject flagSpawn;
+		if (team == _teamA) {
+			flagSpawn = GameObject.Find ("FlagSpawnZoneA") as GameObject;
+		} else {
+			flagSpawn = GameObject.Find ("FlagSpawnZoneB") as GameObject;
+		}
+
+		if (flagSpawn == null) {
+			Debug.LogError("there is no spawn point that belongs to specified team");
+			return;
+		}
+		GameObject flag;
+		var flagPrefab = Resources.Load("Prefabs/flag", typeof(GameObject)) as GameObject;
+		if (Consts.IsSinglePlayer)
+		{
+			flag = Instantiate(flagPrefab, flagSpawn.transform.position, Quaternion.identity) as GameObject;
+
+		}
+		else
+		{
+			flag = Network.Instantiate(flagPrefab, flagSpawn.transform.position, Quaternion.identity, 0) as GameObject;
+
+		}
+
+	}
 
 
     public void LoadFinished()

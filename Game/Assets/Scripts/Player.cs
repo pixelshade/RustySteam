@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public int StartHP = 100;
     public int HP = 100;
-
+	public int Id;
 
     public bool Dead = false;
     public bool Stunned = false;
@@ -44,6 +44,8 @@ public class Player : MonoBehaviour
         }
         _playerNameText = GameObject.Find("PlayerName").GetComponent<TextMesh>();
         _playerNameText.text = _nickName;
+
+		Id = NetworkManager.Get ().GetPosition (false);
     }
 
     // Update is called once per frame
