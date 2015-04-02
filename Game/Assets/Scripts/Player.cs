@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -14,9 +16,11 @@ public class Player : MonoBehaviour
     public bool HasFlag = false;
     public int Team = 0;
     public GameObject FlagGameObject;
+    public List<NetworkManager.PlayerInfo> PlayerInfos;
 
 
     private int _killer, _deathType;
+    private float _stunLeft;
 
     public string NickName
     {
@@ -46,11 +50,26 @@ public class Player : MonoBehaviour
         _playerNameText.text = _nickName;
 
 		Id = NetworkManager.Get ().GetPosition (false);
+
+        var networkManager = NetworkManager.Get();
+        PlayerInfos = networkManager.PlayerList;
+        Team = PlayerInfos[Id].Team.Id;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Stun
+        if (_stunLeft > 0)
+        {
+            _stunLeft -= Time.deltaTime;
+        }
+        else if (_stunLeft < 0)
+        {
+            _stunLeft = 0;
+            Stunned = false;
+        }
+
         // DEad
         if (HP <= 0)
         {
@@ -100,12 +119,14 @@ public class Player : MonoBehaviour
         var flag = collision.transform.GetComponent<FlagController>();
         if (flag != null)
         {
-            Debug.Log("vlajka!");
-            HasFlag = true;
-            if (Consts.IsSinglePlayer)
-                Destroy(collision.gameObject);
-            else
-                Network.Destroy(collision.gameObject);
+            if (flag.Team != Team) { 
+                Debug.Log("vlajka!");
+                HasFlag = true;
+                if (Consts.IsSinglePlayer)
+                    Destroy(collision.gameObject);
+                else
+                    Network.Destroy(collision.gameObject);
+            }
         }
 
     }
@@ -151,8 +172,8 @@ public class Player : MonoBehaviour
             p = GameObject.Find("SpawnZoneB").transform.position;
         }
         var position = new Vector3(p.x, 2, p.z);
-//        position +=  Random.insideUnitSphere*(Random.Range(-100,100));
-//        position.y = 2;
+        //position +=  Random.insideUnitSphere*(Random.Range(-100,100));
+        //position.y = 2;
 
         HP = StartHP;
         Dead = false;
@@ -168,6 +189,11 @@ public class Player : MonoBehaviour
         transform.position = position;
     }
 
+    public void Stun(float duration)
+    {
+        _stunLeft = duration;
+        Stunned = true;
+    }
 
     public bool IsAlive()
     {

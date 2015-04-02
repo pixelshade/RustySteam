@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FlagController : MonoBehaviour {
+public class FlagController : MonoBehaviour
+{
+
+    public int Team;
 
 	// Use this for initialization
 	void Start () {

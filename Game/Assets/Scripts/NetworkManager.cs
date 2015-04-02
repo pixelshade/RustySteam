@@ -79,6 +79,9 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 	void OnDisconnectedFromServer (){
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Application.LoadLevel(Consts.MainMenuScene);
 	}
 
 	public int GetCount(){

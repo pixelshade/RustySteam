@@ -30,7 +30,8 @@ public class Movable : MonoBehaviour
 
         if (_hasToMove)
         {
-            GetComponent<Rigidbody>().velocity = vectorToMove*powerToMove;
+            //GetComponent<Rigidbody>().velocity = vectorToMove * powerToMove;
+            GetComponent<Rigidbody>().AddForce(vectorToMove*powerToMove, ForceMode.VelocityChange);
             _hasToMove = false;
         }
         // no longer moving
@@ -44,6 +45,7 @@ public class Movable : MonoBehaviour
         vectorToMove = vector3;
         powerToMove = power;
         _hasToMove = true;
+        Debug.Log("Moved towards: " + vector3 + " " + MovedByPlayer);
 //            rigidbody.AddForce(vector3 * power * Time.deltaTime);
     
     }

@@ -45,7 +45,7 @@ public class GuiGame : MonoBehaviour
 
 //        if (_pull.CdLeft()>0)
 //        {
-            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height-50, 100, 50),  " CD ready in "+ _pull.CdLeft() +"s");
+            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height-50, 100, 50),  " CD ready in "+ _pull.CdLeft().ToString("F1") +"s");
 //        }
 //        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
 
@@ -95,11 +95,11 @@ public class GuiGame : MonoBehaviour
             if (team1 == null) team1 = player.Team;
             if (player.Team == team1)
             {
-                strTeam1 += player.Team.TeamName +" " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+                strTeam1 += player.Team.TeamName + " " + player.Team.Id + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
             }
             else
             {
-                strTeam2 += player.Team.TeamName +" " +player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+                strTeam2 += player.Team.TeamName + " " + player.Team.Id + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
             }
         }
         plrScore += strTeam1 + "==========\n" + strTeam2;

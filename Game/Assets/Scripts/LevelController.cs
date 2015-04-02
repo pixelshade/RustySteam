@@ -29,8 +29,8 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
 	    GameMode =  (Consts.GameModes) _networkManager.GameMode;
 
-        _teamA = new TeamInfo("Edison");
-        _teamB = new TeamInfo("Tesla");
+        _teamA = new TeamInfo("Edison", 1);
+        _teamB = new TeamInfo("Tesla", 0);
 
 	    if (Consts.IsHost)
 	    {
@@ -56,7 +56,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             }
             else
             {
-                nw.RPC("PlayerJoinTeam", RPCMode.AllBuffered, i, 2);
+                nw.RPC("PlayerJoinTeam", RPCMode.AllBuffered, i, 0);
             }
             odd = !odd;
         }
@@ -212,11 +212,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 public class TeamInfo
 {
     public string TeamName;
+    public int Id;
     public int Score = 0;
 
-    public TeamInfo(string name)
+    public TeamInfo(string name, int id)
     {
         TeamName = name;
+        Id = id;
     }
 }
 

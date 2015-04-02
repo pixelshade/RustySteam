@@ -35,27 +35,32 @@ public class PullController : MonoBehaviour
             {
                 return;
             }
-            _cdLeft = CD;
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
                 int playerIndex = NetworkManager.Get().GetPosition(false);
-                if (hit.rigidbody != null && hitObj!=null)
+                if (hit.rigidbody != null && hitObj != null)
                 {
-                    
+                    var player = hit.transform.GetComponent<Player>();
+                    if (player != null)
+                    {
+                        Debug.Log("Hunter: " + transform.GetComponent<Player>().Team + " Hunted: " + player.Team);
+                        //if (player.Team != transform.GetComponent<Player>().Team)
+                        //{
+                            player.Stun(Stun);
+                        //}
+                    }
                     var direction = hit.transform.position - transform.position;
                     hitObj.MoveTowards(playerIndex,direction.normalized, Power);
                 }
                 else
                 {
-                    transform.GetComponent<Player>().Stunned = true;
-                    _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
                     self.MoveTowards(playerIndex, fwd.normalized, -Power);
                 }
             
             }
-
+            _cdLeft = CD;
         }
     }
 
@@ -68,26 +73,31 @@ public class PullController : MonoBehaviour
             {
                 return;
             }
-            _cdLeft = CD;
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
                 int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj != null)
                 {
+                    var player = hit.transform.GetComponent<Player>();
+                    if (player != null)
+                    {
+                        if (player.Team != transform.GetComponent<Player>().Team)
+                        {
+                            player.Stun(Stun);
+                        }
+                    }
                     var direction = hit.transform.position - transform.position;
                     hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                 }
                 else
                 {
-                    transform.GetComponent<Player>().Stunned = true;
-                    _stunLeft = Stun;
                     var self = transform.GetComponent<Movable>();
                     //var direction = hit.transform.position - transform.position;
                     self.MoveTowards(playerIndex, fwd.normalized, Power);
                 }
-            
             }
+            _cdLeft = CD;
         }
 
     }
@@ -106,18 +116,6 @@ public class PullController : MonoBehaviour
 	// Update is called once per frame
     private void Update()
     {
-
-        //Stun
-        if (_stunLeft > 0)
-        {
-            _stunLeft -= Time.deltaTime;
-        }
-        else if (_stunLeft < 0)
-        {
-            _stunLeft = 0;
-            transform.GetComponent<Player>().Stunned = false;
-        }
-
         // Cooldown 
         if (_cdLeft > 0)
         {

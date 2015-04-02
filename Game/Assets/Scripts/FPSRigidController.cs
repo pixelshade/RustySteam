@@ -4,101 +4,92 @@ using System.Collections;
 
 public class FPSRigidController : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public float gravity = 10.0f;
-    public float maxVelocityChange = 10.0f;
-    public bool canJump = true;
-    public float jumpHeight = 2.0f;
-    private bool grounded = false;
+    public Transform LookTransform;
+    public Vector3 Gravity = Vector3.down * 9.81f;
+    public float RotationRate = 0.1f;
+    public float Velocity = 8;
+    public float GroundControl = 1.0f;
+    public float AirControl = 0.2f;
+    public float JumpVelocity = 5;
+    public float GroundHeight = 1.1f;
+    private bool _jump;
+    private bool _esc;
+    private bool _grounded;
     private Rigidbody _rigidbody;
     private Player _player;
 
-
-
-
-    void Awake()
+    void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _player = GetComponent<Player>();
+
+        _rigidbody.freezeRotation = true;
+        _rigidbody.useGravity = false;
+        _rigidbody.isKinematic = false;
         
-        //_rigidbody.freezeRotation = true;
-        //_rigidbody.useGravity = false;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
+    void Update()
+    {
+        _jump = _jump || Input.GetButtonDown("Jump");
+        _esc = _esc || Input.GetButtonDown("Cancel");
+    }
+
     void FixedUpdate()
     {
-        if (Input.GetButton("Cancel"))
+        if (_esc)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Application.LoadLevel(Consts.MainMenuScene);
+            if (Network.isServer || Network.isClient)
+            {
+                if (Network.isServer) MasterServer.UnregisterHost();
+                Network.Disconnect();
+                Application.LoadLevel(Consts.MainMenuScene);
+            }
+            _esc = false;
         }
 
-        if (GetComponent<NetworkView>().isMine)
-        {
+        //if (GetComponent<NetworkView>().isMine)
+        //{
+            if (!_player.Stunned && !_player.Dead) { 
+            // Cast a ray towards the ground to see if the Walker is grounded
+                //bool grounded = Physics.Raycast(transform.position, Gravity.normalized, GroundHeight);
 
-            if (grounded && !_player.Stunned)
-            {
-                // Calculate how fast we should be moving
-                Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                targetVelocity = transform.TransformDirection(targetVelocity);
-                targetVelocity *= speed;
+                // Rotate the body to stay upright
+                Vector3 gravityForward = Vector3.Cross(Gravity, transform.right);
+                Quaternion targetRotation = Quaternion.LookRotation(gravityForward, -Gravity);
+                _rigidbody.rotation = Quaternion.Lerp(_rigidbody.rotation, targetRotation, RotationRate);
 
-                // Apply a force that attempts to reach our target velocity
-                Vector3 velocity = _rigidbody.velocity;
-                if (targetVelocity != Vector3.zero)
-                {
-                    Vector3 velocityChange = (targetVelocity - velocity);
-                    velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-                    velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-                    velocityChange.y = 0;
-                    _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
-                }
-                // Jump
-                if (canJump && Input.GetButton("Jump"))
-                {
-                    _rigidbody.velocity = new Vector3(velocity.x, CalculateJumpVerticalSpeed(), velocity.z);
-                }
+                // Add velocity change for movement on the local horizontal plane
+                Vector3 forward = Vector3.Cross(transform.up, -LookTransform.right).normalized;
+                Vector3 right = Vector3.Cross(transform.up, LookTransform.forward).normalized;
+                Vector3 targetVelocity = (forward * Input.GetAxis("Vertical") + right * Input.GetAxis("Horizontal")) * Velocity;
+                Vector3 localVelocity = transform.InverseTransformDirection(_rigidbody.velocity);
+                Vector3 velocityChange = transform.InverseTransformDirection(targetVelocity) - localVelocity;
+
+                // The velocity change is clamped to the control velocity
+                // The vertical component is either removed or set to result in the absolute jump velocity
+                velocityChange = Vector3.ClampMagnitude(velocityChange, _grounded ? GroundControl : AirControl);
+                velocityChange.y = _jump && _grounded ? -localVelocity.y + JumpVelocity : 0;
+                velocityChange = transform.TransformDirection(velocityChange);
+                _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+
+                // Add gravity
+                _rigidbody.AddForce(Gravity * _rigidbody.mass);
+
+                _jump = false;
+                _grounded = false;
             }
-            else if (!_player.Stunned)
-            {
-                // Calculate how fast we should be moving
-                Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-                targetVelocity = transform.TransformDirection(targetVelocity);
-                targetVelocity *= speed;
-                targetVelocity *= 0.4f;
-
-                // Apply a force that attempts to reach our target velocity
-                Vector3 velocity = _rigidbody.velocity;
-                if (targetVelocity != Vector3.zero)
-                {
-                    Vector3 velocityChange = (targetVelocity - velocity);
-                    velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-                    velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
-                    velocityChange.y = 0;
-                    _rigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
-                }
-            }
-
-            // We apply gravity manually for more tuning control
-            _rigidbody.AddForce(new Vector3(0, -gravity*_rigidbody.mass, 0));
-
-            grounded = false;
-        }
+        //}
     }
 
     void OnCollisionStay()
     {
-        grounded = true;
-    }
-
-    float CalculateJumpVerticalSpeed()
-    {
-        // From the jump height and gravity we deduce the upwards speed 
-        // for the character to reach at the apex.
-        return Mathf.Sqrt(2 * jumpHeight * gravity);
+        _grounded = true;
     }
 
 }
