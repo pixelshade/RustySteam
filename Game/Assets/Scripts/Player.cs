@@ -21,12 +21,16 @@ public class Player : MonoBehaviour
     {
         get
         {
+            if(NetworkManager.Get().PlayerList.Count > Id)
+                return NetworkManager.Get().PlayerList[Id].Team.Id;
             return -1;
         }
 
         set
         {
 
+            if (NetworkManager.Get().PlayerList.Count > Id)
+                NetworkManager.Get().PlayerList[Id].Team.Id = value;
         }
     }
 

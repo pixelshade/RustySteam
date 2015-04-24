@@ -24,6 +24,7 @@ public class GuiMenu : MonoBehaviour {
     private readonly string[] _selModesStrings = Enum.GetNames(typeof(Consts.GameModes));
 
     private int _selModeInt = 0;
+    private int _prevSelModeInt = 0;
 
     public void SetState(MenuState newState)
     {
@@ -193,10 +194,16 @@ public class GuiMenu : MonoBehaviour {
         if (Consts.IsHost)
         {
             _selModeInt = GUILayout.SelectionGrid(_selModeInt, _selModesStrings, 1);
+            if (_selModeInt != _prevSelModeInt)
+            {
+                GetComponent<NetworkView>().RPC("SetGameModeInMenu", RPCMode.OthersBuffered, _selModeInt);
+                _prevSelModeInt = _selModeInt;
+            }
+
         }
         else
         {
-            GUILayout.Label("Host selects mode:"+(Consts.GameModes)_selModeInt);
+            GUILayout.Label("Game mode:"+(Consts.GameModes)_selModeInt);
            
         }
         GUILayout.EndHorizontal();
@@ -308,6 +315,13 @@ public class GuiMenu : MonoBehaviour {
 		Network.RemoveRPCs(player);
 		Network.DestroyPlayerObjects(player);
 	}
+
+
+    [RPC]
+    void SetGameModeInMenu(int gameMode)
+    {
+        _selModeInt = gameMode;
+    }
 
 	IEnumerator LeaveLobby() {
 		if (Network.isServer || Network.isClient) {
