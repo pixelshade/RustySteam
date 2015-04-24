@@ -9,12 +9,27 @@ public class Player : MonoBehaviour
 {
     public int StartHP = 100;
     public int HP = 100;
-	public int Id;
+
+    public int Id = -1;
+   
 
     public bool Dead = false;
     public bool Stunned = false;
     public bool HasFlag = false;
-    public int Team = 0;
+
+    public int Team
+    {
+        get
+        {
+            return -1;
+        }
+
+        set
+        {
+
+        }
+    }
+
     public GameObject FlagGameObject;
     public List<NetworkManager.PlayerInfo> PlayerInfos;
 
@@ -48,12 +63,10 @@ public class Player : MonoBehaviour
         }
         _playerNameText = GameObject.Find("PlayerName").GetComponent<TextMesh>();
         _playerNameText.text = _nickName;
+        Id = NetworkManager.Get().GetPosition(false);
+		
 
-		Id = NetworkManager.Get ().GetPosition (false);
-
-        var networkManager = NetworkManager.Get();
-        PlayerInfos = networkManager.PlayerList;
-        Team = PlayerInfos[Id].Team.Id;
+       
     }
 
     // Update is called once per frame

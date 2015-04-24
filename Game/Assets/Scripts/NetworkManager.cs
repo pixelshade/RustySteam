@@ -43,6 +43,12 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 
+    [RPC]
+    void ChangeShownModeInMenu(int gameMode)
+    {
+        
+    }
+
 
 	[RPC] 
 	IEnumerator LoadLevelRPC (string level, int levelPrefix, int gameMode){
