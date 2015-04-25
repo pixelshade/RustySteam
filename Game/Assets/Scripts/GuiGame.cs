@@ -40,20 +40,24 @@ public class GuiGame : MonoBehaviour
     void OnGUI()
     {
 //                GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
-        
-        GUI.TextArea(new Rect(0, 0, 100, 50),"HP:" + _player.HP+ " \n Power:"+ _pull.Power + "\n Range: "+ _pull.Range);
+        if (GetComponent<NetworkView>().isMine)
+        {
+            GUI.TextArea(new Rect(0, 0, 100, 50),
+                "HP:" + _player.HP + " \n Power:" + _pull.Power + "\n Range: " + _pull.Range);
 
 //        if (_pull.CdLeft()>0)
 //        {
-            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height-50, 100, 50),  " CD ready in "+ _pull.CdLeft().ToString("F1") +"s");
+            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height - 50, 100, 50),
+                " CD ready in " + _pull.CdLeft().ToString("F1") + "s");
 //        }
 //        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
 
-        CrossHairGUI();
+            CrossHairGUI();
 
-        RespawnGUI();
+            RespawnGUI();
 
-        ScoreGUI();
+            ScoreGUI();
+        }
     }
 
     private void CrossHairGUI()
@@ -88,6 +92,7 @@ public class GuiGame : MonoBehaviour
         string plrScore = "";
         string strTeam1 = "", strTeam2 = "";
         TeamInfo team1 = null;
+        if(_playerInfos!=null)
         foreach (var player in _playerInfos)
         {
 

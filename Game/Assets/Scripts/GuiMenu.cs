@@ -11,6 +11,10 @@ public class GuiMenu : MonoBehaviour {
 
     public Texture Logo;
 
+    public float AutoServerListRefreshTimeDelay = 5;
+    public bool AutoRefreshServersList = true;
+    private float _lastAutoRefresh;
+
     private HostData[] _hostList;
     private MenuState _state;
     private string _nick;
@@ -113,7 +117,15 @@ public class GuiMenu : MonoBehaviour {
 
     void JoinGame()
     {
-   
+                 if (AutoRefreshServersList)
+                 {
+                     if (Time.time - _lastAutoRefresh > AutoServerListRefreshTimeDelay)
+                     {
+                         _lastAutoRefresh = Time.time;
+                         Debug.Log("Refresh server list"+Time.time);
+                         MasterServer.RequestHostList(Consts.GameName);
+                     }
+                 }
 		        GUILayout.Label("Join Game");
 		        GUILayout.Label("Servers:");
 		        if (_hostList != null){
@@ -158,7 +170,6 @@ public class GuiMenu : MonoBehaviour {
 
     private void GameLobby()
     {
-
         GUILayout.Label("Lobby");
         int count = 0;
         for (int i = 0; i < (Consts.maxPlayers); i++)

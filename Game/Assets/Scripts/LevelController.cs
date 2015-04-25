@@ -41,6 +41,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         SpawnPlayer(PlayerPrefs.GetString("NickName"));
 	}
 
+   
 
     public void DividePlayersToTeams()
     {
@@ -103,6 +104,25 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             Debug.LogWarning("NetworkManager is null! - Debugging enviroment");
         }
 
+        switch (GameMode)
+        {
+                case Consts.GameModes.CaptureTheFlag: SetUpCaptureTheFlagMode();
+                break;
+                case Consts.GameModes.DeathMatch: SetUpDeathMatchMode();
+                break;
+                case Consts.GameModes.KingOfTheHill: SetUpKingOfTheHillMode();
+                break;
+        }
+        
+    }
+
+    public void SetUpCaptureTheFlagMode()
+    {
+
+    }
+
+    public void SetUpDeathMatchMode()
+    {
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
         var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NumCubes; i++)
@@ -112,9 +132,9 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             point.y = Math.Abs(point.y);
 
             var point2 = Random.insideUnitSphere * 500;
-            point.y = Math.Abs(point2.y)/2;
+            point.y = Math.Abs(point2.y) / 2;
 
-            GameObject s,w;
+            GameObject s, w;
             if (Consts.IsSinglePlayer)
             {
                 s = Instantiate(scrap, point, Quaternion.identity) as GameObject;
@@ -128,6 +148,12 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 50;
         }
     }
+
+    public void SetUpKingOfTheHillMode()
+    {
+
+    }
+
 
 	// Update is called once per frame
 	void Update () {
@@ -166,6 +192,9 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         _timeToShowKill = Time.time + 5;
 
     }
+
+
+  
 
 	public void SpawnFlagForTeam(TeamInfo team){
 		GameObject flagSpawn;

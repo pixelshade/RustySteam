@@ -116,6 +116,7 @@ public class PullController : MonoBehaviour
 	// Update is called once per frame
     private void Update()
     {
+
         // Cooldown 
         if (_cdLeft > 0)
         {
@@ -128,11 +129,14 @@ public class PullController : MonoBehaviour
 
 
         Power += Input.GetAxis("Mouse ScrollWheel")*10;
-
-        if (Camera.main.enabled)
+        
+        if (Camera.main != null && Camera.main.enabled)
         {
             // Direction of shot depends on rotation of player and his camera
+            var c = Camera.main.transform.TransformDirection(Vector3.forward);
             Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
+            Debug.Log("main"+c);
+            Debug.Log("find" + cam);
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
             fwd.x -= fwd.x*Math.Abs(cam.y);
             fwd.y = cam.y;
