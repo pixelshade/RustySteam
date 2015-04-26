@@ -39,6 +39,7 @@ public class Movable : MonoBehaviour
              MovedByPlayer = -1;
     }
 
+    [RPC]
     public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
     {
         MovedByPlayer = actuator;

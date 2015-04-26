@@ -44,16 +44,19 @@ public class PullController : MonoBehaviour
                 if (hit.rigidbody != null && hitObj != null)
                 {
                     var player = hit.transform.GetComponent<Player>();
+                    var direction = hit.transform.position - transform.position;
+                    GetComponent<NetworkView>().RPC("MoveTowards", RPCMode.Server, playerIndex, direction.normalized, Power);
                     if (player != null)
                     {
-                        Debug.Log("Hunter: " + transform.GetComponent<Player>().Team + " Hunted: " + player.Team);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
-                            player.Stun(Stun);
+                        //player.Stun(Stun);
                         //}
                     }
-                    var direction = hit.transform.position - transform.position;
-                    hitObj.MoveTowards(playerIndex,direction.normalized, Power);
+                    else
+                    {
+                        //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
+                    }
                 }
                 else
                 {
@@ -80,24 +83,25 @@ public class PullController : MonoBehaviour
             {
                 Debug.Log(hit);
                 
-                   
-
                 var hitObj = hit.transform.GetComponent<Movable>();
                 int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj != null)
                 {
 //                    _ropeScript.BuildRope(hit.transform, false); 
                     var player = hit.transform.GetComponent<Player>();
+                    var direction = hit.transform.position - transform.position;
+                    GetComponent<NetworkView>().RPC("MoveTowards", RPCMode.Server, playerIndex, direction.normalized, -Power);
                     if (player != null)
                     {
-                        if (player.Team != transform.GetComponent<Player>().Team)
-                        {
-                            player.Stun(Stun);
-                        }
+                        //if (player.Team != transform.GetComponent<Player>().Team)
+                        //{
+                        //    player.Stun(Stun);
+                        //}
                     }
-                    var direction = hit.transform.position - transform.position;
-                    hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
-                   
+                    else
+                    {
+                        //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
+                    }
                 }
                 else
                 {
