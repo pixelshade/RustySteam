@@ -14,6 +14,7 @@ public class PullController : MonoBehaviour
     private float _cdLeft = 0.0f;
     private float _stunLeft = 0.0f;
     private GuiGame _guiGame;
+    private RopeScript _ropeScript;
 
 
     void Awake()
@@ -25,6 +26,7 @@ public class PullController : MonoBehaviour
 	void Start ()
 	{
 	    _guiGame = GetComponent<GuiGame>();
+	    _ropeScript = GetComponent<RopeScript>();
 	}
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
@@ -67,6 +69,7 @@ public class PullController : MonoBehaviour
 
     private void ProcessRightClick(Ray ray, RaycastHit hit, Vector3 fwd)
     {
+
         if (Input.GetButtonDown("Fire2"))
         {
             if (_cdLeft > 0)
@@ -75,10 +78,15 @@ public class PullController : MonoBehaviour
             }
             if (Physics.Raycast(ray, out hit, Range))
             {
+                Debug.Log(hit);
+                
+                   
+
                 var hitObj = hit.transform.GetComponent<Movable>();
                 int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj != null)
                 {
+//                    _ropeScript.BuildRope(hit.transform, false); 
                     var player = hit.transform.GetComponent<Player>();
                     if (player != null)
                     {
@@ -89,15 +97,22 @@ public class PullController : MonoBehaviour
                     }
                     var direction = hit.transform.position - transform.position;
                     hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
+                   
                 }
                 else
                 {
+//                    _ropeScript.BuildRope(hit.transform, true);
                     var self = transform.GetComponent<Movable>();
                     //var direction = hit.transform.position - transform.position;
                     self.MoveTowards(playerIndex, fwd.normalized, Power);
                 }
             }
+           
             _cdLeft = CD;
+        }
+        else
+        {
+//            _ropeScript.DestroyRope();
         }
 
     }
@@ -135,8 +150,8 @@ public class PullController : MonoBehaviour
             // Direction of shot depends on rotation of player and his camera
             var c = Camera.main.transform.TransformDirection(Vector3.forward);
             Vector3 cam = transform.Find("Camera").TransformDirection(Vector3.forward);
-            Debug.Log("main"+c);
-            Debug.Log("find" + cam);
+//            Debug.Log("main"+c);
+//            Debug.Log("find" + cam);
             Vector3 fwd = transform.TransformDirection(Vector3.forward);
             fwd.x -= fwd.x*Math.Abs(cam.y);
             fwd.y = cam.y;
@@ -148,6 +163,9 @@ public class PullController : MonoBehaviour
 
             //chage crosshair if we have something hit 
             _guiGame.CrosshairSelected(Physics.Raycast(ray, out hit, Range));
+
+
+            
 
 
             ProcessLeftClick(ray, hit, fwd);
@@ -167,6 +185,8 @@ public class PullController : MonoBehaviour
     {
         return _cdLeft;
     }
+
+    
 
 
 }

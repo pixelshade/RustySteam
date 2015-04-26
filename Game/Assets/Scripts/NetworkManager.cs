@@ -39,7 +39,7 @@ public class NetworkManager : MonoBehaviour {
 
 	public void LoadLevel(string level, int gameMode){
 		Network.RemoveRPCsInGroup(0);
-		GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix, GameMode);
+        GetComponent<NetworkView>().RPC("LoadLevelRPC", RPCMode.AllBuffered, level, _lastLevelPrefix, gameMode);
 	}
 
 
@@ -53,6 +53,8 @@ public class NetworkManager : MonoBehaviour {
 	[RPC] 
 	IEnumerator LoadLevelRPC (string level, int levelPrefix, int gameMode){
         GameMode = gameMode;
+        Debug.Log("GameMode je");
+        Debug.Log(gameMode);
         _loaded = 0;
 		_lastLevelPrefix = levelPrefix;
 		Network.SetSendingEnabled(0, false);    

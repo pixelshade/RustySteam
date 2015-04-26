@@ -28,7 +28,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         PlayerInfos = _networkManager.PlayerList;
 
 	    GameMode =  (Consts.GameModes) _networkManager.GameMode;
-
+        
         _teamA = new TeamInfo("Edison", 1);
         _teamB = new TeamInfo("Tesla", 0);
 
@@ -104,6 +104,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             Debug.LogWarning("NetworkManager is null! - Debugging enviroment");
         }
 
+        
         switch (GameMode)
         {
                 case Consts.GameModes.CaptureTheFlag: SetUpCaptureTheFlagMode();
@@ -123,15 +124,17 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
     public void SetUpDeathMatchMode()
     {
+        Debug.Log("DM MODE");
+        var area = 500;
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
         var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NumCubes; i++)
         {
 
-            var point = Random.insideUnitSphere * 500;
+            var point = Random.insideUnitSphere * area;
             point.y = Math.Abs(point.y);
 
-            var point2 = Random.insideUnitSphere * 500;
+            var point2 = Random.insideUnitSphere * area;
             point.y = Math.Abs(point2.y) / 2;
 
             GameObject s, w;
