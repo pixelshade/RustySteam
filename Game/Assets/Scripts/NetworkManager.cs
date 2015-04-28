@@ -43,13 +43,6 @@ public class NetworkManager : MonoBehaviour {
 	}
 
 
-    [RPC]
-    void ChangeShownModeInMenu(int gameMode)
-    {
-        
-    }
-
-
 	[RPC] 
 	IEnumerator LoadLevelRPC (string level, int levelPrefix, int gameMode){
         GameMode = gameMode;
@@ -89,7 +82,14 @@ public class NetworkManager : MonoBehaviour {
 	void OnDisconnectedFromServer (){
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+
         Application.LoadLevel(Consts.MainMenuScene);
+        _lastLevelPrefix = 1;
+        PlayerList = new List<PlayerInfo>();
+        LoadFinish = new List<ILoadFinish>();
+        _loaded = 0;
+        GameMode = 0;
+
 	}
 
 	public int GetCount(){

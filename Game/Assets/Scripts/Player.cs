@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
 
+    private bool _isMine;
+
     public int Team
     {
         get
@@ -46,11 +48,9 @@ public class Player : MonoBehaviour
         get { return _nickName; } 
         set
         {
-            if (_playerNameText != null)
-            {
+                _playerNameText = GetComponentInChildren<TextMesh>();
                 _nickName = value;
                 _playerNameText.text = value;
-            }
         }
     }
     private string _nickName;
@@ -58,19 +58,18 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (GetComponent<NetworkView>().isMine)
+        _isMine = GetComponent<NetworkView>().isMine;
+
+        if (_isMine)
         {
             Camera[] c = GetComponentsInChildren<Camera>();
             AudioListener[] al = GetComponentsInChildren<AudioListener>();
             c[0].enabled = true;
             al[0].enabled = true;
         }
-        _playerNameText = GameObject.Find("PlayerName").GetComponent<TextMesh>();
-        _playerNameText.text = _nickName;
         Id = NetworkManager.Get().GetPosition(false);
-		
-
-       
+        _playerNameText = GetComponentInChildren<TextMesh>();
+        
     }
 
     // Update is called once per frame

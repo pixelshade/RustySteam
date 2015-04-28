@@ -71,7 +71,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         pos.y = 2;
         
         GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
-        p.GetComponent<Player>().NickName = name;
+     
     }
 
     void OnGUI()
@@ -234,8 +234,33 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
     public void AllLoadFinished()
     {
+        
         DividePlayersToTeams();
-     
+        GetComponent<NetworkView>().RPC("SetupPlayers",RPCMode.AllBuffered);
+    }
+
+
+    [RPC]
+    public void SetupPlayers()
+    {
+        var playersGameObjects = GameObject.FindGameObjectsWithTag("Player");
+        foreach (var playerGO in playersGameObjects)
+        {
+            foreach (var playerInfo in PlayerInfos)
+            {
+                if(playerInfo==null) continue;
+                
+                if (playerGO.GetComponent<NetworkView>().owner == playerInfo.Player)
+                {
+                    Debug.Log(playerInfo.NickName);
+                    var playerScript = playerGO.GetComponent<Player>();
+                    playerScript.Id = _networkManager.GetPosition(false, playerInfo.Player);
+                    playerScript.NickName = playerInfo.NickName;
+
+                }
+            }
+        }
+
     }
 }
 

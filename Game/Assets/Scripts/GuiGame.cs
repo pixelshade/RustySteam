@@ -4,6 +4,7 @@ using System.Collections;
 
 public class GuiGame : MonoBehaviour
 {
+    public Texture DmgTexture;
     public Texture CrosshairTexture;
 
     private Player _player;
@@ -16,6 +17,10 @@ public class GuiGame : MonoBehaviour
     private float _respawnTime;
 
     private GUIStyle _hugeGuiStyle;
+    private static float _dmg_taken_time;
+
+
+    private const float DMG_TAKEN_DUR = 1;
 
 	// Use this for initialization
     void Awake()
@@ -43,7 +48,7 @@ public class GuiGame : MonoBehaviour
         if (GetComponent<NetworkView>().isMine)
         {
             GUI.TextArea(new Rect(0, 0, 100, 50),
-                "HP:" + _player.HP + " \n Power:" + _pull.Power + "\n Range: " + _pull.Range);
+                "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pull.Power + "\n Range: " + _pull.Range);
 
 //        if (_pull.CdLeft()>0)
 //        {
@@ -57,6 +62,7 @@ public class GuiGame : MonoBehaviour
             RespawnGUI();
 
             ScoreGUI();
+            DmgTakenAnimate();
         }
     }
 
@@ -86,25 +92,40 @@ public class GuiGame : MonoBehaviour
 
     }
 
+    public static void DmgTaken()
+    {
+        _dmg_taken_time = Time.time;
+    }
+
+    private void DmgTakenAnimate()
+    {
+        var diff = Time.time - _dmg_taken_time;
+        if (diff < DMG_TAKEN_DUR)
+        {
+            GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), DmgTexture, ScaleMode.StretchToFill, true);
+        }
+    }
 
     private void ScoreGUI()
     {
         string plrScore = "";
         string strTeam1 = "", strTeam2 = "";
         TeamInfo team1 = null;
-        if(_playerInfos!=null)
+        if (_playerInfos != null)
         foreach (var player in _playerInfos)
         {
 
             if (player == null || player.Team == null) continue;
             if (team1 == null) team1 = player.Team;
+
+            var info = player.Team.Id +" " + player.Team.TeamName + "- " + player.Team.Score + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
             if (player.Team == team1)
             {
-                strTeam1 += player.Team.TeamName + " " + player.Team.Id + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+                strTeam1 += info;
             }
             else
             {
-                strTeam2 += player.Team.TeamName + " " + player.Team.Id + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+                strTeam2 += info;
             }
         }
         plrScore += strTeam1 + "==========\n" + strTeam2;
@@ -121,4 +142,5 @@ public class GuiGame : MonoBehaviour
     {
         _respawnTime = seconds+Time.time;
     }
+
 }

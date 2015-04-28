@@ -13,10 +13,12 @@ public class Movable : MonoBehaviour
     public int MovedByPlayer;
 
 
+    private Player _player;
+
     
 	// Use this for initialization
 	void Start () {
-	
+        _player = GetComponent<Player>();
 	}
 	
 	// Update is called once per frame
@@ -40,6 +42,19 @@ public class Movable : MonoBehaviour
     }
 
     [RPC]
+    public void MovePlayerTowards(int actuator, int target, Vector3 vector3, float power = 1)
+    {
+        
+        Debug.Log("MovePLayerTowards: " + actuator + "target:" + target);
+        if (_player == null) return;
+        
+        if (_player.Id == target)
+        {
+            GuiGame.DmgTaken();
+            MoveTowards(actuator, vector3, power);
+        }
+    }
+    
     public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
     {
         MovedByPlayer = actuator;

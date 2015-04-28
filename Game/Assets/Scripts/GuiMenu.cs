@@ -9,7 +9,7 @@ public class GuiMenu : MonoBehaviour {
         MainMenu, Lobby, Join, Host
     }
 
-    public Texture Logo;
+//    public Texture Logo;
 
     public float AutoServerListRefreshTimeDelay = 5;
     public bool AutoRefreshServersList = true;
@@ -30,6 +30,9 @@ public class GuiMenu : MonoBehaviour {
     private int _selModeInt = 0;
     private int _prevSelModeInt = 0;
 
+    // panels
+    private GameObject _mainMenuPanel;
+
     public void SetState(MenuState newState)
     {
         _state = newState;
@@ -47,6 +50,10 @@ public class GuiMenu : MonoBehaviour {
             _nick = PlayerPrefs.GetString("NickName");
         }
         SetState(MenuState.MainMenu);
+	    _mainMenuPanel = GameObject.Find("MainMenuPanel") as GameObject;
+        
+        
+
 	}
 
     void Awake()
@@ -54,10 +61,9 @@ public class GuiMenu : MonoBehaviour {
 //        GetComponent<NetworkView>().group = 0;
     }
 
-
     private void OnGUI()
     {
-        GUI.DrawTexture(new Rect(Screen.width / 2 - 100, 0, 200, 100), Logo,ScaleMode.ScaleToFit);
+//        GUI.DrawTexture(new Rect(Screen.width / 2 - 100, 0, 200, 100), Logo,ScaleMode.ScaleToFit);
         GUILayout.BeginArea(_centRect);
         if (_state == MenuState.MainMenu)
         {
@@ -168,6 +174,8 @@ public class GuiMenu : MonoBehaviour {
 		   
     }
 
+
+
     private void GameLobby()
     {
         GUILayout.Label("Lobby");
@@ -251,6 +259,7 @@ public class GuiMenu : MonoBehaviour {
 
 	void OnConnectedToServer()
 	{
+        Debug.Log("OnConnectedToServer");
 		_networkManager.PlayerList.Clear();
         for (var i = 0; i < Consts.maxPlayers; i++)
         {
@@ -262,6 +271,7 @@ public class GuiMenu : MonoBehaviour {
 
 	void OnServerInitialized()
 	{
+        Debug.Log("OnServerInitialized");
 		_networkManager.PlayerList.Clear();
         for (var i = 0; i < Consts.maxPlayers; i++)
         {
@@ -335,12 +345,12 @@ public class GuiMenu : MonoBehaviour {
     }
 
 	IEnumerator LeaveLobby() {
+        SetState(MenuState.MainMenu);
 		if (Network.isServer || Network.isClient) {
 			_disconnect = true;
 			if (Network.isServer) MasterServer.UnregisterHost();
 			Network.Disconnect();
 			yield return new WaitForSeconds(.3f);
 		}
-		SetState(MenuState.MainMenu);
 	}
 }

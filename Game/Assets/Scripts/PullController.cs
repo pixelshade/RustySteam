@@ -15,7 +15,7 @@ public class PullController : MonoBehaviour
     private float _stunLeft = 0.0f;
     private GuiGame _guiGame;
     private RopeScript _ropeScript;
-
+    private NetworkView _networkView;
 
     void Awake()
     {
@@ -27,6 +27,7 @@ public class PullController : MonoBehaviour
 	{
 	    _guiGame = GetComponent<GuiGame>();
 	    _ropeScript = GetComponent<RopeScript>();
+	    _networkView = GetComponent<NetworkView>();
 	}
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
@@ -45,9 +46,12 @@ public class PullController : MonoBehaviour
                 {
                     var player = hit.transform.GetComponent<Player>();
                     var direction = hit.transform.position - transform.position;
-                    GetComponent<NetworkView>().RPC("MoveTowards", RPCMode.Server, playerIndex, direction.normalized, Power);
+
                     if (player != null)
                     {
+                        var targetIndex = player.Id;
+                        Debug.Log(targetIndex+" indexy "+playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
                         //player.Stun(Stun);
@@ -55,7 +59,7 @@ public class PullController : MonoBehaviour
                     }
                     else
                     {
-                        //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
+                        hitObj.MoveTowards(playerIndex, direction.normalized, Power);
                     }
                 }
                 else
@@ -90,9 +94,12 @@ public class PullController : MonoBehaviour
 //                    _ropeScript.BuildRope(hit.transform, false); 
                     var player = hit.transform.GetComponent<Player>();
                     var direction = hit.transform.position - transform.position;
-                    GetComponent<NetworkView>().RPC("MoveTowards", RPCMode.Server, playerIndex, direction.normalized, -Power);
+            
                     if (player != null)
                     {
+                        var targetIndex = player.Id;
+                        Debug.Log(targetIndex + " indexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
                         //    player.Stun(Stun);
@@ -100,7 +107,7 @@ public class PullController : MonoBehaviour
                     }
                     else
                     {
-                        //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
+                        hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                     }
                 }
                 else
@@ -135,7 +142,7 @@ public class PullController : MonoBehaviour
 	// Update is called once per frame
     private void Update()
     {
-
+        if (!_networkView.isMine) return;
         // Cooldown 
         if (_cdLeft > 0)
         {

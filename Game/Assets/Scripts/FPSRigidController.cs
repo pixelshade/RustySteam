@@ -18,6 +18,7 @@ public class FPSRigidController : MonoBehaviour
     private Rigidbody _rigidbody;
     private Player _player;
 
+
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -53,8 +54,8 @@ public class FPSRigidController : MonoBehaviour
             _esc = false;
         }
 
-        //if (GetComponent<NetworkView>().isMine)
-        //{
+        if (GetComponent<NetworkView>().isMine)
+        {
             if (!_player.Stunned && !_player.Dead) { 
             // Cast a ray towards the ground to see if the Walker is grounded
                 //bool grounded = Physics.Raycast(transform.position, Gravity.normalized, GroundHeight);
@@ -84,7 +85,7 @@ public class FPSRigidController : MonoBehaviour
                 _jump = false;
                 _grounded = false;
             }
-        //}
+        }
     }
 
     void OnCollisionStay()
