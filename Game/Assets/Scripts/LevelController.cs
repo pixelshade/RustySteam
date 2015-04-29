@@ -13,7 +13,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public Consts.GameModes GameMode;
     public static TeamInfo _teamA, _teamB;
 
-    public List<GameObject> PlayersGameObjects = new List<GameObject>();
+    public List<GameObject> PlayersGameObjects;
 
     public List<NetworkManager.PlayerInfo> PlayerInfos;
 
@@ -41,7 +41,11 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         SpawnPlayer(PlayerPrefs.GetString("NickName"));
 	}
 
-   
+    public static LevelController Get()
+    {
+        GameObject go = GameObject.Find("Main");
+        return go == null ? null : go.GetComponent<LevelController>();
+    }
 
     public void DividePlayersToTeams()
     {
@@ -63,6 +67,16 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         }
     }
 
+    void OnDisconnectedFromServer(NetworkDisconnection info)
+    {
+        if (Network.isServer)
+            Debug.Log("Local server connection disconnected");
+        else
+            if (info == NetworkDisconnection.LostConnection)
+                Debug.Log("Lost connection to the server");
+            else
+                Debug.Log("Successfully diconnected from the server");
+    }
 
     public void SpawnPlayer(string name)
     {
@@ -243,8 +257,8 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     [RPC]
     public void SetupPlayers()
     {
-        var playersGameObjects = GameObject.FindGameObjectsWithTag("Player");
-        foreach (var playerGO in playersGameObjects)
+        PlayersGameObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
+        foreach (var playerGO in PlayersGameObjects)
         {
             foreach (var playerInfo in PlayerInfos)
             {

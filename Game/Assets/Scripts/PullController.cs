@@ -14,8 +14,13 @@ public class PullController : MonoBehaviour
     private float _cdLeft = 0.0f;
     private float _stunLeft = 0.0f;
     private GuiGame _guiGame;
+    private LevelController _levelController;
     private RopeScript _ropeScript;
     private NetworkView _networkView;
+    private Player _playerSelf;
+
+    public ParticleSystem ShootParticleSystem;
+
 
     void Awake()
     {
@@ -28,6 +33,10 @@ public class PullController : MonoBehaviour
 	    _guiGame = GetComponent<GuiGame>();
 	    _ropeScript = GetComponent<RopeScript>();
 	    _networkView = GetComponent<NetworkView>();
+	    _playerSelf = GetComponent<Player>();
+        _levelController = LevelController.Get();
+        
+        ShootParticleSystem.Stop();
 	}
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
@@ -44,12 +53,12 @@ public class PullController : MonoBehaviour
                 int playerIndex = NetworkManager.Get().GetPosition(false);
                 if (hit.rigidbody != null && hitObj != null)
                 {
-                    var player = hit.transform.GetComponent<Player>();
+                    var hitPlayer = hit.transform.GetComponent<Player>();
                     var direction = hit.transform.position - transform.position;
 
-                    if (player != null)
+                    if (hitPlayer != null)
                     {
-                        var targetIndex = player.Id;
+                        var targetIndex = hitPlayer.Id;
                         Debug.Log(targetIndex+" indexy "+playerIndex);
                         GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
@@ -69,6 +78,9 @@ public class PullController : MonoBehaviour
                 }
             
             }
+
+            PlayerShotAnimate();
+            _networkView.RPC("PlayerShootsAnimate",RPCMode.OthersBuffered,_playerSelf.Id);
             _cdLeft = CD;
         }
     }
@@ -92,12 +104,12 @@ public class PullController : MonoBehaviour
                 if (hit.rigidbody != null && hitObj != null)
                 {
 //                    _ropeScript.BuildRope(hit.transform, false); 
-                    var player = hit.transform.GetComponent<Player>();
+                    var hitPlayer = hit.transform.GetComponent<Player>();
                     var direction = hit.transform.position - transform.position;
             
-                    if (player != null)
+                    if (hitPlayer != null)
                     {
-                        var targetIndex = player.Id;
+                        var targetIndex = hitPlayer.Id;
                         Debug.Log(targetIndex + " indexy " + playerIndex);
                         GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
@@ -197,7 +209,24 @@ public class PullController : MonoBehaviour
         return _cdLeft;
     }
 
-    
+    [RPC]
+    public void PlayerShootsAnimate(int playerId)
+    {
 
+        foreach (var playerGO in _levelController.PlayersGameObjects)
+        {
+            
+            if (playerGO.GetComponent<Player>().Id == playerId)
+            {
+                playerGO.GetComponent<PullController>().PlayerShotAnimate();
+            }
+            
+        }
+        
+    }
 
+    private void PlayerShotAnimate()
+    {
+        ShootParticleSystem.Play();
+    }
 }
