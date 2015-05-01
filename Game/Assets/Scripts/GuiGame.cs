@@ -6,9 +6,13 @@ public class GuiGame : MonoBehaviour
 {
     public Texture DmgTexture;
     public Texture CrosshairTexture;
+    public Texture CdBarBgTexture;
+    public Texture CdBarTexture;
+    public Texture TeamsScoreTexture;
+
 
     private Player _player;
-    private PullController _pull;
+    private PullController _pullController;
     
 
     private bool _crosshairSelected;
@@ -18,15 +22,17 @@ public class GuiGame : MonoBehaviour
 
     private GUIStyle _hugeGuiStyle;
     private static float _dmg_taken_time;
+    private NetworkView _networkView;
 
+    
 
-    private const float DMG_TAKEN_DUR = 1;
+    private const float DMG_TAKEN_ANIMATION_DUR = 1;
 
 	// Use this for initialization
     void Awake()
     {
         _player = GetComponent<Player>();
-        _pull = GetComponent<PullController>();
+        _pullController = GetComponent<PullController>();
     }
 
 	void Start ()
@@ -34,7 +40,8 @@ public class GuiGame : MonoBehaviour
 	    _hugeGuiStyle = new GUIStyle();
 	    _hugeGuiStyle.fontSize = 72;
 	    _playerInfos = NetworkManager.Get().PlayerList;
-
+	    _networkView = GetComponent<NetworkView>();
+        
 	}
 	
 	// Update is called once per frame
@@ -45,15 +52,19 @@ public class GuiGame : MonoBehaviour
     void OnGUI()
     {
 //                GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
-        if (GetComponent<NetworkView>().isMine)
+        if (_networkView.isMine)
         {
             GUI.TextArea(new Rect(0, 0, 100, 50),
-                "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pull.Power + "\n Range: " + _pull.Range);
+                "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pullController.Power + "\n Range: " + _pullController.Range);
 
-//        if (_pull.CdLeft()>0)
+//        if (_pullController.CdLeft()>0)
 //        {
-            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height - 50, 100, 50),
-                " CD ready in " + _pull.CdLeft().ToString("F1") + "s");
+//            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height - 50, 100, 50),
+//                " CD ready in " + _pullController.CdLeft().ToString("F1") + "s");
+
+            GUI.DrawTexture(new Rect(Screen.width / 2 - 128, -5, 256, 68), TeamsScoreTexture);
+            GUI.DrawTexture(new Rect(Screen.width / 2 - 50, Screen.height - 30, 100, 25), CdBarBgTexture);
+            GUI.DrawTexture(new Rect(Screen.width / 2 - 35, Screen.height - 22, 70 * ((_pullController.CD-_pullController.CdLeft())/_pullController.CD), 10), CdBarTexture, ScaleMode.StretchToFill);
 //        }
 //        GUI.Box(new Rect(Screen.width / 2 - 100, 100, 200, 150), "Menu");
 
@@ -100,7 +111,7 @@ public class GuiGame : MonoBehaviour
     private void DmgTakenAnimate()
     {
         var diff = Time.time - _dmg_taken_time;
-        if (diff < DMG_TAKEN_DUR)
+        if (diff < DMG_TAKEN_ANIMATION_DUR)
         {
             GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), DmgTexture, ScaleMode.StretchToFill, true);
         }

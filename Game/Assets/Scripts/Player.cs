@@ -66,8 +66,9 @@ public class Player : MonoBehaviour
             AudioListener[] al = GetComponentsInChildren<AudioListener>();
             c[0].enabled = true;
             al[0].enabled = true;
+            Id = NetworkManager.Get().GetPosition(false);
         }
-        Id = NetworkManager.Get().GetPosition(false);
+       
         _playerNameText = GetComponentInChildren<TextMesh>();
         
     }
@@ -108,7 +109,7 @@ public class Player : MonoBehaviour
             if (!Dead)
             {
                 var levelController = GameObject.Find("Main");
-                var playerIndex = NetworkManager.Get().GetPosition(true);
+                var playerIndex = NetworkManager.Get().GetPosition(false);
                 if (Consts.IsHost)
                     levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, playerIndex, _deathType);
                 Respawn(5);

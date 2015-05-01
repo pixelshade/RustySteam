@@ -335,6 +335,7 @@ public class GuiMenu : MonoBehaviour {
 		}
 		Network.RemoveRPCs(player);
 		Network.DestroyPlayerObjects(player);
+        Debug.Log("destroy player objects");
 	}
 
 

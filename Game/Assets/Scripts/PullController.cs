@@ -100,7 +100,9 @@ public class PullController : MonoBehaviour
                 Debug.Log(hit);
                 
                 var hitObj = hit.transform.GetComponent<Movable>();
-                int playerIndex = NetworkManager.Get().GetPosition(false);
+//                int playerIndex = NetworkManager.Get().GetPosition(false);
+                int playerIndex = _playerSelf.Id;
+
                 if (hit.rigidbody != null && hitObj != null)
                 {
 //                    _ropeScript.BuildRope(hit.transform, false); 
@@ -111,7 +113,7 @@ public class PullController : MonoBehaviour
                     {
                         var targetIndex = hitPlayer.Id;
                         Debug.Log(targetIndex + " indexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
+                          GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, -Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
                         //    player.Stun(Stun);
@@ -208,6 +210,23 @@ public class PullController : MonoBehaviour
     {
         return _cdLeft;
     }
+
+    [RPC]
+    public void MovePlayerTowards(int actuator, int target, Vector3 vector3, float power = 1)
+    {
+        foreach (var playerGO in _levelController.PlayersGameObjects)
+        {
+
+            if (playerGO.GetComponent<Player>().Id == target)
+            {
+                playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);
+                if(NetworkManager.Get().GetPosition(false) == target)
+                    GuiGame.DmgTaken();
+            }
+
+        }
+    }
+
 
     [RPC]
     public void PlayerShootsAnimate(int playerId)

@@ -14,11 +14,12 @@ public class Movable : MonoBehaviour
 
 
     private Player _player;
-
+    private Rigidbody _rigidbody;
     
 	// Use this for initialization
 	void Start () {
         _player = GetComponent<Player>();
+	    _rigidbody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -33,26 +34,12 @@ public class Movable : MonoBehaviour
         if (_hasToMove)
         {
             //GetComponent<Rigidbody>().velocity = vectorToMove * powerToMove;
-            GetComponent<Rigidbody>().AddForce(vectorToMove*powerToMove, ForceMode.VelocityChange);
+            _rigidbody.AddForce(vectorToMove*powerToMove, ForceMode.VelocityChange);
             _hasToMove = false;
         }
         // no longer moving
-        if (GetComponent<Rigidbody>().velocity.sqrMagnitude < 0.01f)
+        if (_rigidbody.velocity.sqrMagnitude < 0.01f)
              MovedByPlayer = -1;
-    }
-
-    [RPC]
-    public void MovePlayerTowards(int actuator, int target, Vector3 vector3, float power = 1)
-    {
-        
-        Debug.Log("MovePLayerTowards: " + actuator + "target:" + target);
-        if (_player == null) return;
-        
-        if (_player.Id == target)
-        {
-            GuiGame.DmgTaken();
-            MoveTowards(actuator, vector3, power);
-        }
     }
     
     public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
