@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 {
     public const int NumCubes = 10;
+    public const int NumDanger = 4;
     
     private NetworkManager _networkManager;
     private Rigidbody _rb;
@@ -140,9 +141,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SetUpDeathMatchMode()
     {
         Debug.Log("DM MODE");
-        var area = 500;
+        var area = 400;
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
         var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
+        var danger = Resources.Load("Prefabs/DangerZone", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NumCubes; i++)
         {
 
@@ -150,7 +152,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             point.y = Math.Abs(point.y);
 
             var point2 = Random.insideUnitSphere * area;
-            point.y = Math.Abs(point2.y) / 2;
+            point2.y = Math.Abs(point2.y) / 5;
 
             GameObject s, w;
             if (Consts.IsSinglePlayer)
@@ -163,8 +165,26 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                 s = Network.Instantiate(scrap, point, Quaternion.identity, 0) as GameObject;
                 w = Network.Instantiate(wall, point2, Quaternion.identity, 0) as GameObject;
             }
-            w.transform.localScale += new Vector3(Random.value, Random.value, Random.value) * 50;
+            w.transform.localScale += new Vector3(Random.value, Random.value / 3, Random.value) * 30;
         }
+
+        for (var i = 0; i < NumDanger; i++)
+        {
+            var point = Random.insideUnitSphere * area;
+            point.y = 0.07f;
+
+            GameObject d;
+            if (Consts.IsSinglePlayer)
+            {
+                d = Instantiate(danger, point, Quaternion.identity) as GameObject;
+            }
+            else
+            {
+                d = Network.Instantiate(danger, point, Quaternion.identity, 0) as GameObject;
+            }
+            d.transform.localScale += new Vector3(Random.value, 0, Random.value) * 10;
+        }
+
     }
 
     public void SetUpKingOfTheHillMode()
