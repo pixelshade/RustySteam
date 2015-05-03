@@ -50,7 +50,8 @@ public class PullController : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Range))
             {
                 var hitObj = hit.transform.GetComponent<Movable>();
-                int playerIndex = NetworkManager.Get().GetPosition(false);
+                //int playerIndex = NetworkManager.Get().GetPosition(false);
+                int playerIndex = _playerSelf.Id;
                 if (hit.rigidbody != null && hitObj != null)
                 {
                     var hitPlayer = hit.transform.GetComponent<Player>();
@@ -68,7 +69,10 @@ public class PullController : MonoBehaviour
                     }
                     else
                     {
-                        hitObj.MoveTowards(playerIndex, direction.normalized, Power);
+                        var objIndex = hitObj.Id;
+                        Debug.Log(objIndex + " Objindexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, Power);
+                        //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
                     }
                 }
                 else
@@ -121,7 +125,10 @@ public class PullController : MonoBehaviour
                     }
                     else
                     {
-                        hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
+                        var objIndex = hitObj.Id;
+                        Debug.Log(objIndex + " Objindexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, -Power);
+                        //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                     }
                 }
                 else
@@ -214,16 +221,30 @@ public class PullController : MonoBehaviour
     [RPC]
     public void MovePlayerTowards(int actuator, int target, Vector3 vector3, float power = 1)
     {
-        foreach (var playerGO in _levelController.PlayersGameObjects)
+        if (target < 0)
         {
-
-            if (playerGO.GetComponent<Player>().Id == target)
+            foreach (var targetGO in _levelController.MovableGameObjects)
             {
-                playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);
-                if(NetworkManager.Get().GetPosition(false) == target)
-                    GuiGame.DmgTaken();
+                var movable = targetGO.GetComponent<Movable>();
+                if (movable.Id == target)
+                {
+                    movable.MoveTowards(actuator, vector3, power);
+                }
             }
+        }
+        else
+        {
+            foreach (var playerGO in _levelController.PlayersGameObjects)
+            {
 
+                if (playerGO.GetComponent<Player>().Id == target)
+                {
+                    playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);
+                    if (NetworkManager.Get().GetPosition(false) == target)
+                        GuiGame.DmgTaken();
+                }
+
+            }
         }
     }
 

@@ -11,6 +11,7 @@ public class Movable : MonoBehaviour
     public bool IsMovable = true;
 
     public int MovedByPlayer;
+    public int Id;
 
 
     private Player _player;

@@ -14,6 +14,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public static TeamInfo _teamA, _teamB;
 
     public List<GameObject> PlayersGameObjects;
+    public List<GameObject> MovableGameObjects;
 
     public List<NetworkManager.PlayerInfo> PlayerInfos;
 
@@ -251,6 +252,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         
         DividePlayersToTeams();
         GetComponent<NetworkView>().RPC("SetupPlayers",RPCMode.AllBuffered);
+        GetComponent<NetworkView>().RPC("SetupMovables", RPCMode.AllBuffered);
     }
 
 
@@ -273,6 +275,19 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
                 }
             }
+        }
+
+    }
+
+    [RPC]
+    public void SetupMovables()
+    {
+        MovableGameObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("movable"));
+        var i = -1;
+        foreach (var movableGO in MovableGameObjects)
+        {
+            movableGO.GetComponent<Movable>().Id = i;
+            i--;
         }
 
     }
