@@ -83,11 +83,11 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        var pos = Random.insideUnitSphere*300;
-        pos.y = 2;
         
-        GameObject p = Network.Instantiate(player, pos, Quaternion.identity, 0) as GameObject;
-     
+        
+        GameObject p = Network.Instantiate(player, Vector3.zero, Quaternion.identity, 0) as GameObject;
+        p.GetComponent<Player>().Respawn(0);
+
     }
 
     void OnGUI()

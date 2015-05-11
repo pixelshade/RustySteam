@@ -168,14 +168,16 @@ public class Player : MonoBehaviour
     public void Respawn(float time = 0)
     {
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
         fpsRigidCtrl.enabled = false;
+        
         var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
         gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
     }
 
-    public void Respawn()
+    private void Respawn()
     {
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         fpsRigidCtrl.enabled = true;
@@ -188,7 +190,7 @@ public class Player : MonoBehaviour
         {
             p = GameObject.Find("SpawnZoneB").transform.position;
         }
-        var position = new Vector3(p.x, 2, p.z);
+        var position = new Vector3(p.x, 10, p.z);
         //position +=  Random.insideUnitSphere*(Random.Range(-100,100));
         //position.y = 2;
 
