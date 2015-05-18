@@ -83,8 +83,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        var spawnChoice = Random.value;
-        Vector3 p = spawnChoice < 0.5 ? GameObject.Find("SpawnZoneA").transform.position : GameObject.Find("SpawnZoneB").transform.position;
+        GameObject[] array1 = GameObject.FindGameObjectsWithTag("SpawnA");
+        GameObject[] array2 = GameObject.FindGameObjectsWithTag("SpawnB");
+        GameObject[] newArray = new GameObject[array1.Length + array2.Length];
+        Array.Copy(array1, newArray, 0);
+        Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
+        var spawnChoice = Random.Range(0, newArray.Length);
+        Vector3 p = newArray[spawnChoice].transform.position;
         GameObject pl = Network.Instantiate(player, p, Quaternion.identity, 0) as GameObject;
         pl.GetComponent<Player>().Respawn(0);
     }

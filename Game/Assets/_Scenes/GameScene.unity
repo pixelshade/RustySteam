@@ -362,7 +362,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -516,7 +516,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -670,7 +670,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -732,7 +732,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -794,7 +794,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1062,7 +1062,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1233,7 +1233,7 @@ GameObject:
   - 114: {fileID: 1253091202}
   m_Layer: 0
   m_Name: SpawnZoneA
-  m_TagString: Untagged
+  m_TagString: SpawnA
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1384,7 +1384,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1443,7 +1443,7 @@ GameObject:
   - 114: {fileID: 1431627407}
   m_Layer: 0
   m_Name: SpawnZoneB 1
-  m_TagString: Untagged
+  m_TagString: SpawnB
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1524,7 +1524,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1594,7 +1594,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1942,7 +1942,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -1996,7 +1996,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2208,7 +2208,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.y
@@ -2418,7 +2418,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2480,7 +2480,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2542,7 +2542,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: -15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2601,7 +2601,7 @@ GameObject:
   - 114: {fileID: 2042955440}
   m_Layer: 0
   m_Name: SpawnZoneA 1
-  m_TagString: Untagged
+  m_TagString: SpawnA
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2690,7 +2690,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: cbfbe0717f02a7849a4e61995e6bdc02, type: 2}
       propertyPath: m_LocalRotation.x
@@ -2749,7 +2749,7 @@ GameObject:
   - 114: {fileID: 2146317852}
   m_Layer: 0
   m_Name: SpawnZoneB
-  m_TagString: Untagged
+  m_TagString: SpawnB
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
