@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
 
         var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
-        _gameGui.RespawnIn(time);
+        gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
     }
 

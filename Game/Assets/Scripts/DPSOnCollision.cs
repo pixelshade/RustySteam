@@ -24,7 +24,7 @@ public class DPSOnCollision : MonoBehaviour
 	    {
 	        if (Time.time > times[i])
 	        {
-                collidingPlayers[i].HP -= Damage;
+                collidingPlayers[i].TakeDamage(Damage);
                 times[i] = Time.time + Seconds;
 	        }
 	    }
