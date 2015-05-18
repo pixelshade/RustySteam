@@ -18,8 +18,13 @@ public class PullController : MonoBehaviour
     private RopeScript _ropeScript;
     private NetworkView _networkView;
     private Player _playerSelf;
+    private AudioSource[] _audioSources;
 
     public ParticleSystem ShootParticleSystem;
+    public ParticleSystem SuckParticleSystem;
+
+    public AudioClip SuckAudioClip;
+    public AudioClip ShootAudioClip;
 
 
     void Awake()
@@ -35,6 +40,7 @@ public class PullController : MonoBehaviour
 	    _networkView = GetComponent<NetworkView>();
 	    _playerSelf = GetComponent<Player>();
         _levelController = LevelController.Get();
+	    _audioSources = GetComponents<AudioSource>();
         
         ShootParticleSystem.Stop();
 	}
@@ -83,8 +89,8 @@ public class PullController : MonoBehaviour
             
             }
 
-            PlayerShotAnimate();
-            _networkView.RPC("PlayerShootsAnimate",RPCMode.OthersBuffered,_playerSelf.Id);
+            PlayerShotAnimate(false);
+            _networkView.RPC("PlayerShootsAnimate",RPCMode.OthersBuffered,_playerSelf.Id,false);
             _cdLeft = CD;
         }
     }
@@ -139,7 +145,8 @@ public class PullController : MonoBehaviour
                     self.MoveTowards(playerIndex, fwd.normalized, Power);
                 }
             }
-           
+            PlayerShotAnimate(true);
+            _networkView.RPC("PlayerShootsAnimate", RPCMode.OthersBuffered, _playerSelf.Id, true);
             _cdLeft = CD;
         }
         else
@@ -241,7 +248,7 @@ public class PullController : MonoBehaviour
                 {
                     playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);
                     if (NetworkManager.Get().GetPosition(false) == target)
-                        GuiGame.DmgTaken();
+                        _guiGame.PlayTakeDamageAnimation();
                 }
 
             }
@@ -250,7 +257,7 @@ public class PullController : MonoBehaviour
 
 
     [RPC]
-    public void PlayerShootsAnimate(int playerId)
+    public void PlayerShootsAnimate(int playerId, bool suckAnimation)
     {
 
         foreach (var playerGO in _levelController.PlayersGameObjects)
@@ -258,15 +265,25 @@ public class PullController : MonoBehaviour
             
             if (playerGO.GetComponent<Player>().Id == playerId)
             {
-                playerGO.GetComponent<PullController>().PlayerShotAnimate();
+                playerGO.GetComponent<PullController>().PlayerShotAnimate(suckAnimation);
             }
             
         }
         
     }
 
-    private void PlayerShotAnimate()
+    private void PlayerShotAnimate(bool suckAnimation)
     {
-        ShootParticleSystem.Play();
+        if (suckAnimation)
+        {
+            _audioSources[0].PlayOneShot(SuckAudioClip);
+            SuckParticleSystem.Play();
+        }
+        else
+        {
+            _audioSources[0].PlayOneShot(ShootAudioClip);
+            ShootParticleSystem.Play();
+        }
+        
     }
 }

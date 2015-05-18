@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public int StartHP = 100;
     public int HP = 100;
 
+    public AudioClip OuchAudioClip;
+
     public int Id = -1;
    
 
@@ -17,7 +19,12 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
 
+    
+
+    private GuiGame _gameGui;
+
     private bool _isMine;
+    private AudioSource _audioSource;
 
     public int Team
     {
@@ -58,6 +65,9 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        _gameGui = GetComponent<GuiGame>();
+        _audioSource = GetComponents<AudioSource>()[0];
+
         _isMine = GetComponent<NetworkView>().isMine;
 
         if (_isMine)
@@ -124,7 +134,7 @@ public class Player : MonoBehaviour
         //        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
         if (collision.relativeVelocity.magnitude > 50)
         {
-            HP -= 10;
+            TakeDamage(10);
             if(HP ==0)
                 if (collision.gameObject.GetComponent<Movable>() != null)
                 {
@@ -171,9 +181,9 @@ public class Player : MonoBehaviour
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         fpsRigidCtrl.enabled = false;
         
-        var gameGui = GetComponent<GuiGame>();
+       
         Invoke("Respawn", time);
-        gameGui.RespawnIn(time);
+        _gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
     }
 
@@ -217,5 +227,13 @@ public class Player : MonoBehaviour
     public bool IsAlive()
     {
         return HP > 0;
+    }
+
+
+    public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        _gameGui.PlayTakeDamageAnimation();
+        _audioSource.PlayOneShot(OuchAudioClip);
     }
 }

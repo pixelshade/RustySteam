@@ -9,7 +9,7 @@ public class GuiGame : MonoBehaviour
     public Texture CdBarBgTexture;
     public Texture CdBarTexture;
     public Texture TeamsScoreTexture;
-
+    public AudioClip OuchAudioClip;
 
     private Player _player;
     private PullController _pullController;
@@ -21,8 +21,9 @@ public class GuiGame : MonoBehaviour
     private float _respawnTime;
 
     private GUIStyle _hugeGuiStyle;
-    private static float _dmg_taken_time;
+    private float _dmgTakenTime;
     private NetworkView _networkView;
+    private AudioSource _audioSource;
 
     
 
@@ -41,7 +42,8 @@ public class GuiGame : MonoBehaviour
 	    _hugeGuiStyle.fontSize = 72;
 	    _playerInfos = NetworkManager.Get().PlayerList;
 	    _networkView = GetComponent<NetworkView>();
-        
+	    _audioSource = GetComponent<AudioSource>();
+
 	}
 	
 	// Update is called once per frame
@@ -103,14 +105,16 @@ public class GuiGame : MonoBehaviour
 
     }
 
-    public static void DmgTaken()
+    public void PlayTakeDamageAnimation()
     {
-        _dmg_taken_time = Time.time;
+        _dmgTakenTime = Time.time;
+        _audioSource.PlayOneShot(OuchAudioClip);
+
     }
 
     private void DmgTakenAnimate()
     {
-        var diff = Time.time - _dmg_taken_time;
+        var diff = Time.time - _dmgTakenTime;
         if (diff < DMG_TAKEN_ANIMATION_DUR)
         {
             GUI.DrawTexture(new Rect(0,0, Screen.width, Screen.height), DmgTexture, ScaleMode.StretchToFill, true);

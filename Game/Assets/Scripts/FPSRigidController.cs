@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 
@@ -12,17 +13,23 @@ public class FPSRigidController : MonoBehaviour
     public float AirControl = 0.2f;
     public float JumpVelocity = 5;
     public float GroundHeight = 1.1f;
+
+    public AudioClip RunAudioClip;
+    public AudioClip JumpAudioClip;
+
     private bool _jump;
     private bool _esc;
     private bool _grounded;
     private Rigidbody _rigidbody;
     private Player _player;
+    private AudioSource[] _audioSources;
 
 
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _player = GetComponent<Player>();
+        _audioSources = GetComponents<AudioSource>();
 
         _rigidbody.freezeRotation = true;
         _rigidbody.useGravity = false;
@@ -37,6 +44,26 @@ public class FPSRigidController : MonoBehaviour
     {
         _jump = _jump || Input.GetButtonDown("Jump");
         _esc = _esc || Input.GetButtonDown("Cancel");
+
+        if (_jump)
+        {
+            _audioSources[0].PlayOneShot(JumpAudioClip);
+        }
+        if (_grounded && (Math.Abs(Input.GetAxis("Vertical")) + Math.Abs(Input.GetAxis("Horizontal"))) > 0.05)
+        {
+            if (!_audioSources[1].isPlaying)
+            {
+                _audioSources[1].clip = RunAudioClip;
+                _audioSources[1].loop = true;
+                _audioSources[1].Play();
+            }
+
+        }
+        else
+        {
+            if (_audioSources[1].clip == RunAudioClip && _audioSources[1].isPlaying) _audioSources[1].Stop();
+        }
+        
     }
 
     void FixedUpdate()
