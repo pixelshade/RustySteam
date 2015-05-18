@@ -17,6 +17,7 @@ public class FPSRigidController : MonoBehaviour
     private bool _grounded;
     private Rigidbody _rigidbody;
     private Player _player;
+    private bool _dontLock;
 
 
     void Start()
@@ -27,16 +28,19 @@ public class FPSRigidController : MonoBehaviour
         _rigidbody.freezeRotation = true;
         _rigidbody.useGravity = false;
         _rigidbody.isKinematic = false;
-        
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        _dontLock = false;
     }
 
     void Update()
     {
         _jump = _jump || Input.GetButtonDown("Jump");
         _esc = _esc || Input.GetButtonDown("Cancel");
+
+        if (!_dontLock) { 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     void FixedUpdate()
@@ -51,6 +55,7 @@ public class FPSRigidController : MonoBehaviour
                 Network.Disconnect();
                 Application.LoadLevel(Consts.MainMenuScene);
             }
+            _dontLock = true;
             _esc = false;
         }
 

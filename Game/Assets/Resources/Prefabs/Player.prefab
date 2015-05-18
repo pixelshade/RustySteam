@@ -1318,10 +1318,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43afe229c54edc645afc9b8989cdbc0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Power: 25
+  Power: 30
   Range: 50
   CD: .5
   Stun: 1
+  EnemyKoeficient: 2
   ShootParticleSystem: {fileID: 19837690}
 --- !u!114 &11494980
 MonoBehaviour:

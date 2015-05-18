@@ -83,11 +83,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        
-        
-        GameObject p = Network.Instantiate(player, Vector3.zero, Quaternion.identity, 0) as GameObject;
-        p.GetComponent<Player>().Respawn(0);
-
+        var spawnChoice = Random.value;
+        Vector3 p = spawnChoice < 0.5 ? GameObject.Find("SpawnZoneA").transform.position : GameObject.Find("SpawnZoneB").transform.position;
+        GameObject pl = Network.Instantiate(player, p, Quaternion.identity, 0) as GameObject;
+        pl.GetComponent<Player>().Respawn(0);
     }
 
     void OnGUI()
@@ -141,9 +140,9 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SetUpDeathMatchMode()
     {
         Debug.Log("DM MODE");
-        var area = 400;
+        var area = 200;
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
-        var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
+        //var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
         var danger = Resources.Load("Prefabs/DangerZone", typeof(GameObject)) as GameObject;
         for (var i = 0; i < NumCubes; i++)
         {
@@ -158,14 +157,14 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             if (Consts.IsSinglePlayer)
             {
                 s = Instantiate(scrap, point, Quaternion.identity) as GameObject;
-                w = Instantiate(wall, point2, Quaternion.identity) as GameObject;
+                //w = Instantiate(wall, point2, Quaternion.identity) as GameObject;
             }
             else
             {
                 s = Network.Instantiate(scrap, point, Quaternion.identity, 0) as GameObject;
-                w = Network.Instantiate(wall, point2, Quaternion.identity, 0) as GameObject;
+                //w = Network.Instantiate(wall, point2, Quaternion.identity, 0) as GameObject;
             }
-            w.transform.localScale += new Vector3(Random.value, Random.value / 3, Random.value) * 30;
+            //w.transform.localScale += new Vector3(Random.value, Random.value / 3, Random.value) * 30;
         }
 
         /*for (var i = 0; i < NumDanger; i++)

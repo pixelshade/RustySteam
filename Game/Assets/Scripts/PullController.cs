@@ -10,6 +10,7 @@ public class PullController : MonoBehaviour
     public int Range = 100;
     public float CD = 0.5f;
     public float Stun = 1.0f;
+    public float EnemyKoeficient = 2.0f;
 
     private float _cdLeft = 0.0f;
     private float _stunLeft = 0.0f;
@@ -60,8 +61,8 @@ public class PullController : MonoBehaviour
                     if (hitPlayer != null)
                     {
                         var targetIndex = hitPlayer.Id;
-                        Debug.Log(targetIndex+" indexy "+playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, Power);
+                        //Debug.Log(targetIndex+" indexy "+playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, EnemyKoeficient * Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
                         //player.Stun(Stun);
@@ -70,8 +71,8 @@ public class PullController : MonoBehaviour
                     else
                     {
                         var objIndex = hitObj.Id;
-                        Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, Power);
+                        //Debug.Log(objIndex + " Objindexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
                     }
                 }
@@ -116,8 +117,8 @@ public class PullController : MonoBehaviour
                     if (hitPlayer != null)
                     {
                         var targetIndex = hitPlayer.Id;
-                        Debug.Log(targetIndex + " indexy " + playerIndex);
-                          GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, -Power);
+                        //Debug.Log(targetIndex + " indexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, EnemyKoeficient * -Power);
                         //if (player.Team != transform.GetComponent<Player>().Team)
                         //{
                         //    player.Stun(Stun);
@@ -126,8 +127,8 @@ public class PullController : MonoBehaviour
                     else
                     {
                         var objIndex = hitObj.Id;
-                        Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, -Power);
+                        //Debug.Log(objIndex + " Objindexy " + playerIndex);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * -Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                     }
                 }

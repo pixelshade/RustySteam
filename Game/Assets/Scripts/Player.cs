@@ -170,15 +170,17 @@ public class Player : MonoBehaviour
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         fpsRigidCtrl.enabled = false;
-        
+
         var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
+        Debug.Log("RESPAWN1");
         gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
     }
 
     private void Respawn()
     {
+        Debug.Log("RESPAWN!");
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         fpsRigidCtrl.enabled = true;
         Vector3 p;

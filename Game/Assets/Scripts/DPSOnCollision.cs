@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class DPSOnCollision : MonoBehaviour
 {
@@ -34,10 +35,21 @@ public class DPSOnCollision : MonoBehaviour
         var player = collision.transform.GetComponent<Player>();
         if (player != null && !collidingPlayers.Contains(player))
         {
-			collidingPlayers.Add(player);
+            collidingPlayers.Add(player);
             Debug.Log(player.name);
             times.Add(Time.time);
 
+        }
+        else
+        {
+            var trans = collision.transform;
+            if (trans.tag == "movable")
+            {
+                Debug.Log("Object Collision ");
+                var point = UnityEngine.Random.insideUnitSphere * 150;
+                point.y = Math.Abs(point.y);
+                trans.position = point;
+            }
         }
 
     }
