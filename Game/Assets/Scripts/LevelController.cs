@@ -168,7 +168,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             w.transform.localScale += new Vector3(Random.value, Random.value / 3, Random.value) * 30;
         }
 
-        for (var i = 0; i < NumDanger; i++)
+        /*for (var i = 0; i < NumDanger; i++)
         {
             var point = Random.insideUnitSphere * area;
             point.y = 0.07f;
@@ -183,7 +183,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                 d = Network.Instantiate(danger, point, Quaternion.identity, 0) as GameObject;
             }
             d.transform.localScale += new Vector3(Random.value, 0, Random.value) * 10;
-        }
+        }*/
 
     }
 
