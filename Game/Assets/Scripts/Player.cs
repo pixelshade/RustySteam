@@ -130,8 +130,6 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-//        Debug.Log("sila" + collision.relativeVelocity.magnitude);
-        //        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
         if (collision.relativeVelocity.magnitude > 50)
         {
             TakeDamage(10);
@@ -180,8 +178,8 @@ public class Player : MonoBehaviour
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         fpsRigidCtrl.enabled = false;
-        
-       
+
+        var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
         _gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
@@ -194,11 +192,15 @@ public class Player : MonoBehaviour
         Vector3 p;
         if (Team == 1)
         {
-            p = GameObject.Find("SpawnZoneA").transform.position;
+            var spawns = GameObject.FindGameObjectsWithTag("SpawnA");
+            var choice = Random.Range(0, spawns.Length);
+            p = spawns[choice].transform.position;
         }
         else
         {
-            p = GameObject.Find("SpawnZoneB").transform.position;
+            var spawns = GameObject.FindGameObjectsWithTag("SpawnB");
+            var choice = Random.Range(0, spawns.Length);
+            p = spawns[choice].transform.position;
         }
         var position = new Vector3(p.x, 10, p.z);
         //position +=  Random.insideUnitSphere*(Random.Range(-100,100));
@@ -214,7 +216,6 @@ public class Player : MonoBehaviour
     public IEnumerator Respawn(Vector3 position ,float time = 0)
     {
         yield return new WaitForSeconds(time);
-        Debug.Log("pls");
         transform.position = position;
     }
 

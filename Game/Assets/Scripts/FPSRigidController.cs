@@ -23,6 +23,8 @@ public class FPSRigidController : MonoBehaviour
     private Rigidbody _rigidbody;
     private Player _player;
     private AudioSource[] _audioSources;
+    private bool _dontLock;
+
 
 
     void Start()
@@ -34,16 +36,15 @@ public class FPSRigidController : MonoBehaviour
         _rigidbody.freezeRotation = true;
         _rigidbody.useGravity = false;
         _rigidbody.isKinematic = false;
-        
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        _dontLock = false;
     }
 
     void Update()
     {
         _jump = _jump || Input.GetButtonDown("Jump");
         _esc = _esc || Input.GetButtonDown("Cancel");
+
 
         if (_jump)
         {
@@ -64,6 +65,10 @@ public class FPSRigidController : MonoBehaviour
             if (_audioSources[1].clip == RunAudioClip && _audioSources[1].isPlaying) _audioSources[1].Stop();
         }
         
+        if (!_dontLock) { 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     void FixedUpdate()
@@ -78,6 +83,7 @@ public class FPSRigidController : MonoBehaviour
                 Network.Disconnect();
                 Application.LoadLevel(Consts.MainMenuScene);
             }
+            _dontLock = true;
             _esc = false;
         }
 

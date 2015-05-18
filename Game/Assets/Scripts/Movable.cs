@@ -49,7 +49,7 @@ public class Movable : MonoBehaviour
         vectorToMove = vector3;
         powerToMove = power;
         _hasToMove = true;
-        Debug.Log("Moved towards: " + vector3 + " " + MovedByPlayer);
+        //Debug.Log("Moved towards: " + vector3 + " " + MovedByPlayer);
 //            rigidbody.AddForce(vector3 * power * Time.deltaTime);
     
     }

@@ -79,6 +79,12 @@ public class NetworkManager : MonoBehaviour {
 	    }
 	}
 
+    void OnPlayerDisconnected(NetworkPlayer player)
+    {
+        Network.RemoveRPCs(player);
+        Network.DestroyPlayerObjects(player);
+    }
+
 	void OnDisconnectedFromServer (){
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;

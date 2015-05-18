@@ -1491,7 +1491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43afe229c54edc645afc9b8989cdbc0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Power: 25
+  Power: 30
   Range: 50
   CD: .5
   Stun: 1
@@ -1499,6 +1499,8 @@ MonoBehaviour:
   SuckParticleSystem: {fileID: 19837690}
   SuckAudioClip: {fileID: 8300000, guid: 1ca9328572606934895b6c452c1582ad, type: 3}
   ShootAudioClip: {fileID: 8300000, guid: 5489ff0939e15364db535b7c9d810f2e, type: 3}
+  EnemyKoeficient: 2
+  ShootParticleSystem: {fileID: 19837690}
 --- !u!114 &11494980
 MonoBehaviour:
   m_ObjectHideFlags: 1
