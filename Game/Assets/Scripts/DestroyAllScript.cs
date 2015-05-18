@@ -14,26 +14,6 @@ public class DestroyAllScript : MonoBehaviour {
 	
 	}
 
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision");
-        var player = collision.gameObject.GetComponent<Player>();
-        if (player != null)
-        {
-            player.HP = 0;
-        }
-        else
-        {
-            var trans = collision.transform;
-            if (trans.tag == "movable")
-            {
-                var point = UnityEngine.Random.insideUnitSphere * 500;
-                point.y = Math.Abs(point.y);
-                trans.position = point;
-            }
-        }
-    }*/
-
     private void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponentInParent<Player>();

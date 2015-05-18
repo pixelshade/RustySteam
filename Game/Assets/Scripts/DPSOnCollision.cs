@@ -45,7 +45,6 @@ public class DPSOnCollision : MonoBehaviour
             var trans = collision.transform;
             if (trans.tag == "movable")
             {
-                Debug.Log("Object Collision ");
                 var point = UnityEngine.Random.insideUnitSphere * 150;
                 point.y = Math.Abs(point.y);
                 trans.position = point;

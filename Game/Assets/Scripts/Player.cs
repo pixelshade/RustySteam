@@ -120,8 +120,6 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-//        Debug.Log("sila" + collision.relativeVelocity.magnitude);
-        //        Debug.Log("moja" + GetComponent<Rigidbody>().velocity.magnitude);
         if (collision.relativeVelocity.magnitude > 50)
         {
             HP -= 10;
@@ -173,14 +171,12 @@ public class Player : MonoBehaviour
 
         var gameGui = GetComponent<GuiGame>();
         Invoke("Respawn", time);
-        Debug.Log("RESPAWN1");
         gameGui.RespawnIn(time);
 //        yield return new  WaitForSeconds(time);
     }
 
     private void Respawn()
     {
-        Debug.Log("RESPAWN!");
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         fpsRigidCtrl.enabled = true;
         Vector3 p;
@@ -206,7 +202,6 @@ public class Player : MonoBehaviour
     public IEnumerator Respawn(Vector3 position ,float time = 0)
     {
         yield return new WaitForSeconds(time);
-        Debug.Log("pls");
         transform.position = position;
     }
 

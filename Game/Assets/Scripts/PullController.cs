@@ -63,16 +63,12 @@ public class PullController : MonoBehaviour
                         var targetIndex = hitPlayer.Id;
                         //Debug.Log(targetIndex+" indexy "+playerIndex);
                         GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, EnemyKoeficient * Power);
-                        //if (player.Team != transform.GetComponent<Player>().Team)
-                        //{
-                        //player.Stun(Stun);
-                        //}
                     }
                     else
                     {
                         var objIndex = hitObj.Id;
                         //Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * Power);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
                     }
                 }
@@ -119,16 +115,12 @@ public class PullController : MonoBehaviour
                         var targetIndex = hitPlayer.Id;
                         //Debug.Log(targetIndex + " indexy " + playerIndex);
                         GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, targetIndex, direction.normalized, EnemyKoeficient * -Power);
-                        //if (player.Team != transform.GetComponent<Player>().Team)
-                        //{
-                        //    player.Stun(Stun);
-                        //}
                     }
                     else
                     {
                         var objIndex = hitObj.Id;
                         //Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * -Power);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, -Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                     }
                 }

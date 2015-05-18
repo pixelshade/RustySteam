@@ -81,7 +81,6 @@ public class NetworkManager : MonoBehaviour {
 
     void OnPlayerDisconnected(NetworkPlayer player)
     {
-        Debug.Log("Clean up after player " + player);
         Network.RemoveRPCs(player);
         Network.DestroyPlayerObjects(player);
     }
@@ -90,7 +89,6 @@ public class NetworkManager : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        Destroy(gameObject);
         Application.LoadLevel(Consts.MainMenuScene);
         _lastLevelPrefix = 1;
         PlayerList = new List<PlayerInfo>();
