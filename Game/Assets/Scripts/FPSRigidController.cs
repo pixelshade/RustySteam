@@ -46,10 +46,15 @@ public class FPSRigidController : MonoBehaviour
         _esc = _esc || Input.GetButtonDown("Cancel");
 
 
-        if (_jump)
+        if (_grounded && _jump)
         {
-            _audioSources[0].PlayOneShot(JumpAudioClip);
+            if (!_audioSources[0].isPlaying)
+            {
+                _audioSources[0].clip = JumpAudioClip;
+                _audioSources[0].Play();
+            }
         }
+       
         if (_grounded && (Math.Abs(Input.GetAxis("Vertical")) + Math.Abs(Input.GetAxis("Horizontal"))) > 0.05)
         {
             if (!_audioSources[1].isPlaying)

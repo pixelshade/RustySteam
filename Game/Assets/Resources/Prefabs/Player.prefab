@@ -1418,7 +1418,7 @@ MonoBehaviour:
   AirControl: .200000003
   JumpVelocity: 10
   GroundHeight: 1.10000002
-  RunAudioClip: {fileID: 8300000, guid: 3d956e300c30efd44bfa137a87a72c3d, type: 3}
+  RunAudioClip: {fileID: 8300000, guid: 25ebbf705eeaf1c40813598f3ff25373, type: 3}
   JumpAudioClip: {fileID: 8300000, guid: 430144525b5c2444ea7a535e411f043f, type: 3}
 --- !u!114 &11431824
 MonoBehaviour:
@@ -1495,12 +1495,11 @@ MonoBehaviour:
   Range: 50
   CD: .5
   Stun: 1
-  ShootParticleSystem: {fileID: 19864914}
+  EnemyKoeficient: 2
+  ShootParticleSystem: {fileID: 19837690}
   SuckParticleSystem: {fileID: 19837690}
   SuckAudioClip: {fileID: 8300000, guid: 1ca9328572606934895b6c452c1582ad, type: 3}
   ShootAudioClip: {fileID: 8300000, guid: 5489ff0939e15364db535b7c9d810f2e, type: 3}
-  EnemyKoeficient: 2
-  ShootParticleSystem: {fileID: 19837690}
 --- !u!114 &11494980
 MonoBehaviour:
   m_ObjectHideFlags: 1
