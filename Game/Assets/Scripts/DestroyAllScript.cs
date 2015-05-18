@@ -19,7 +19,7 @@ public class DestroyAllScript : MonoBehaviour {
         var player = other.GetComponentInParent<Player>();
         if (player != null)
         {
-            player.HP = 0;
+            player.TakeDamage(1000);
         }
         else
         {

@@ -89,7 +89,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         Array.Copy(array1, newArray, 0);
         Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
         var spawnChoice = Random.Range(0, newArray.Length);
-        Vector3 p = newArray[spawnChoice].GetComponent<Transform>().position;
+        var zone = newArray[spawnChoice];
+        Vector3 p = Vector3.zero;
+        if (zone != null)
+            p = zone.GetComponent<Transform>().position;
         GameObject pl = Network.Instantiate(player, p, Quaternion.identity, 0) as GameObject;
         pl.GetComponent<Player>().Respawn(0);
     }
