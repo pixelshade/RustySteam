@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 7e3df2108bd63c64bb394e2f0e8d8119
-timeCreated: 1425560240
-licenseType: Free
+timeCreated: 1432049268
+licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - OuchAudioClip: {fileID: 8300000, guid: d024906336908f0479171049675d06be, type: 3}
+  - FlagGameObject: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

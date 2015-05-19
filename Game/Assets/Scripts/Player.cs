@@ -121,7 +121,7 @@ public class Player : MonoBehaviour
                 var levelController = GameObject.Find("Main");
                 var playerIndex = NetworkManager.Get().GetPosition(false);
                 if (Consts.IsHost)
-                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, playerIndex, _deathType);
+                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, Id, _deathType);
                 Respawn(5);
                 Dead = true;
             }
