@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
     public int StartHP = 100;
-    public int HP = 100;
-
+    
     public AudioClip OuchAudioClip;
+    public Text PlayerHpText;
 
     public int Id = -1;
    
@@ -25,6 +27,24 @@ public class Player : MonoBehaviour
 
     private bool _isMine;
     private AudioSource _audioSource;
+
+
+    public int HP
+    {
+        get { return _hp; }
+        set
+        {
+            Debug.Log("vrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+            if (PlayerHpText != null)
+            {
+                Debug.Log("helloplshelloplshelloplshelloplshelloplshellopls");
+                PlayerHpText.text = value.ToString();
+            }
+            _hp = value;
+        }
+    }
+
+    private int _hp = 100;
 
     public int Team
     {
@@ -207,6 +227,7 @@ public class Player : MonoBehaviour
         //position.y = 2;
 
         HP = StartHP;
+
         Dead = false;
         
         transform.position = position;

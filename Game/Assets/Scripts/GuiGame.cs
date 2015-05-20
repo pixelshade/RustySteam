@@ -64,7 +64,7 @@ public class GuiGame : MonoBehaviour
 //            GUI.TextArea(new Rect(Screen.width/2 - 50, Screen.height - 50, 100, 50),
 //                " CD ready in " + _pullController.CdLeft().ToString("F1") + "s");
 
-            GUI.DrawTexture(new Rect(Screen.width / 2 - 128, -5, 256, 68), TeamsScoreTexture);
+        //    GUI.DrawTexture(new Rect(Screen.width / 2 - 128, -5, 256, 68), TeamsScoreTexture);
             GUI.DrawTexture(new Rect(Screen.width / 2 - 50, Screen.height - 30, 100, 25), CdBarBgTexture);
             GUI.DrawTexture(new Rect(Screen.width / 2 - 35, Screen.height - 22, 70 * ((_pullController.CD-_pullController.CdLeft())/_pullController.CD), 10), CdBarTexture, ScaleMode.StretchToFill);
 //        }

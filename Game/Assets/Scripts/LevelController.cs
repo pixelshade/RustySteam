@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
@@ -10,6 +11,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     
     private NetworkManager _networkManager;
     private Rigidbody _rb;
+
+
+    public Text TeamAScoreText;
+    public Text TeamBScoreText;
 
     public Consts.GameModes GameMode;
     public static TeamInfo _teamA, _teamB;
@@ -83,22 +88,22 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        GameObject[] array1 = GameObject.FindGameObjectsWithTag("SpawnA");
-        GameObject[] array2 = GameObject.FindGameObjectsWithTag("SpawnB");
-        GameObject[] newArray = new GameObject[array1.Length + array2.Length];
-        Array.Copy(array1, newArray, 0);
-        Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
-        var spawnChoice = Random.Range(0, newArray.Length);
-        Vector3 p = new Vector3(0, 0, 0);
-        if (newArray.Length == 0)
-        {
-            Debug.LogError("No spawns, spawning player on 0,0,0");
-        }
-        else
-        {
-            p = newArray[spawnChoice].GetComponent<Transform>().position;
-        }
-        GameObject pl = Network.Instantiate(player, p, Quaternion.identity, 0) as GameObject;
+//        GameObject[] array1 = GameObject.FindGameObjectsWithTag("SpawnA");
+//        GameObject[] array2 = GameObject.FindGameObjectsWithTag("SpawnB");
+//        GameObject[] newArray = new GameObject[array1.Length + array2.Length];
+//        Array.Copy(array1, newArray, 0);
+//        Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
+//        var spawnChoice = Random.Range(0, newArray.Length);
+//        Vector3 p = new Vector3(0, 0, 0);
+//        if (newArray.Length == 0)
+//        {
+//            Debug.LogError("No spawns, spawning player on 0,0,0");
+//        }
+//        else
+//        {
+//            p = newArray[spawnChoice].GetComponent<Transform>().position;
+//        }
+        GameObject pl = Network.Instantiate(player, Random.insideUnitSphere*100, Quaternion.identity, 0) as GameObject;
     }
 
     void OnGUI()
@@ -335,7 +340,26 @@ public class TeamInfo
 {
     public string TeamName;
     public int Id;
-    public int Score = 0;
+    private int _score = 0;
+
+    public int Score
+    {
+        get { return _score; }
+        set
+        {
+            _score = value;
+            if (Id == 1)
+            {
+                LevelController.Get().TeamAScoreText.text = value.ToString();
+            }
+            else
+            {
+                LevelController.Get().TeamBScoreText.text = value.ToString();
+            }
+        }
+
+
+    }
 
     public TeamInfo(string name, int id)
     {

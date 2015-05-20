@@ -1546,6 +1546,8 @@ MonoBehaviour:
   AirControl: .200000003
   JumpVelocity: 5
   GroundHeight: 1.10000002
+  RunAudioClip: {fileID: 0}
+  JumpAudioClip: {fileID: 0}
 --- !u!114 &11462134
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1572,7 +1574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartHP: 100
-  HP: 100
+  OuchAudioClip: {fileID: 0}
+  PlayerHpText: {fileID: 0}
   Id: -1
   Dead: 0
   Stunned: 0
@@ -1593,7 +1596,11 @@ MonoBehaviour:
   Range: 100
   CD: 2
   Stun: 1
+  EnemyKoeficient: 2
   ShootParticleSystem: {fileID: 0}
+  SuckParticleSystem: {fileID: 0}
+  SuckAudioClip: {fileID: 0}
+  ShootAudioClip: {fileID: 0}
 --- !u!114 &11490106
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1610,6 +1617,7 @@ MonoBehaviour:
   CdBarBgTexture: {fileID: 0}
   CdBarTexture: {fileID: 0}
   TeamsScoreTexture: {fileID: 0}
+  OuchAudioClip: {fileID: 0}
 --- !u!124 &12480168
 Behaviour:
   m_ObjectHideFlags: 1
