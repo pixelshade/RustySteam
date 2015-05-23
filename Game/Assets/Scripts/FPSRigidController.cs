@@ -88,14 +88,7 @@ public class FPSRigidController : MonoBehaviour
     {
         if (_esc)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-            if (Network.isServer || Network.isClient)
-            {
-                if (Network.isServer) MasterServer.UnregisterHost();
-                Network.Disconnect();
-                Application.LoadLevel(Consts.MainMenuScene);
-            }
+           LevelController.Get().LeaveGameAndGoToMainMenu();
             _dontLock = true;
             _esc = false;
         }

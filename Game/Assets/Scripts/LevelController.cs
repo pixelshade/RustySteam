@@ -12,13 +12,14 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     private NetworkManager _networkManager;
     private Rigidbody _rb;
 
-
+    public GameObject ScorePanel;
     public Text TeamAScoreText;
     public Text TeamBScoreText;
 
     public Consts.GameModes GameMode;
     public static TeamInfo TeamA, TeamB;
     public static TeamInfo[] TeamInfos;
+    public static int VictoryScore = 5;
 
     public List<GameObject> PlayersGameObjects;
     public List<GameObject> MovableGameObjects;
@@ -118,6 +119,8 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             {
                 GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
                     PlayerInfos[_killer].NickName + " -[" + _deathType + "]- " + PlayerInfos[_victim].NickName);
+                _killer = -1;
+                
             }
             else
             {
@@ -212,6 +215,18 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
     }
 
+    public void LeaveGameAndGoToMainMenu()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        if (Network.isServer || Network.isClient)
+        {
+            if (Network.isServer) MasterServer.UnregisterHost();
+            Network.Disconnect();
+            Application.LoadLevel(Consts.MainMenuScene);
+        }
+    }
+
 
 	// Update is called once per frame
 	void Update () {
@@ -242,12 +257,16 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         {
 			if(killer != victim)  PlayerInfos[killer].Kills++;
             PlayerInfos[victim].Deaths++;
-            if (GameMode == Consts.GameModes.DeathMatch && PlayerInfos[killer].Team != PlayerInfos[victim].Team)
+            if (GameMode == Consts.GameModes.DeathMatch)
             {
+                if (TeamA == PlayerInfos[victim].Team) TeamB.Score++;
+                if (TeamB == PlayerInfos[victim].Team) TeamA.Score++;
                 PlayerInfos[killer].Team.Score++;
             }
             ShowKill(killer, victim, deathType);
         }
+
+        if(TeamA.Score >= VictoryScore || TeamB.Score >= VictoryScore) EndGameShowWinners();
     }
 
     private void ShowKill(int killer, int victim, int deathType )
@@ -257,6 +276,22 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         _victim = victim;
         _timeToShowKill = Time.time + 5;
 
+    }
+
+
+    public void EndGameShowWinners()
+    {
+        DisableAllPlayerMovement();
+        ScorePanel.GetComponent<ScorePanelScript>().ShowEndGameScore();
+    }
+
+    private void DisableAllPlayerMovement()
+    {
+        foreach (var playersGameObject in PlayersGameObjects)
+        {
+            playersGameObject.GetComponent<FPSRigidController>().Velocity = 0;
+            playersGameObject.GetComponent<FPSRigidController>().enabled = false;
+        }
     }
 
 
@@ -366,7 +401,7 @@ public class TeamInfo
         set
         {
             _score = value;
-            if (Id == 1)
+            if (Id == 0)
             {
                 LevelController.Get().TeamAScoreText.text = value.ToString();
             }

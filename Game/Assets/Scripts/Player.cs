@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Mime;
-using System.Runtime.InteropServices;
+﻿
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
@@ -160,9 +158,10 @@ public class Player : MonoBehaviour
     {
         if (collision.relativeVelocity.magnitude > 50)
         {
-            TakeDamage(10);
-            if(HP ==0)
-                if (collision.gameObject.GetComponent<Movable>() != null)
+            var movable = collision.gameObject.GetComponent<Movable>();
+            TakeDamage(movable != null ? 100 : 10);
+            if(HP <= 0)
+                if (movable != null)
                 {
                     _killer = collision.gameObject.GetComponent<Movable>().MovedByPlayer;
                     _deathType = (int)DeathType.Hit;
