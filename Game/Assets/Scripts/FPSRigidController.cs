@@ -24,6 +24,7 @@ public class FPSRigidController : MonoBehaviour
     private Player _player;
     private AudioSource[] _audioSources;
     private bool _dontLock;
+    private NetworkView _networkView;
 
 
 
@@ -32,6 +33,7 @@ public class FPSRigidController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _player = GetComponent<Player>();
         _audioSources = GetComponents<AudioSource>();
+        _networkView = GetComponent<NetworkView>();
 
         _rigidbody.freezeRotation = true;
         _rigidbody.useGravity = false;
@@ -45,7 +47,18 @@ public class FPSRigidController : MonoBehaviour
         _jump = _jump || Input.GetButtonDown("Jump");
         _esc = _esc || Input.GetButtonDown("Cancel");
 
+        HandleSounds();
+      
+        
+        if (!_dontLock) { 
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
 
+    private void HandleSounds()
+    {
+        if (!_networkView.isMine) return;
         if (_grounded && _jump)
         {
             if (!_audioSources[0].isPlaying)
@@ -54,7 +67,7 @@ public class FPSRigidController : MonoBehaviour
                 _audioSources[0].Play();
             }
         }
-       
+
         if (_grounded && (Math.Abs(Input.GetAxis("Vertical")) + Math.Abs(Input.GetAxis("Horizontal"))) > 0.05)
         {
             if (!_audioSources[1].isPlaying)
@@ -68,12 +81,7 @@ public class FPSRigidController : MonoBehaviour
         else
         {
             if (_audioSources[1].clip == RunAudioClip && _audioSources[1].isPlaying) _audioSources[1].Stop();
-        }
-        
-        if (!_dontLock) { 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        } 
     }
 
     void FixedUpdate()

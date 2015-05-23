@@ -1496,7 +1496,7 @@ MonoBehaviour:
   CD: .5
   Stun: 1
   EnemyKoeficient: 2
-  ShootParticleSystem: {fileID: 19837690}
+  ShootParticleSystem: {fileID: 19864914}
   SuckParticleSystem: {fileID: 19837690}
   SuckAudioClip: {fileID: 8300000, guid: 1ca9328572606934895b6c452c1582ad, type: 3}
   ShootAudioClip: {fileID: 8300000, guid: 5489ff0939e15364db535b7c9d810f2e, type: 3}

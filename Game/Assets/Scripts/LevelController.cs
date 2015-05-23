@@ -230,7 +230,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             if (myPos == playerIndex && GetComponent<NetworkView>().isMine)
             {
                 Debug.Log(PlayersGameObjects.Count + " a index" + playerIndex + " team:" + team);
-                PlayersGameObjects[playerIndex].GetComponent<Player>().Respawn(0);
+                GetPlayerGameObject(playerIndex).GetComponent<Player>().Respawn(0);
             }
         }
     }
@@ -260,7 +260,17 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     }
 
 
-  
+    public GameObject GetPlayerGameObject(int playerId)
+    {
+        foreach (var playersGameObject in PlayersGameObjects)
+        {
+            if (playersGameObject.GetComponent<NetworkView>().owner == PlayerInfos[playerId].Player)
+            {
+                return playersGameObject;
+            }
+        }
+        return null;
+    }
 
 	public void SpawnFlagForTeam(TeamInfo team){
 		GameObject flagSpawn;
@@ -299,7 +309,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     {
         PlayersGameObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         DividePlayersToTeams();
-        GetComponent<NetworkView>().RPC("SetupPlayers",RPCMode.AllBuffered);
+        GetComponent<NetworkView>().RPC("SetupPlayers", RPCMode.AllBuffered);
         GetComponent<NetworkView>().RPC("SetupMovables", RPCMode.AllBuffered);
     }
 
@@ -307,6 +317,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     [RPC]
     public void SetupPlayers()
     {
+        PlayersGameObjects = new List<GameObject>(GameObject.FindGameObjectsWithTag("Player"));
         foreach (var playerGO in PlayersGameObjects)
         {
             foreach (var playerInfo in PlayerInfos)
@@ -315,7 +326,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                 
                 if (playerGO.GetComponent<NetworkView>().owner == playerInfo.Player)
                 {
-                    Debug.Log(playerInfo.NickName);
+                    Debug.Log("Setup player: "+playerInfo.NickName);
                     var playerScript = playerGO.GetComponent<Player>();
                     playerScript.Id = _networkManager.GetPosition(false, playerInfo.Player);
                     playerScript.NickName = playerInfo.NickName;

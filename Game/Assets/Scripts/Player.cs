@@ -39,7 +39,8 @@ public class Player : MonoBehaviour
             var PlayerHpText = GameObject.Find("HPText");
             if (PlayerHpText != null)
             {
-                PlayerHpText.GetComponent<Text>().text = value.ToString();
+                if(_isMine)
+                    PlayerHpText.GetComponent<Text>().text = value.ToString();
             }
             _hp = value;
         }

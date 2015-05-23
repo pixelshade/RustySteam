@@ -252,7 +252,7 @@ public class PullController : MonoBehaviour
     [RPC]
     public void PlayerShootsAnimate(int playerId, bool suckAnimation)
     {
-
+        Debug.Log("[RPC]PlayerShootsAnimate("+playerId+","+suckAnimation+")");
         foreach (var playerGO in _levelController.PlayersGameObjects)
         {
             
