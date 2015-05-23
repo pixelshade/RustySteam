@@ -17,7 +17,8 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public Text TeamBScoreText;
 
     public Consts.GameModes GameMode;
-    public static TeamInfo _teamA, _teamB;
+    public static TeamInfo TeamA, TeamB;
+    public static TeamInfo[] TeamInfos;
 
     public List<GameObject> PlayersGameObjects;
     public List<GameObject> MovableGameObjects;
@@ -36,8 +37,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
 	    GameMode =  (Consts.GameModes) _networkManager.GameMode;
         
-        _teamA = new TeamInfo("Edison", 1);
-        _teamB = new TeamInfo("Tesla", 0);
+        TeamA = new TeamInfo("Edison", 0, new Color(146f / 255, 118f / 255, 218f / 255, 0));
+        TeamB = new TeamInfo("Tesla", 1, new Color(194f / 255, 64f / 255, 63f / 255, 0));
+
+        TeamInfos = new TeamInfo[]{TeamA,TeamB};
 
 	    if (Consts.IsHost)
 	    {
@@ -62,6 +65,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         var nw = GetComponent<NetworkView>();
         for (int i = 0; i < playerInfos.Count; i++)
         {
+            if(playerInfos[i]==null) continue;
             if (odd)
             {
                 nw.RPC("PlayerJoinTeam", RPCMode.AllBuffered, i, 1);
@@ -217,15 +221,17 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     [RPC]
     void PlayerJoinTeam(int playerIndex, int team)
     {
-        Debug.Log("[RPC]DividePlayersToTeams");
-       
+        Debug.Log("[RPC]PlayerJoinTeam("+playerIndex + ","+ team +")");
+
         if (PlayerInfos != null && PlayerInfos[playerIndex] != null)
-        PlayerInfos[playerIndex].Team = (team == 1) ? _teamA : _teamB;
-        var myPos = _networkManager.GetPosition(false);
-        if (myPos == playerIndex && GetComponent<NetworkView>().isMine)
         {
-            Debug.Log(PlayersGameObjects.Count+" a index"+ playerIndex);
-            PlayersGameObjects[playerIndex].GetComponent<Player>().Respawn(0);
+            PlayerInfos[playerIndex].Team = TeamInfos[team];
+            var myPos = _networkManager.GetPosition(false);
+            if (myPos == playerIndex && GetComponent<NetworkView>().isMine)
+            {
+                Debug.Log(PlayersGameObjects.Count + " a index" + playerIndex + " team:" + team);
+                PlayersGameObjects[playerIndex].GetComponent<Player>().Respawn(0);
+            }
         }
     }
 
@@ -260,7 +266,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 		GameObject flagSpawn;
         GameObject flag, flagPrefab;
         
-		if (team == _teamA) {
+		if (team == TeamA) {
 			flagSpawn = GameObject.Find ("FlagSpawnZoneA") as GameObject;
             flagPrefab = Resources.Load("Prefabs/FlagA", typeof(GameObject)) as GameObject;
 		} else {
@@ -313,7 +319,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                     var playerScript = playerGO.GetComponent<Player>();
                     playerScript.Id = _networkManager.GetPosition(false, playerInfo.Player);
                     playerScript.NickName = playerInfo.NickName;
-
+                    playerScript.SetTeamColor(playerInfo.Team.Color);
                 }
             }
         }
@@ -341,6 +347,7 @@ public class TeamInfo
     public string TeamName;
     public int Id;
     private int _score = 0;
+    public Color Color;
 
     public int Score
     {
@@ -361,10 +368,11 @@ public class TeamInfo
 
     }
 
-    public TeamInfo(string name, int id)
+    public TeamInfo(string name, int id, Color color)
     {
         TeamName = name;
         Id = id;
+        Color = color;
     }
 }
 
