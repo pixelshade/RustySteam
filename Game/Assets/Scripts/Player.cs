@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public int StartHP = 100;
     
     public AudioClip OuchAudioClip;
-    public Text PlayerHpText;
+    public GameObject TeamColorGameObject;
 
     public int Id = -1;
    
@@ -21,6 +21,8 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
 
+
+    
     
 
     private GuiGame _gameGui;
@@ -34,11 +36,10 @@ public class Player : MonoBehaviour
         get { return _hp; }
         set
         {
-            Debug.Log("vrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+            var PlayerHpText = GameObject.Find("HPText");
             if (PlayerHpText != null)
             {
-                Debug.Log("helloplshelloplshelloplshelloplshelloplshellopls");
-                PlayerHpText.text = value.ToString();
+                PlayerHpText.GetComponent<Text>().text = value.ToString();
             }
             _hp = value;
         }
@@ -52,14 +53,20 @@ public class Player : MonoBehaviour
         {
             if(NetworkManager.Get().PlayerList.Count > Id)
                 return NetworkManager.Get().PlayerList[Id].Team.Id;
+            Debug.LogError("Team id is unavailable.");
             return -1;
         }
 
         set
         {
-
             if (NetworkManager.Get().PlayerList.Count > Id)
-                NetworkManager.Get().PlayerList[Id].Team.Id = value;
+            {
+                var team = LevelController.TeamInfos[value];
+                Debug.Log("Team WAS SET"+team.TeamName);
+                NetworkManager.Get().PlayerList[Id].Team = team;
+                SetTeamColor(team.Color);
+            }
+                
         }
     }
 
@@ -176,6 +183,10 @@ public class Player : MonoBehaviour
 
     }
 
+    public void SetTeamColor(Color color)
+    {
+        TeamColorGameObject.GetComponent<Renderer>().material.color = color;
+    }
 
     public GameObject SpawnFlag(Vector3 position)
     {
