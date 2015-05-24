@@ -1093,13 +1093,30 @@ Prefab:
       propertyPath: m_ViewID.m_Type
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 14861896, guid: 10cce4749184f2d439c32491083222fc, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 10cce4749184f2d439c32491083222fc, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &825018621 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 150662, guid: 10cce4749184f2d439c32491083222fc, type: 2}
   m_PrefabInternal: {fileID: 825018620}
+--- !u!4 &825018622 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 441042, guid: 10cce4749184f2d439c32491083222fc, type: 2}
+  m_PrefabInternal: {fileID: 825018620}
+--- !u!148 &825018623
+NetworkView:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 825018621}
+  m_Enabled: 1
+  m_StateSynchronization: 1
+  m_Observed: {fileID: 825018622}
+  m_ViewID:
+    m_ID: 29
+    m_Type: 1
 --- !u!1001 &858056302
 Prefab:
   m_ObjectHideFlags: 0
