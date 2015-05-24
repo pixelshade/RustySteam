@@ -5,7 +5,7 @@ using System;
 
 public class DPSOnCollision : MonoBehaviour
 {
-    public int Damage = 10;
+    public int Damage = 50;
     public float Seconds = 1000;
 
     private List<Player> collidingPlayers = new List<Player>();
