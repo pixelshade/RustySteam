@@ -236,7 +236,6 @@ public class PullController : MonoBehaviour
         {
             foreach (var playerGO in _levelController.PlayersGameObjects)
             {
-
                 if (playerGO.GetComponent<Player>().Id == target)
                 {
                     playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);

@@ -19,10 +19,6 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
 
-
-    
-    
-
     private GuiGame _gameGui;
 
     private bool _isMine;
@@ -163,9 +159,9 @@ public class Player : MonoBehaviour
             if(HP <= 0)
                 if (movable != null)
                 {
-                    _killer = collision.gameObject.GetComponent<Movable>().MovedByPlayer;
+                    _killer = movable.MovedByPlayer;
                     _deathType = (int)DeathType.Hit;
-                }
+                    }
         }
 
         var flag = collision.transform.GetComponent<FlagController>();
@@ -266,6 +262,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         HP -= damage;
+        _killer = GetComponent<Movable>().MovedByPlayer;
         _gameGui.PlayTakeDamageAnimation();
         _audioSource.PlayOneShot(OuchAudioClip);
     }

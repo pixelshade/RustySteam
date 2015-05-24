@@ -119,7 +119,6 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
             {
                 GUI.TextArea(new Rect(Screen.width/2-100, 50, 200, 20),
                     PlayerInfos[_killer].NickName + " -[" + _deathType + "]- " + PlayerInfos[_victim].NickName);
-                _killer = -1;
                 
             }
             else
@@ -255,13 +254,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     {
         if (PlayerInfos != null && PlayerInfos[killer] != null && PlayerInfos[victim] != null)
         {
-			if(killer != victim)  PlayerInfos[killer].Kills++;
+			if(killer != victim) PlayerInfos[killer].Kills++;
             PlayerInfos[victim].Deaths++;
             if (GameMode == Consts.GameModes.DeathMatch)
             {
-                if (TeamA == PlayerInfos[victim].Team) TeamB.Score++;
-                if (TeamB == PlayerInfos[victim].Team) TeamA.Score++;
-                PlayerInfos[killer].Team.Score++;
+                if (TeamA == PlayerInfos[victim].Team && killer != victim) TeamB.Score++;
+                if (TeamB == PlayerInfos[victim].Team && killer != victim) TeamA.Score++;
+                //PlayerInfos[killer].Team.Score++;
             }
             ShowKill(killer, victim, deathType);
         }
