@@ -4,7 +4,7 @@ using System.Collections;
 public class FlagController : MonoBehaviour
 {
 
-    public int Team;
+    public TeamInfo Team;
 
 	// Use this for initialization
 	void Start () {

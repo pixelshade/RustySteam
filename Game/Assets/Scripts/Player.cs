@@ -42,24 +42,23 @@ public class Player : MonoBehaviour
 
     private int _hp = 100;
 
-    public int Team
+    public TeamInfo Team
     {
         get
         {
             if(NetworkManager.Get().PlayerList.Count > Id)
-                return NetworkManager.Get().PlayerList[Id].Team.Id;
+                return NetworkManager.Get().PlayerList[Id].Team;
             Debug.LogError("Team id is unavailable.");
-            return -1;
+            return null;
         }
 
         set
         {
             if (NetworkManager.Get().PlayerList.Count > Id)
             {
-                var team = LevelController.TeamInfos[value];
-                Debug.Log("Team WAS SET"+team.TeamName);
-                NetworkManager.Get().PlayerList[Id].Team = team;
-                SetTeamColor(team.Color);
+                Debug.Log("Team WAS SET"+value.TeamName);
+                NetworkManager.Get().PlayerList[Id].Team = value;
+                SetTeamColor(value.Color);
             }
                 
         }
@@ -218,7 +217,7 @@ public class Player : MonoBehaviour
         var fpsRigidCtrl = GetComponent<FPSRigidController>();
         fpsRigidCtrl.enabled = true;
         Vector3 p;
-        if (Team == 1)
+        if (Team == LevelController.TeamA)
         {
             var spawns = GameObject.FindGameObjectsWithTag("SpawnA");
             var choice = Random.Range(0, spawns.Length);
