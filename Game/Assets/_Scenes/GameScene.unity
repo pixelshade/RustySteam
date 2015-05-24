@@ -2903,6 +2903,10 @@ Prefab:
       propertyPath: startDelay
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11463492, guid: 3560fe3c4938f034db8303b6f4c9e02c, type: 2}
+      propertyPath: Damage
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3560fe3c4938f034db8303b6f4c9e02c, type: 2}
   m_IsPrefabParent: 0
