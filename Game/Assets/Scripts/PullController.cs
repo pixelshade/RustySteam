@@ -104,8 +104,6 @@ public class PullController : MonoBehaviour
             }
             if (Physics.Raycast(ray, out hit, Range))
             {
-                Debug.Log(hit);
-                
                 var hitObj = hit.transform.GetComponent<Movable>();
 //                int playerIndex = NetworkManager.Get().GetPosition(false);
                 int playerIndex = _playerSelf.Id;

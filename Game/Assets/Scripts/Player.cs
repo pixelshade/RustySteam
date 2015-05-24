@@ -69,7 +69,8 @@ public class Player : MonoBehaviour
     public List<NetworkManager.PlayerInfo> PlayerInfos;
 
 
-    private int _killer, _deathType;
+    private int _killer;
+    public int deathType;
     private float _stunLeft;
 
     public string NickName
@@ -143,7 +144,7 @@ public class Player : MonoBehaviour
                 var levelController = GameObject.Find("Main");
                 var playerIndex = NetworkManager.Get().GetPosition(false);
                 if (Consts.IsHost)
-                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, Id, _deathType);
+                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, Id, deathType);
                 Respawn(5);
                 Dead = true;
             }
@@ -160,7 +161,7 @@ public class Player : MonoBehaviour
                 if (movable != null)
                 {
                     _killer = movable.MovedByPlayer;
-                    _deathType = (int)DeathType.Hit;
+                    deathType = (int)DeathType.Hit;
                     }
         }
 

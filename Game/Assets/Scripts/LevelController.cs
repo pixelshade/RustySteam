@@ -262,10 +262,10 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
                 if (TeamB == PlayerInfos[victim].Team && killer != victim) TeamA.Score++;
                 //PlayerInfos[killer].Team.Score++;
             }
-            ShowKill(killer, victim, deathType);
         }
+        ShowKill(killer, victim, deathType);
 
-        if(TeamA.Score >= VictoryScore || TeamB.Score >= VictoryScore) EndGameShowWinners();
+        if (TeamA.Score >= VictoryScore || TeamB.Score >= VictoryScore) EndGameShowWinners();
     }
 
     private void ShowKill(int killer, int victim, int deathType )
