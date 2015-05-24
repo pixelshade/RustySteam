@@ -388,6 +388,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         }
 
     }
+
+    [RPC]
+    public void UpdateScore(int teamId, int score)
+    {
+        if (Consts.IsHost) return;
+        TeamInfos[teamId].Score = score;
+    }
 }
 
 
@@ -405,6 +412,7 @@ public class TeamInfo
         set
         {
             _score = value;
+            if (Consts.IsHost) LevelController.Get().GetComponent<NetworkView>().RPC("UpdateScore", RPCMode.AllBuffered, Id, value);
             if (Id == 0)
             {
                 LevelController.Get().TeamAScoreText.text = value.ToString();
