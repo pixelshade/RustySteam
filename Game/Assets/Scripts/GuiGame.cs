@@ -56,8 +56,9 @@ public class GuiGame : MonoBehaviour
 //                GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
         if (_networkView.isMine)
         {
-            //GUI.TextArea(new Rect(0, 0, 100, 50),
-            //    "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pullController.Power + "\n Range: " + _pullController.Range);
+
+//            GUI.TextArea(new Rect(0, 0, 100, 50),
+//                "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pullController.Power + "\n Range: " + _pullController.Range);
 
 //        if (_pullController.CdLeft()>0)
 //        {
@@ -74,7 +75,8 @@ public class GuiGame : MonoBehaviour
 
             RespawnGUI();
 
-            //ScoreGUI();
+//          ScoreGUI();
+
             DmgTakenAnimate();
         }
     }
