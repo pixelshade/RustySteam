@@ -74,7 +74,7 @@ public class GuiGame : MonoBehaviour
 
             RespawnGUI();
 
-            ScoreGUI();
+            //ScoreGUI();
             DmgTakenAnimate();
         }
     }

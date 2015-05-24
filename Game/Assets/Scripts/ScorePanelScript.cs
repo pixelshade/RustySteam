@@ -81,12 +81,12 @@ public class ScorePanelScript : MonoBehaviour
                 
                 if (player.Team == team1)
                 {
-                    plItem.transform.SetParent(TeamAPanel.transform,false); ;
+                    plItem.transform.SetParent(TeamAPanel.transform,false);
                     
                 }
                 else
                 {
-                    plItem.transform.SetParent(TeamBPanel.transform, false); ;
+                    plItem.transform.SetParent(TeamBPanel.transform, false);
                 }
             }
     }
