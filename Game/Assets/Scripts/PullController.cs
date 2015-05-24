@@ -104,8 +104,6 @@ public class PullController : MonoBehaviour
             }
             if (Physics.Raycast(ray, out hit, Range))
             {
-                Debug.Log(hit);
-                
                 var hitObj = hit.transform.GetComponent<Movable>();
 //                int playerIndex = NetworkManager.Get().GetPosition(false);
                 int playerIndex = _playerSelf.Id;
@@ -236,7 +234,6 @@ public class PullController : MonoBehaviour
         {
             foreach (var playerGO in _levelController.PlayersGameObjects)
             {
-
                 if (playerGO.GetComponent<Player>().Id == target)
                 {
                     playerGO.GetComponent<Movable>().MoveTowards(actuator, vector3, power);

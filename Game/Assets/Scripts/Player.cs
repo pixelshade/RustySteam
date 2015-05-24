@@ -19,10 +19,6 @@ public class Player : MonoBehaviour
     public bool Stunned = false;
     public bool HasFlag = false;
 
-
-    
-    
-
     private GuiGame _gameGui;
 
     private bool _isMine;
@@ -73,7 +69,8 @@ public class Player : MonoBehaviour
     public List<NetworkManager.PlayerInfo> PlayerInfos;
 
 
-    private int _killer, _deathType;
+    private int _killer;
+    public int deathType;
     private float _stunLeft;
 
     public string NickName
@@ -147,7 +144,7 @@ public class Player : MonoBehaviour
                 var levelController = GameObject.Find("Main");
                 var playerIndex = NetworkManager.Get().GetPosition(false);
                 if (Consts.IsHost)
-                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, Id, _deathType);
+                    levelController.GetComponent<NetworkView>().RPC("PlayerKillEnemyWith", RPCMode.AllBuffered, _killer, Id, deathType);
                 Respawn(5);
                 Dead = true;
             }
@@ -163,9 +160,9 @@ public class Player : MonoBehaviour
             if(HP <= 0)
                 if (movable != null)
                 {
-                    _killer = collision.gameObject.GetComponent<Movable>().MovedByPlayer;
-                    _deathType = (int)DeathType.Hit;
-                }
+                    _killer = movable.MovedByPlayer;
+                    deathType = (int)DeathType.Hit;
+                    }
         }
 
         var flag = collision.transform.GetComponent<FlagController>();
@@ -266,6 +263,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(int damage)
     {
         HP -= damage;
+        _killer = GetComponent<Movable>().MovedByPlayer;
         _gameGui.PlayTakeDamageAnimation();
         _audioSource.PlayOneShot(OuchAudioClip);
     }

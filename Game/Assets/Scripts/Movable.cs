@@ -16,6 +16,7 @@ public class Movable : MonoBehaviour
 
     private Player _player;
     private Rigidbody _rigidbody;
+    private float _tagCD;
     
 	// Use this for initialization
 	void Start () {
@@ -39,13 +40,17 @@ public class Movable : MonoBehaviour
             _hasToMove = false;
         }
         // no longer moving
-        if (_rigidbody.velocity.sqrMagnitude < 0.01f)
-             MovedByPlayer = -1;
+        if (_tagCD > 0.0f)
+            _tagCD -= Time.deltaTime;
+        if (_tagCD <= 0.0f) {
+            MovedByPlayer = -1;
+        }
     }
     
     public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
     {
         MovedByPlayer = actuator;
+        _tagCD = 20.0f;
         vectorToMove = vector3;
         powerToMove = power;
         _hasToMove = true;

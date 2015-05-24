@@ -25,6 +25,7 @@ public class DPSOnCollision : MonoBehaviour
 	        if (Time.time > times[i])
 	        {
                 collidingPlayers[i].TakeDamage(Damage);
+                collidingPlayers[i].deathType = (int)DeathType.DeathZone;
                 times[i] = Time.time + Seconds;
 	        }
 	    }
