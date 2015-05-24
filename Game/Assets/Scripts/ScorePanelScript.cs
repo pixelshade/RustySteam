@@ -75,10 +75,10 @@ public class ScorePanelScript : MonoBehaviour
 
                 var plItem = Instantiate(PlayerScoreItem);
                 var plText = plItem.GetComponent<Text>();
-                
-                var info = player.Team.Id + " " + player.Team.TeamName + "- " + player.Team.Score + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+
+                var info = player.Team.Id + "   " + player.NickName + "     " + player.Kills + "    " + player.Deaths;
                 plText.text = info;
-                
+                //plText.color = player.Team.Color;
                 if (player.Team == team1)
                 {
                     plItem.transform.SetParent(TeamAPanel.transform,false); ;
