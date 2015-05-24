@@ -256,15 +256,17 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     [RPC]
     void PlayerKillEnemyWith(int killer, int victim, int deathType)
     {
-        if (killer >= 0)
+        //if (killer >= 0)
             if (PlayerInfos != null && PlayerInfos[killer] != null && PlayerInfos[victim] != null)
             {
 			    if (killer != victim) PlayerInfos[killer].Kills++;
                 if (GameMode == Consts.GameModes.DeathMatch)
                 {
-                    if (TeamA == PlayerInfos[victim].Team && killer != victim) TeamB.Score++;
-                    if (TeamB == PlayerInfos[victim].Team && killer != victim) TeamA.Score++;
-                    //PlayerInfos[killer].Team.Score++;
+                    if (Consts.IsHost || Consts.IsSinglePlayer) { 
+                        if (TeamA == PlayerInfos[victim].Team && killer != victim) TeamB.Score++;
+                        if (TeamB == PlayerInfos[victim].Team && killer != victim) TeamA.Score++;
+                    }
+                //PlayerInfos[killer].Team.Score++;
                 }
             }
         PlayerInfos[victim].Deaths++;
