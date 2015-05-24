@@ -56,8 +56,8 @@ public class GuiGame : MonoBehaviour
 //                GUI.Label(new Rect(120, 0, 200, 100), "velocity " + _rb.velocity + "\n pos: " + _rb.position);
         if (_networkView.isMine)
         {
-            GUI.TextArea(new Rect(0, 0, 100, 50),
-                "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pullController.Power + "\n Range: " + _pullController.Range);
+            //GUI.TextArea(new Rect(0, 0, 100, 50),
+            //    "id:"+ _player.Id + "HP:" + _player.HP + " \n Power:" + _pullController.Power + "\n Range: " + _pullController.Range);
 
 //        if (_pullController.CdLeft()>0)
 //        {
@@ -133,7 +133,8 @@ public class GuiGame : MonoBehaviour
             if (player == null || player.Team == null) continue;
             if (team1 == null) team1 = player.Team;
 
-            var info = player.Team.Id +" " + player.Team.TeamName + "- " + player.Team.Score + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+                //var info = player.Team.Id +" " + player.Team.TeamName + "- " + player.Team.Score + " " + player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
+            var info = player.NickName + " K:" + player.Kills + " D:" + player.Deaths + "\n";
             if (player.Team == team1)
             {
                 strTeam1 += info;
