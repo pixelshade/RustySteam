@@ -15,11 +15,13 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public GameObject ScorePanel;
     public Text TeamAScoreText;
     public Text TeamBScoreText;
+    public GameObject ZepelinGameObject;
 
     public Consts.GameModes GameMode;
     public static TeamInfo TeamA, TeamB;
     public static TeamInfo[] TeamInfos;
-    public static int VictoryScore = 5;
+    public static int VictoryScore = 30;
+
 
     public List<GameObject> PlayersGameObjects;
     public List<GameObject> MovableGameObjects;
@@ -157,12 +159,14 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
 
     public void SetUpCaptureTheFlagMode()
     {
-
+        ZepelinGameObject.SetActive(false);
     }
 
     public void SetUpDeathMatchMode()
     {
         Debug.Log("DM MODE");
+        ZepelinGameObject.SetActive(false);
+
         var area = 200;
         var scrap = Resources.Load("Prefabs/Scrap", typeof(GameObject)) as GameObject;
         //var wall = Resources.Load("Prefabs/Wall", typeof(GameObject)) as GameObject;
@@ -266,7 +270,7 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
         PlayerInfos[victim].Deaths++;
         ShowKill(killer, victim, deathType);
 
-        if (TeamA.Score >= VictoryScore || TeamB.Score >= VictoryScore) EndGameShowWinners();
+      //  if (TeamA.Score >= VictoryScore || TeamB.Score >= VictoryScore) EndGameShowWinners();
     }
 
     private void ShowKill(int killer, int victim, int deathType )
@@ -409,6 +413,7 @@ public class TeamInfo
             {
                 LevelController.Get().TeamBScoreText.text = value.ToString();
             }
+            if (value >= LevelController.VictoryScore) LevelController.Get().EndGameShowWinners();
         }
 
 
