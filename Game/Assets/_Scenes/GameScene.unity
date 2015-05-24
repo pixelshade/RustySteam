@@ -3319,6 +3319,10 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 11486626, guid: 9d12df0ab601a0f4496ba77daff5cff8, type: 2}
+      propertyPath: m_Text
+      value: "Player\t    \t  K    \tD"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9d12df0ab601a0f4496ba77daff5cff8, type: 2}
   m_IsPrefabParent: 0

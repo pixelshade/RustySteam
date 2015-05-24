@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GuiMenu : MonoBehaviour {
@@ -14,6 +15,12 @@ public class GuiMenu : MonoBehaviour {
     public float AutoServerListRefreshTimeDelay = 5;
     public bool AutoRefreshServersList = true;
     private float _lastAutoRefresh;
+
+    public InputField NicknameInputField;
+    public Text GameLobbyText;
+    public Button PlayerLobbyButton;
+    public GameObject LobbyPanel;
+    public GameObject MainMenuPanel;
 
     private HostData[] _hostList;
     private MenuState _state;
@@ -30,8 +37,6 @@ public class GuiMenu : MonoBehaviour {
     private int _selModeInt = 0;
     private int _prevSelModeInt = 0;
 
-    // panels
-    private GameObject _mainMenuPanel;
 
     public void SetState(MenuState newState)
     {
@@ -39,9 +44,86 @@ public class GuiMenu : MonoBehaviour {
     }
 
 
+
+    public void NicknameChanged()
+    {
+        _nick = NicknameInputField.text;
+        PlayerPrefs.SetString("NickName", _nick);
+    }
+
+    public void SetUpGameLobby()
+    {
+        int count = 0;
+        for (int i = 0; i < (Consts.maxPlayers); i++)
+        {
+            if (_networkManager.PlayerList[i] != null) count++;
+        }
+        GameLobbyText.text = "Players (" + count + "/" + (Consts.maxPlayers) + "):";
+        for (int i = 0; i < Consts.maxPlayers; i++)
+        {
+            if (_networkManager.PlayerList[i] == null)
+            {
+            }
+            else
+            {
+                var btn = Instantiate(PlayerLobbyButton);
+                btn.transform.SetParent(LobbyPanel.transform, false);
+                btn.GetComponent<Text>().text = _networkManager.PlayerList[i].NickName;
+                if (Consts.IsHost)
+                {
+                    
+                    btn.onClick.AddListener(() => GetComponent<NetworkView>().RPC("KickPlayer", RPCMode.AllBuffered, _networkManager.PlayerList[i].Player));
+                }
+            }
+        }
+        if (Consts.IsHost)
+        {
+            _selModeInt = GUILayout.SelectionGrid(_selModeInt, _selModesStrings, 1);
+            if (_selModeInt != _prevSelModeInt)
+            {
+                GetComponent<NetworkView>().RPC("SetGameModeInMenu", RPCMode.OthersBuffered, _selModeInt);
+                _prevSelModeInt = _selModeInt;
+            }
+
+        }
+        else
+        {
+            GUILayout.Label("Game mode:" + (Consts.GameModes)_selModeInt);
+
+        }
+        GUILayout.EndHorizontal();
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Leave Lobby"))
+        {
+            StartCoroutine(LeaveLobby());
+        }
+        if (Consts.IsHost)
+        {
+            if (GUILayout.Button("Start Game"))
+            {
+                MasterServer.UnregisterHost();
+
+                _networkManager.LoadLevel(Consts.GameScene, _selModeInt);
+            }
+
+
+
+        }
+        else
+        {
+            GUILayout.Label("Wait for Host to Start the Game");
+        }
+        GUILayout.EndHorizontal();
+    }
+
 	void Start ()
 	{
-	   
+        
+        
+
+
+        
+
         _networkManager = NetworkManager.Get();
         Debug.Log(_networkManager);
         _nick = "Player" + Random.Range(0, 20);
@@ -50,9 +132,8 @@ public class GuiMenu : MonoBehaviour {
             _nick = PlayerPrefs.GetString("NickName");
         }
         SetState(MenuState.MainMenu);
-	    _mainMenuPanel = GameObject.Find("MainMenuPanel") as GameObject;
-        
-        
+
+	    NicknameInputField.text = _nick;
 
 	}
 
@@ -67,7 +148,8 @@ public class GuiMenu : MonoBehaviour {
         GUILayout.BeginArea(_centRect);
         if (_state == MenuState.MainMenu)
         {
-            MainMenu();
+          //  MainMenu();
+            
         }
         if (_state == MenuState.Join)
         {
@@ -89,6 +171,11 @@ public class GuiMenu : MonoBehaviour {
 	
 	}
 
+
+    public void JoinGameButtonClick()
+    {
+        SetState(MenuState.Join);
+    }
 
     void MainMenu()
     {
@@ -121,8 +208,14 @@ public class GuiMenu : MonoBehaviour {
 
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
     void JoinGame()
     {
+        
                  if (AutoRefreshServersList)
                  {
                      if (Time.time - _lastAutoRefresh > AutoServerListRefreshTimeDelay)
@@ -147,15 +240,17 @@ public class GuiMenu : MonoBehaviour {
 		        GUILayout.BeginHorizontal();
 		        if(GUILayout.Button("Back")){
 		            SetState(MenuState.MainMenu);
+                    MainMenuPanel.SetActive(true);
 		        }
 		        if(GUILayout.Button("Refresh")){
 		            MasterServer.RequestHostList(Consts.GameName);
 		        }
 		        GUILayout.EndHorizontal();
+               
 		
     }
 
-    void HostGame()
+    public void HostGame()
     {
  
 //		        GUILayout.Label("Host Game");
@@ -178,6 +273,7 @@ public class GuiMenu : MonoBehaviour {
 
     private void GameLobby()
     {
+       // GUILayout.BeginArea(new Rect(0,0, 400, 500));
         GUILayout.Label("Lobby");
         int count = 0;
         for (int i = 0; i < (Consts.maxPlayers); i++)
@@ -248,7 +344,7 @@ public class GuiMenu : MonoBehaviour {
             GUILayout.Label("Wait for Host to Start the Game");
         }
         GUILayout.EndHorizontal();
-
+      //  GUILayout.EndArea();
     }
 
     void OnMasterServerEvent(MasterServerEvent msEvent)

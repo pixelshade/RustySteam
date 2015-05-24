@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -40,7 +41,6 @@ public class ScorePanelScript : MonoBehaviour
         {
             if (_tabShowScore)
             {
-                Debug.Log("SHOW SCORE");
                 ShowPlayerScores();
             }
             _prevTabShowScore = _tabShowScore;
@@ -49,7 +49,6 @@ public class ScorePanelScript : MonoBehaviour
 	    if (_tabHideScore)
 	    {
             HidePlayerScores();
-            Debug.Log("hide SCORE");
 	    }
         
 	}
@@ -62,8 +61,6 @@ public class ScorePanelScript : MonoBehaviour
 
     public void ShowPlayerScores()
     {
-      
-        Debug.Log("ShowPlayerScores");
         PlayerScorePanel.SetActive(true);
         TeamInfo team1 = null;
         var _playerInfos = _levelController.PlayerInfos;
@@ -76,7 +73,7 @@ public class ScorePanelScript : MonoBehaviour
                 var plItem = Instantiate(PlayerScoreItem);
                 var plText = plItem.GetComponent<Text>();
 
-                var info = player.Team.Id + "   " + player.NickName + "     " + player.Kills + "    " + player.Deaths;
+                var info = String.Format("{0,-15}  {1,-8}  {2,-7}", player.NickName, player.Kills, player.Deaths);
                 plText.text = info;
                 //plText.color = player.Team.Color;
                 if (player.Team == team1)
