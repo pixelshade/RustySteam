@@ -5,6 +5,7 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class GuiGame : MonoBehaviour
 {
+    
     public Texture DmgTexture;
     public Texture CrosshairTexture;
     public Texture CdBarBgTexture;
@@ -25,7 +26,7 @@ public class GuiGame : MonoBehaviour
     private float _dmgTakenTime;
     private NetworkView _networkView;
     private AudioSource _audioSource;
-    
+ 
 
     private const float DMG_TAKEN_ANIMATION_DUR = 1;
 
@@ -43,12 +44,11 @@ public class GuiGame : MonoBehaviour
 	    _playerInfos = NetworkManager.Get().PlayerList;
 	    _networkView = GetComponent<NetworkView>();
 	    _audioSource = GetComponent<AudioSource>();
-	   
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+    
 	}
 
     void OnGUI()
