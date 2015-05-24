@@ -95,22 +95,22 @@ public class LevelController : MonoBehaviour, NetworkManager.ILoadFinish
     public void SpawnPlayer(string name)
     {
         var player = Resources.Load("Prefabs/Player", typeof(GameObject)) as GameObject;
-        GameObject[] array1 = GameObject.FindGameObjectsWithTag("SpawnA");
-        GameObject[] array2 = GameObject.FindGameObjectsWithTag("SpawnB");
-        GameObject[] newArray = new GameObject[array1.Length + array2.Length];
-        Array.Copy(array1, newArray, 0);
-        Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
-        var spawnChoice = Random.Range(0, newArray.Length);
-        Vector3 p = new Vector3(0, 0, 0);
-        if (newArray.Length == 0)
-        {
-            p = Random.insideUnitSphere * 100;
-        }
-        else
-        {
-            p = newArray[spawnChoice].GetComponent<Transform>().position;
-        }
-        GameObject pl = Network.Instantiate(player, p, Quaternion.identity, 0) as GameObject;
+        //GameObject[] array1 = GameObject.FindGameObjectsWithTag("SpawnA");
+        //GameObject[] array2 = GameObject.FindGameObjectsWithTag("SpawnB");
+        //GameObject[] newArray = new GameObject[array1.Length + array2.Length];
+        //Array.Copy(array1, newArray, 0);
+        //Array.Copy(array2, 0, newArray, array1.Length, array2.Length);
+        //var spawnChoice = Random.Range(0, newArray.Length);
+        //Vector3 p = new Vector3(0, 0, 0);
+        //if (newArray.Length == 0)
+        //{
+        //    p = Random.insideUnitSphere * 100;
+        //}
+        //else
+        //{
+        //    p = newArray[spawnChoice].GetComponent<Transform>().position;
+        //}
+        GameObject pl = Network.Instantiate(player, Random.insideUnitSphere * 100, Quaternion.identity, 0) as GameObject;
     }
 
     void OnGUI()
