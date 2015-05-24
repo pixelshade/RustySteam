@@ -35,17 +35,12 @@ public class Player : MonoBehaviour
             {
                 if(_isMine)
                     PlayerHpText.GetComponent<Text>().text = value.ToString();
-                if(Consts.IsHost)
-                    GetComponent<NetworkView>().RPC("UpdateHP", RPCMode.AllBuffered, Id, HP);
             }
             _hp = value;
         }
     }
 
     private int _hp = 100;
-
-
-
 
     public TeamInfo Team
     {
@@ -271,12 +266,4 @@ public class Player : MonoBehaviour
         _gameGui.PlayTakeDamageAnimation();
         _audioSource.PlayOneShot(OuchAudioClip);
     }
-
-    [RPC]
-    public void UpdateHP(int playerId, int hp)
-    {
-        if (Consts.IsHost) return;
-        if(Id == playerId) HP = hp;
-    }
-}
 }
