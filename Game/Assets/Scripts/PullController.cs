@@ -74,7 +74,7 @@ public class PullController : MonoBehaviour
                     {
                         var objIndex = hitObj.Id;
                         //Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, Power);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, Power);
                     }
                 }
@@ -124,7 +124,7 @@ public class PullController : MonoBehaviour
                     {
                         var objIndex = hitObj.Id;
                         //Debug.Log(objIndex + " Objindexy " + playerIndex);
-                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, -Power);
+                        GetComponent<NetworkView>().RPC("MovePlayerTowards", RPCMode.AllBuffered, playerIndex, objIndex, direction.normalized, EnemyKoeficient * -Power);
                         //hitObj.MoveTowards(playerIndex, direction.normalized, -Power);
                     }
                 }

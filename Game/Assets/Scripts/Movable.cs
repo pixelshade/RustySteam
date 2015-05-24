@@ -43,14 +43,17 @@ public class Movable : MonoBehaviour
         if (_tagCD > 0.0f)
             _tagCD -= Time.deltaTime;
         if (_tagCD <= 0.0f) {
-            MovedByPlayer = -1;
+            if (_player != null)
+                MovedByPlayer = _player.Id;
+            else
+                MovedByPlayer = -1;
         }
     }
     
     public void MoveTowards(int actuator, Vector3 vector3, float power = 1)
     {
         MovedByPlayer = actuator;
-        _tagCD = 20.0f;
+        _tagCD = 10.0f;
         vectorToMove = vector3;
         powerToMove = power;
         _hasToMove = true;

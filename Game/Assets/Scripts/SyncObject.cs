@@ -10,9 +10,13 @@ public class SyncObject : MonoBehaviour
     private Vector3 _syncEndPosition = Vector3.zero;
     private Quaternion _q = Quaternion.identity;
     private Rigidbody _rb;
+    private Player _player;
+    private int _hp;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _player = GetComponent<Player>();
     }
 
     void Update()
@@ -36,6 +40,13 @@ public class SyncObject : MonoBehaviour
 
             _q = _rb.rotation;
             stream.Serialize(ref _q);
+
+            if (_player != null)
+            {
+                _hp = _player.HP;
+                stream.Serialize(ref _hp);
+            }
+
             Serialize(stream, info);
         }
         else
@@ -43,6 +54,10 @@ public class SyncObject : MonoBehaviour
             stream.Serialize(ref syncPosition);
             stream.Serialize(ref syncVelocity);
             stream.Serialize(ref _q);
+            if (_player != null)
+            {
+                stream.Serialize(ref _hp);
+            }
 
             _syncTime = 0f;
             _syncDelay = Time.time - _lastSynchronizationTime;
@@ -50,7 +65,11 @@ public class SyncObject : MonoBehaviour
            
             _syncEndPosition = syncPosition + syncVelocity * _syncDelay;
             _syncStartPosition = GetComponent<Rigidbody>().position;
-            
+
+            if (_player != null) { 
+                _player.HP = _hp;
+            }
+
             Deserialize(stream, info);
         }
         
