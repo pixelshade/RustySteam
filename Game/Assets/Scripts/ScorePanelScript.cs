@@ -91,9 +91,7 @@ public class ScorePanelScript : MonoBehaviour
 
     public void HidePlayerScores()
     {
-        Debug.Log("HidePlayerScores");
             int childs = TeamAPanel.transform.childCount;
-        Debug.Log("Child count:"+ childs);
             for (int i = childs - 1; i >= 0; i--)
             {
                 Destroy(TeamAPanel.transform.GetChild(i).gameObject);

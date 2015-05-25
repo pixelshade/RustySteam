@@ -1399,6 +1399,7 @@ MonoBehaviour:
   Stunned: 0
   HasFlag: 0
   FlagGameObject: {fileID: 0}
+  deathType: 0
 --- !u!114 &11422048
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1496,6 +1497,7 @@ MonoBehaviour:
   CD: .5
   Stun: 1
   EnemyKoeficient: 2
+  SpawnedBlock: {fileID: 100000, guid: 30b986507de402b41be7124f87c1b9f1, type: 2}
   ShootParticleSystem: {fileID: 19864914}
   SuckParticleSystem: {fileID: 19837690}
   SuckAudioClip: {fileID: 8300000, guid: 1ca9328572606934895b6c452c1582ad, type: 3}
@@ -1516,7 +1518,6 @@ MonoBehaviour:
   CdBarBgTexture: {fileID: 2800000, guid: d394f163ff38b4b4db2a012b83e4d275, type: 3}
   CdBarTexture: {fileID: 2800000, guid: 940a76c6af26b2e4cb4d208bb4af4f45, type: 3}
   TeamsScoreTexture: {fileID: 2800000, guid: 7e13a529486b6a94796d4a0f78b1cf32, type: 3}
-  OuchAudioClip: {fileID: 0}
 --- !u!120 &12057368
 LineRenderer:
   m_ObjectHideFlags: 1

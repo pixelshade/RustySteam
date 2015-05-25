@@ -11,7 +11,6 @@ public class GuiGame : MonoBehaviour
     public Texture CdBarBgTexture;
     public Texture CdBarTexture;
     public Texture TeamsScoreTexture;
-    public AudioClip OuchAudioClip;
 
     private Player _player;
     private PullController _pullController;
@@ -110,8 +109,6 @@ public class GuiGame : MonoBehaviour
     public void PlayTakeDamageAnimation()
     {
         _dmgTakenTime = Time.time;
-        _audioSource.PlayOneShot(OuchAudioClip);
-
     }
 
     private void DmgTakenAnimate()

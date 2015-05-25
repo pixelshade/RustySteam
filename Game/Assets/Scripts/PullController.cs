@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PullController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class PullController : MonoBehaviour
     private Player _playerSelf;
     private AudioSource[] _audioSources;
 
+    public GameObject SpawnedBlock;
     public ParticleSystem ShootParticleSystem;
     public ParticleSystem SuckParticleSystem;
 
@@ -45,6 +47,7 @@ public class PullController : MonoBehaviour
         
         ShootParticleSystem.Stop();
 	}
+      
 
     private void ProcessLeftClick(Ray ray, RaycastHit hit, Vector3 fwd)
     {
@@ -147,8 +150,37 @@ public class PullController : MonoBehaviour
 
     }
 
+
+    [RPC]
+    public void SendBlockToPosition(int blockId, Vector3 position)
+    {
+        var movable = GetMovableWithId(blockId);
+        if (movable == null) return;
+        movable.transform.position = position;
+        movable.GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+
     private void ProcessActions(Ray ray, RaycastHit hit)
     {
+        if (Input.GetButtonDown("SpawnBlock"))
+        {
+            var count = _levelController.MovableGameObjects.Count;
+            if (count > 0)
+            {
+                int rnd = Random.Range(0, count);
+                var blockId = _levelController.MovableGameObjects[rnd].GetComponent<Movable>().Id;
+
+                var playerPos = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+                var playerDirection = transform.forward;
+                const float spawnDistance = 5;
+
+                var pos = playerPos + playerDirection*spawnDistance;
+                _networkView.RPC("SendBlockToPosition", RPCMode.AllBuffered, blockId, pos);
+                _cdLeft = CD;
+            }
+        } 
+
         if(Input.GetButton("Levitate") || Input.GetKey("e"))
         {
             if (hit.transform != null && hit.transform.GetComponent<Movable>() != null && hit.rigidbody != null)
@@ -216,19 +248,26 @@ public class PullController : MonoBehaviour
         return _cdLeft;
     }
 
+    public Movable GetMovableWithId(int movableId)
+    {
+        foreach (var targetGO in _levelController.MovableGameObjects)
+        {
+            var movable = targetGO.GetComponent<Movable>();
+            if (movable.Id == movableId)
+            {
+                return movable;
+            }
+        }
+        return null;
+    }
+
     [RPC]
     public void MovePlayerTowards(int actuator, int target, Vector3 vector3, float power = 1)
     {
         if (target < 0)
         {
-            foreach (var targetGO in _levelController.MovableGameObjects)
-            {
-                var movable = targetGO.GetComponent<Movable>();
-                if (movable.Id == target)
-                {
-                    movable.MoveTowards(actuator, vector3, power);
-                }
-            }
+            var movable = GetMovableWithId(target);
+            movable.MoveTowards(actuator, vector3, power);
         }
         else
         {
