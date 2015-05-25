@@ -61,6 +61,7 @@ public class ScorePanelScript : MonoBehaviour
 
     public void ShowPlayerScores()
     {
+        HidePlayerScores();
         PlayerScorePanel.SetActive(true);
         TeamInfo team1 = null;
         var _playerInfos = _levelController.PlayerInfos;
